@@ -1,0 +1,48 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC58.5.dat
+# Format: Focal Data File 1.0
+# Updated: Wed Jul 26 08:27:37 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Wed Jul 26 08:20:07 CEST 2017
+StartTime=1501050007327
+# Observation stopped: Wed Jul 26 08:27:37 CEST 2017
+StopTime=1501050457327
+ 
+Answer.1=OC58.5
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+216, u
+7486, 4
+11193, 3
+11724, 1
+20515, q
+24307, 1
+33074, q
+40354, 1
+41691, q
+50291, 1
+57600, q
+60265, j
+73763, u
+73908, 1
+119852, q
+122570, 1
+128121, 3
+137698, 1
+168133, 3
+188128, 1
+197695, q
+206412, 1
+239192, i
+450000, EOF

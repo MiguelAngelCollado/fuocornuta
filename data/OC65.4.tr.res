@@ -1,0 +1,117 @@
+FirstLineOfResults=73
+#-----------------------------------------------------------
+# Name: OC65.4.tr.res
+# Format: Behaviour Trace Results File 1.0
+# Updated: Mon Jul 24 20:44:50 CEST 2017
+#-----------------------------------------------------------
+Focal Data File = OC65.4.dat
+Focal Analysis Master File = FU Experiments.faf
+ 
+Focal Analysis Master File summary for FU Experiments.faf.
+Focal master file: D:\JWatcher\Datos\FU Experiments.fmf
+Behaviours:
+	1	Quadrant 1	Being at the 1st quadrant
+	2	Quadrant 2	Being at the 2nd quadrant
+	3	Quadrant 3	Being at the 3rd quadrant
+	4	Quadrant 4	Being at the 4th quadrant
+	e	Cardboard 3	Being at cardboard 3
+	i	Inactivity	Being inactive
+	j	Lid exploring	Trying to solve the problem
+	k	Succed	Solve the problem
+	o	Escaping	Trying to escape
+	p	Eating	Being eating
+	q	Cardboard 1	Being at cardboard 1
+	r	Cardboard 4	Being at cardboard 4
+	t	Refugee	Being at the refugee
+	u	Activity	Being active
+	w	Cardboard 2	Being at cardboard 2
+No modifiers definedModified behaviours:
+	None specified.
+States:
+	1 switches off: itself, 2, 3, 4, e, q, r, t, w.
+	2 switches off: itself, 1, 3, 4, e, q, r, t, w.
+	3 switches off: itself, 1, 2, 4, j, k, p, q, r, t, w, e.
+	4 switches off: itself, 1, 2, 3, e, j, k, p, q, r, t, w.
+	e switches off: itself, q, r, w, 1, 2, 4, 3, j, k, o, t, p.
+	i switches off: itself, u, t, o, j, p, k.
+	j switches off: itself, 3, 4, e, i, k, o, p, r, t.
+	k switches off: itself, 3, 4, e, i, j, o, r, t.
+	o switches off: itself, e, i, j, k, p, r, t.
+	p switches off: itself, 3, 4, i, j, o, r, t, u, e.
+	q switches off: itself, e, r, w, 1, 2, 3, 4, t.
+	r switches off: itself, e, q, w, 1, 2, 3, 4, j, k, o, p, t.
+	t switches off: itself, i, u, 1, 2, 3, 4, e, j, k, o, p, q, r, w.
+	u switches off: itself, i, t, p.
+	w switches off: itself, e, q, r, 1, 3, 2, 4, t.
+Exclusions:
+	None specified.
+Scoring:
+	From beginning.
+Time Bins:
+	End reporting with last complete bin.
+	Duration is length of focal data (less any offset).
+State Analysis:
+	For all durations report:
+		Occurrences
+		Total time
+		Average
+		Proportion of time
+Behaviours analysed as events:
+	k Succed
+Event Analysis:
+	Nothing reported.
+Warnings:
+	No warnings to report.
+ 
+Answer 1 = OC65.4
+Answer 2 = Osmia cornuta
+Answer 3 = Male
+Answer 4 = Control
+Answer 5 = Yellow right
+Answer 6 = 2x
+#BEGIN RESULTS
+Bin, 0, Offset, 0, 73146, 73146, 91114, 91114, 91114, 91114, 93100, 93100, 98916, 98916, 109090, 109090, 125650, 125650, 143091, 143091, 186904, 186904, 190310, 190310, 190872, 190872, 208824, 208824, 227453, 227453, 231197, 231197, 240500, 240500, 250989, 250989, 265610, 265610, 285615, 285615, 295062, 295062, 298494, 298494, 324308, 324308, 328532, 328532, 331800, 331800, 351291, 351291, 394184, 394184, 395063, 395063, 419197, 419197, 419957, 419957, 430085, 430085, 431365, 431365, 449941, 449941, 450000
+Trace, 1, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1
+
+Bin, 0, Offset, 0, 9740, 9740, 18145, 18145, 28899, 28899, 36679, 36679, 41666, 41666, 48982, 48982, 93100, 93100, 98916, 98916, 109090, 109090, 114544, 114544, 118326, 118326, 125650, 125650, 143091, 143091, 146680, 146680, 155044, 155044, 186904, 186904, 208824, 208824, 212214, 212214, 215969, 215969, 227453, 227453, 250989, 250989, 257318, 257318, 259153, 259153, 265610, 265610, 298494, 298494, 307847, 307847, 313496, 313496, 324308, 324308, 365140, 365140, 381178, 381178, 384434, 384434, 394184, 394184, 414373, 414373, 419197, 419197, 450000
+Trace, 2, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 67292, 67292, 73146, 73146, 285615, 285615, 295062, 295062, 351291, 351291, 365140, 365140, 450000
+Trace, 3, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 7668, 7668, 9740, 9740, 48982, 48982, 67292, 67292, 307847, 307847, 313496, 313496, 450000
+Trace, 4, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, e, State, 0, 0
+
+Bin, 0, Offset, 0, 446813, 446813, 449542, 449542, 450000
+Trace, i, State, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, j, State, 0, 0
+
+Bin, 0, Offset, 0, 36800, 36800, 48982, 48982, 450000
+Trace, k, State, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, o, State, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, p, State, 0, 0
+
+Bin, 0, Offset, 0, 190310, 190310, 190872, 190872, 231197, 231197, 240500, 240500, 328532, 328532, 331800, 331800, 395063, 395063, 414373, 414373, 419957, 419957, 430085, 430085, 431365, 431365, 449941, 449941, 450000
+Trace, q, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, r, State, 0, 0
+
+Bin, 0, Offset, 0, 450000
+Trace, t, State, 0, 0
+
+Bin, 0, Offset, 0, 0, 446813, 446813, 449542, 449542, 450000
+Trace, u, State, 0, 1, 1, 0, 0, 1, 1
+
+Bin, 0, Offset, 0, 18145, 18145, 28899, 28899, 36679, 36679, 41666, 41666, 114544, 114544, 118326, 118326, 146680, 146680, 155044, 155044, 212214, 212214, 215969, 215969, 257318, 257318, 259153, 259153, 381178, 381178, 384434, 384434, 450000
+Trace, w, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+

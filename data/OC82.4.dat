@@ -1,0 +1,26 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC82.4.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Aug 22 13:35:16 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Aug 22 13:33:13 CEST 2017
+StartTime=1503401593739
+# Observation stopped: Tue Aug 22 13:36:58 CEST 2017
+StopTime=1503401818739
+ 
+Answer.1=OC82.4
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, i
+225000, EOF

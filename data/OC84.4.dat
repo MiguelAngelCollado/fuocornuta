@@ -1,0 +1,45 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC84.4.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Aug 22 14:00:40 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Aug 22 13:53:10 CEST 2017
+StartTime=1503402790074
+# Observation stopped: Tue Aug 22 14:00:40 CEST 2017
+StopTime=1503403240074
+ 
+Answer.1=OC84.4
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+49, u
+3918, 3
+8943, 4
+14767, 2
+18767, w
+30661, k
+34141, 2
+37336, 1
+41603, q
+43212, 1
+66341, i
+98886, u
+106061, o
+137693, u
+138165, i
+224559, u
+234050, i
+330664, u
+361073, i
+429788, u
+450000, EOF

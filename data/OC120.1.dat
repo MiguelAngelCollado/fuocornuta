@@ -1,0 +1,55 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC120.1.dat
+# Format: Focal Data File 1.0
+# Updated: Fri Aug 25 13:54:50 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Fri Aug 25 13:50:34 CEST 2017
+StartTime=1503661834010
+# Observation stopped: Fri Aug 25 13:54:19 CEST 2017
+StopTime=1503662059010
+ 
+Answer.1=OC120.1
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=
+Answer.6=4x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+8742, 3
+15799, o
+17301, u
+32902, 2
+51857, 1
+53926, 2
+54819, 3
+56758, 1
+59131, 2
+62926, 1
+63813, o
+66139, u
+67063, 2
+70760, 1
+72585, 2
+74359, 3
+89047, 1
+92969, 3
+95188, 4
+95496, 3
+96164, 1
+99682, 2
+102864, o
+139017, u
+143073, i
+162023, u
+188749, o
+191189, u
+197863, o
+225000, EOF

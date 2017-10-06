@@ -1,0 +1,66 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC93.4.dat
+# Format: Focal Data File 1.0
+# Updated: Wed Aug 23 11:33:44 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Wed Aug 23 11:25:52 CEST 2017
+StartTime=1503480352924
+# Observation stopped: Wed Aug 23 11:33:22 CEST 2017
+StopTime=1503480802924
+ 
+Answer.1=OC93.4
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+1373, 2
+8053, 3
+17213, 4
+21518, 2
+22845, w
+28669, 2
+30021, 4
+30717, 3
+34325, 4
+46709, 2
+50925, w
+52573, k
+55934, p
+66693, u
+88109, 2
+90725, 3
+98741, 1
+102365, 2
+105142, w
+109805, 2
+111117, 1
+112077, q
+113957, 1
+125389, q
+126749, 1
+131621, 4
+133517, 3
+140069, 1
+145061, q
+170109, 1
+173421, 2
+181142, w
+198309, 2
+200765, 1
+202630, q
+211365, 1
+212845, 3
+217157, 4
+217309, 3
+239501, i
+450000, EOF

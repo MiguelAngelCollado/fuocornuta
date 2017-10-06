@@ -1,0 +1,35 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC77.3.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Jul 25 15:15:53 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Jul 25 15:13:55 CEST 2017
+StartTime=1500988435646
+# Observation stopped: Tue Jul 25 15:15:53 CEST 2017
+StopTime=1500988553625
+ 
+Answer.1=OC77.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Control
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+15, u
+3260, i
+9093, u
+15182, 2
+22452, 1
+23067, q
+37223, p
+73893, u
+83639, p
+90015, u
+117979, EOF

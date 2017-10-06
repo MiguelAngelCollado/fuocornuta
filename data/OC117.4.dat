@@ -1,0 +1,30 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC117.4.dat
+# Format: Focal Data File 1.0
+# Updated: Mon Aug 28 11:33:40 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Mon Aug 28 11:25:49 CEST 2017
+StartTime=1503912349757
+# Observation stopped: Mon Aug 28 11:33:19 CEST 2017
+StopTime=1503912799757
+ 
+Answer.1=OC117.4
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+16488, 4
+42720, 1
+79857, 2
+119232, i
+450000, EOF

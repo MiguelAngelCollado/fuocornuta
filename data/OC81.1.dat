@@ -1,0 +1,71 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC81.1.dat
+# Format: Focal Data File 1.0
+# Updated: Fri Jul 28 13:58:38 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Fri Jul 28 13:54:33 CEST 2017
+StartTime=1501242873452
+# Observation stopped: Fri Jul 28 13:58:18 CEST 2017
+StopTime=1501243098452
+ 
+Answer.1=OC81.1
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=
+Answer.6=4x
+ 
+ 
+ 
+#BEGIN DATA
+212, u
+1967, 1
+8532, o
+9463, u
+14572, 2
+16667, 4
+18161, 3
+20676, 1
+22042, 2
+24288, o
+26721, u
+27969, 1
+29296, 2
+30035, 4
+31423, o
+32624, u
+36038, 3
+40660, 1
+42267, 2
+48608, o
+50114, u
+59624, 1
+62748, 3
+65197, o
+65943, u
+67844, 1
+73582, 2
+77628, o
+78612, u
+86858, 4
+89855, 2
+93595, o
+94259, u
+97096, 1
+97625, 3
+103002, o
+104105, u
+115236, 1
+121453, o
+122195, u
+123096, 2
+126165, o
+126567, u
+131103, i
+157020, u
+184362, i
+225000, EOF

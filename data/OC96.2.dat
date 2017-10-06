@@ -1,0 +1,64 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC96.2.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Aug 22 11:48:29 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Aug 22 11:40:20 CEST 2017
+StartTime=1503394820524
+# Observation stopped: Tue Aug 22 11:47:50 CEST 2017
+StopTime=1503395270524
+ 
+Answer.1=OC96.2
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+5049, 1
+24842, 2
+29442, 1
+33402, q
+77601, q
+81618, 1
+117905, i
+152513, u
+155201, q
+156929, 1
+175241, 3
+192793, 4
+215729, 2
+222657, 1
+241257, 2
+260112, 4
+276697, 3
+276905, 1
+279090, 2
+281249, w
+287458, 2
+296210, 4
+307625, 3
+325785, 4
+332385, 2
+349154, 1
+364569, 3
+370586, 4
+382393, 2
+395690, 1
+397433, q
+402241, 1
+405250, 3
+415897, 4
+432002, 2
+433225, w
+436121, 2
+440177, 1
+450000, EOF

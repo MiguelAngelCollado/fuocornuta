@@ -1,0 +1,50 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC32.4.dat
+# Format: Focal Data File 1.0
+# Updated: Wed Jul 12 12:54:29 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Wed Jul 12 12:45:55 CEST 2017
+StartTime=1499856355247
+# Observation stopped: Wed Jul 12 12:53:25 CEST 2017
+StopTime=1499856805247
+ 
+Answer.1=OC32.4
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Control
+Answer.5=Blue right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+3716, 1
+114302, q
+132989, 1
+134515, q
+139074, 1
+232732, 2
+240125, 4
+244374, 2
+249473, 4
+263114, 2
+274409, i
+339953, u
+341954, 1
+344698, q
+346002, 1
+349378, 2
+353874, w
+389199, 2
+390963, w
+407953, 2
+413366, w
+415825, 2
+419356, w
+436251, i
+450000, EOF

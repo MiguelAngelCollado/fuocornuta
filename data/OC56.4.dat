@@ -1,0 +1,50 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC56.4.dat
+# Format: Focal Data File 1.0
+# Updated: Wed Jul 19 12:41:11 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Wed Jul 19 12:28:22 CEST 2017
+StartTime=1500460102744
+# Observation stopped: Wed Jul 19 12:35:52 CEST 2017
+StopTime=1500460552744
+ 
+Answer.1=OC56.4
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=Yellow left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+26260, 1
+33468, q
+43372, 1
+48125, q
+50852, 1
+54621, 2
+60229, w
+62461, 2
+64173, o
+67733, u
+69981, w
+72509, 2
+75815, 1
+78957, q
+83676, 1
+86332, 2
+90573, w
+91828, 2
+101293, o
+103957, u
+113765, o
+122789, u
+136477, 3
+169805, i
+450000, EOF

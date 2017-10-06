@@ -1,0 +1,69 @@
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC22.1.dat
+# Format: Focal Data File 1.0
+# Updated: Thu Jul 06 22:18:54 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Thu Jul 06 22:13:52 CEST 2017
+StartTime=1499372032636
+# Observation stopped: Thu Jul 06 22:17:37 CEST 2017
+StopTime=1499372257636
+ 
+Answer.1=OC22.1
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=
+Answer.6=4x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+2031, 2
+7582, 4
+16830, 2
+25759, i
+46631, u
+48686, o
+48823, u
+50399, o
+51558, u
+53319, i
+57150, u
+62374, 1
+67302, o
+70574, u
+78399, 3
+79110, 4
+79942, 2
+85374, 1
+87262, 3
+90646, 4
+91414, o
+92198, u
+93814, o
+95335, u
+101623, i
+103255, u
+106214, 1
+108390, 2
+116087, 4
+117351, 3
+121247, 1
+123238, 2
+126830, o
+126918, u
+133071, i
+134646, u
+136614, o
+137295, u
+138246, 1
+140774, 2
+147135, o
+158270, u
+158416, i
+225000, EOF
