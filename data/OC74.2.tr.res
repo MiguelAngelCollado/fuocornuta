@@ -1,15 +1,15 @@
-FirstLineOfResults=73
+FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC74.2.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Mon Jul 24 12:38:01 CEST 2017
+# Updated: Tue Oct 10 13:27:44 CEST 2017
 #-----------------------------------------------------------
-Focal Data File = OC74.2.dat
-Focal Analysis Master File = FU Experiments.faf
+FocalDataFile=OC74.2.dat
+FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
-Focal master file: D:\JWatcher\Datos\FU Experiments.fmf
-Behaviours:
+Focal master file: /Users/Bartomeus_lab/Desktop/Tesis/Experimento Berlin/Datos/FU Experiments.fmf
+Behaviors:
 	1	Quadrant 1	Being at the 1st quadrant
 	2	Quadrant 2	Being at the 2nd quadrant
 	3	Quadrant 3	Being at the 3rd quadrant
@@ -25,7 +25,8 @@ Behaviours:
 	t	Refugee	Being at the refugee
 	u	Activity	Being active
 	w	Cardboard 2	Being at cardboard 2
-No modifiers definedModified behaviours:
+No modifiers defined
+Modified behaviors:
 	None specified.
 States:
 	1 switches off: itself, 2, 3, 4, e, q, r, t, w.
@@ -56,19 +57,23 @@ State Analysis:
 		Total time
 		Average
 		Proportion of time
-Behaviours analysed as events:
+Conditional States:
+	Nothing reported.
+Behaviors analyzed as events:
 	k Succed
 Event Analysis:
+	Nothing reported.
+Conditional Events:
 	Nothing reported.
 Warnings:
 	No warnings to report.
  
-Answer 1 = OC74.2
-Answer 2 = Osmia cornuta
-Answer 3 = Female
-Answer 4 = Treatment
-Answer 5 = Blue left
-Answer 6 = 2x
+Answer.1=OC74.2
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Blue left
+Answer.6=2x
 #BEGIN RESULTS
 Bin, 0, Offset, 0, 1139, 1139, 2380, 2380, 4293, 4293, 15244, 15244, 42796, 42796, 44556, 44556, 222596, 222596, 223452, 223452, 237364, 237364, 269195, 269195, 269892, 269892, 281020, 281020, 310644, 310644, 316509, 316509, 317244, 317244, 331932, 331932, 332709, 332709, 333324, 333324, 384477, 384477, 395972, 395972, 420533, 420533, 420804, 420804, 436733, 436733, 441452, 441452, 450000
 Trace, 1, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0

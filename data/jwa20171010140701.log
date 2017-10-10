@@ -1,0 +1,17 @@
+#-----------------------------------------------------------
+# Name: jwa20171010140701.log
+# Format: JWatcher Log File 1.0
+# Updated: Tue Oct 10 14:07:01 CEST 2017
+#-----------------------------------------------------------
+Analyzing focal data using Focal Analysis Master FU Experiments.faf
+-----------------------------------------------------------------
+Loading Focal Data from /Users/Bartomeus_lab/Desktop/Tesis/Experimento Berlin/Datos/OC138.1.dat
+  Data loaded successfully
+Analyzing OC138.1.dat
+Error: Code [o] at offset [00:02:28:22] is earlier than previous entry. Skipping analysis.
+  Analysis of OC138.1.dat completed with errors.
+-----------------------------------------------------------------
+Focal Data Analysis completed
+  Focal Data files processed: 1
+  Errors: 1
+-----------------------------------------------------------------

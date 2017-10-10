@@ -8,7 +8,7 @@ temp=NULL
 n=NULL
 row<-NULL
 datatest1<-data.frame()
-
+n=1
 for (n in 1:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".1.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
   row<-t(temp$V2)
@@ -19,8 +19,51 @@ for (n in 1:146) {
   datatest1[n,4] = row[4]
   datatest1[n,5] = row[5]
   datatest1[n,6] = row[6]
-  }
-datatest1
+  row = NULL
+  
+}
+#OC69.1.dat, OC80.1.dat y OC141.1.dat no existen y ha repetido los anteriores
+
+#We extract proportion of activity, inactivity and refuge time
+
+activity.time<-vector()
+inactivity.time<-vector()
+refuge.time<-vector()
+test<-vector()
+for (n in 1:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".1.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/OC",n,".1.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+
+  activity<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity<-subset(temp, subset = (temp$Behavior == " i"))
+  refuge<-subset(temp, subset = (temp$Behavior == " t"))
+  
+
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+
+  
+  test[n] = rowid
+  activity.time[n] = activity$StateAllDur.X
+  inactivity.time[n] = inactivity$StateAllDur.X
+  refuge.time[n] = refuge$StateAllDur.X
+  
+}
+test
+activity.time[1] + activity.time [2]
+inactivity.time
+refuge.time
+cbind(test, activity.time, inactivity.time, refuge.time)
+
+###vamos por aquí-----
+
+
+
+
+
+
+
+
 
 
 

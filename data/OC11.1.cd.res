@@ -1,15 +1,15 @@
-FirstLineOfResults=73
+FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC11.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Mon Jul 10 10:17:11 CEST 2017
+# Updated: Tue Oct 10 13:27:42 CEST 2017
 #-----------------------------------------------------------
-Focal Data File = OC11.1.dat
-Focal Analysis Master File = FU Experiments.faf
+FocalDataFile=OC11.1.dat
+FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
-Focal master file: D:\JWatcher\Datos\FU Experiments.fmf
-Behaviours:
+Focal master file: /Users/Bartomeus_lab/Desktop/Tesis/Experimento Berlin/Datos/FU Experiments.fmf
+Behaviors:
 	1	Quadrant 1	Being at the 1st quadrant
 	2	Quadrant 2	Being at the 2nd quadrant
 	3	Quadrant 3	Being at the 3rd quadrant
@@ -25,7 +25,8 @@ Behaviours:
 	t	Refugee	Being at the refugee
 	u	Activity	Being active
 	w	Cardboard 2	Being at cardboard 2
-No modifiers definedModified behaviours:
+No modifiers defined
+Modified behaviors:
 	None specified.
 States:
 	1 switches off: itself, 2, 3, 4, e, q, r, t, w.
@@ -56,33 +57,37 @@ State Analysis:
 		Total time
 		Average
 		Proportion of time
-Behaviours analysed as events:
+Conditional States:
+	Nothing reported.
+Behaviors analyzed as events:
 	k Succed
 Event Analysis:
+	Nothing reported.
+Conditional Events:
 	Nothing reported.
 Warnings:
 	No warnings to report.
  
-Answer 1 = OC11.1
-Answer 2 = Osmia cornuta
-Answer 3 = Male
-Answer 4 = Treatment
-Answer 5 = 
-Answer 6 = 2x
+Answer.1=OC11.1
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=
+Answer.6=2x
 #BEGIN RESULTS
-Time Bin, Behaviour, Modifier, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
-0, 1, , 15.00, 73209.00, 4880.60, 0.1627
-0, 2, , 13.00, 111102.00, 8546.31, 0.2469
-0, 3, , 19.00, 154777.00, 8146.16, 0.3439
-0, 4, , 6.00, 8377.00, 1396.17, 0.0186
-0, e, , 10.00, 9721.00, 972.10, 0.0216
-0, i, , 1.00, 1585.00, 1585.00, 0.0035
-0, j, , 0.00, 0.00, 0.00, 0.0000
-0, k, , 1.00, 8320.00, 8320.00, 0.0185
-0, o, , 6.00, 236459.00, 39409.83, 0.5255
-0, p, , 0.00, 0.00, 0.00, 0.0000
-0, q, , 2.00, 1183.00, 591.50, 0.0026
-0, r, , 2.00, 1496.00, 748.00, 0.0033
-0, t, , 1.00, 84990.00, 84990.00, 0.1889
-0, u, , 8.00, 363425.00, 45428.12, 0.8076
-0, w, , 4.00, 2761.00, 690.25, 0.0061
+Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
+0, 1, Quadrant 1, , , 15.00, 73209.00, 4880.60, 0.1627
+0, 2, Quadrant 2, , , 13.00, 111102.00, 8546.31, 0.2469
+0, 3, Quadrant 3, , , 19.00, 154777.00, 8146.16, 0.3439
+0, 4, Quadrant 4, , , 6.00, 8377.00, 1396.17, 0.0186
+0, e, Cardboard 3, , , 10.00, 9721.00, 972.10, 0.0216
+0, i, Inactivity, , , 1.00, 1585.00, 1585.00, 0.0035
+0, j, Lid exploring, , , 0.00, 0.00, 0.00, 0.0000
+0, k, Succed, , , 1.00, 8320.00, 8320.00, 0.0185
+0, o, Escaping, , , 6.00, 236459.00, 39409.83, 0.5255
+0, p, Eating, , , 0.00, 0.00, 0.00, 0.0000
+0, q, Cardboard 1, , , 2.00, 1183.00, 591.50, 0.0026
+0, r, Cardboard 4, , , 2.00, 1496.00, 748.00, 0.0033
+0, t, Refugee, , , 1.00, 84990.00, 84990.00, 0.1889
+0, u, Activity, , , 8.00, 363425.00, 45428.12, 0.8076
+0, w, Cardboard 2, , , 4.00, 2761.00, 690.25, 0.0061

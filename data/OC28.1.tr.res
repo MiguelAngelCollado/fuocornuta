@@ -1,15 +1,15 @@
-FirstLineOfResults=73
+FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC28.1.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Mon Jul 10 11:21:14 CEST 2017
+# Updated: Tue Oct 10 13:27:43 CEST 2017
 #-----------------------------------------------------------
-Focal Data File = OC28.1.dat
-Focal Analysis Master File = FU Experiments.faf
+FocalDataFile=OC28.1.dat
+FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
-Focal master file: D:\JWatcher\Datos\FU Experiments.fmf
-Behaviours:
+Focal master file: /Users/Bartomeus_lab/Desktop/Tesis/Experimento Berlin/Datos/FU Experiments.fmf
+Behaviors:
 	1	Quadrant 1	Being at the 1st quadrant
 	2	Quadrant 2	Being at the 2nd quadrant
 	3	Quadrant 3	Being at the 3rd quadrant
@@ -25,7 +25,8 @@ Behaviours:
 	t	Refugee	Being at the refugee
 	u	Activity	Being active
 	w	Cardboard 2	Being at cardboard 2
-No modifiers definedModified behaviours:
+No modifiers defined
+Modified behaviors:
 	None specified.
 States:
 	1 switches off: itself, 2, 3, 4, e, q, r, t, w.
@@ -56,19 +57,23 @@ State Analysis:
 		Total time
 		Average
 		Proportion of time
-Behaviours analysed as events:
+Conditional States:
+	Nothing reported.
+Behaviors analyzed as events:
 	k Succed
 Event Analysis:
+	Nothing reported.
+Conditional Events:
 	Nothing reported.
 Warnings:
 	No warnings to report.
  
-Answer 1 = OC28.1
-Answer 2 = Osmia cornuta
-Answer 3 = Female
-Answer 4 = Treatment
-Answer 5 = 
-Answer 6 = 2x
+Answer.1=OC28.1
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=
+Answer.6=2x
 #BEGIN RESULTS
 Bin, 0, Offset, 0, 181558, 181558, 182201, 182201, 183041, 183041, 204961, 204961, 205338, 205338, 211249, 211249, 236702, 236702, 236969, 236969, 238348, 238348, 241303, 241303, 242024, 242024, 243154, 243154, 251890, 251890, 256624, 256624, 257515, 257515, 262039, 262039, 267761, 267761, 272402, 272402, 278847, 278847, 279239, 279239, 279796, 279796, 285133, 285133, 297335, 297335, 298120, 298120, 298429, 298429, 303337, 303337, 319857, 319857, 320718, 320718, 323886, 323886, 328718, 328718, 337260, 337260, 339982, 339982, 351041, 351041, 351412, 351412, 351943, 351943, 364344, 364344, 379638, 379638, 388376, 388376, 389996, 389996, 391303, 391303, 393273, 393273, 394726, 394726, 398674, 398674, 399934, 399934, 413089, 413089, 417933, 417933, 418455, 418455, 421229, 421229, 421717, 421717, 423319, 423319, 425724, 425724, 427110, 427110, 427388, 427388, 429472, 429472, 439910, 439910, 443134, 443134, 444023, 444023, 445775, 445775, 450000
 Trace, 1, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
