@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC72.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Wed Oct 11 09:50:16 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC72.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC72.1
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
-Answer.5=Blue left
+Answer.5=
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop

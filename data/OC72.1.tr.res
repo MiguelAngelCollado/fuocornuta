@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC72.1.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Wed Oct 11 09:50:16 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC72.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC72.1
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
-Answer.5=Blue left
+Answer.5=
 Answer.6=2x
 #BEGIN RESULTS
 Bin, 0, Offset, 0, 261101, 261101, 262839, 262839, 300202, 300202, 305710, 305710, 307431, 307431, 311026, 311026, 411245, 411245, 413032, 413032, 414862, 414862, 422201, 422201, 450000

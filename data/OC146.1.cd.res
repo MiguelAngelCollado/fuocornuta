@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC146.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Wed Oct 11 09:49:53 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC146.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC146.1
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
-Answer.5=Blue left
+Answer.5=
 Answer.6=4x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop

@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC46.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Wed Oct 11 09:13:44 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC46.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -88,6 +88,6 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, p, Eating, , , 0.00, 0.00, 0.00, 0.0000
 0, q, Cardboard 1, , , 0.00, 0.00, 0.00, 0.0000
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
-0, t, Refugee, , , 2.00, 195290.00, 97645.00, 0.4340
-0, u, Activity, , , 1.00, 20033.00, 20033.00, 0.0445
+0, t, Refugee, , , 2.00, 192967.00, 96483.50, 0.4288
+0, u, Activity, , , 2.00, 257033.00, 128516.50, 0.5712
 0, w, Cardboard 2, , , 0.00, 0.00, 0.00, 0.0000

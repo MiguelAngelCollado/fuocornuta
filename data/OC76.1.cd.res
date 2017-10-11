@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC76.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Wed Oct 11 09:41:35 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC76.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -77,7 +77,7 @@ Answer.6=4x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
 0, 1, Quadrant 1, , , 1.00, 10335.00, 10335.00, 0.0459
-0, 2, Quadrant 2, , , 3.00, 13072.00, 4357.33, 0.0581
+0, 2, Quadrant 2, , , 2.00, 4636.00, 2318.00, 0.0206
 0, 3, Quadrant 3, , , 3.00, 153169.00, 51056.33, 0.6808
 0, 4, Quadrant 4, , , 4.00, 48424.00, 12106.00, 0.2152
 0, e, Cardboard 3, , , 0.00, 0.00, 0.00, 0.0000
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 0.00, 0.00, 0.00, 0.0000
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 5.00, 54159.00, 10831.80, 0.2407
+0, u, Activity, , , 6.00, 89730.00, 14955.00, 0.3988
 0, w, Cardboard 2, , , 0.00, 0.00, 0.00, 0.0000
