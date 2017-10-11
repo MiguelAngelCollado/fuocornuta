@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC44.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Wed Oct 11 10:27:33 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC44.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -70,7 +70,7 @@ Warnings:
  
 Answer.1=OC44.1
 Answer.2=Osmia cornuta
-Answer.3=Osmia cornuta
+Answer.3=Male
 Answer.4=Control
 Answer.5=
 Answer.6=4x
