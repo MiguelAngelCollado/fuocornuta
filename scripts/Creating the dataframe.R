@@ -22,28 +22,115 @@ for (n in 1:146) {
   datatest1[n,6] = row[6]
   
 }
+#OC69.1.dat, OC80.1.dat y OC141.1.dat no existen y ha repetido los anteriores, ya los borraremos
 
 
-####
-#Pasando la prueba
-n=103
-tryCatch(temp2<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ","), error=function(e){})
-temp2
+#Here we extract the neccesary time for passing the first test
+success.time<-vector()
+for (n in 1:146) {
+  tryCatch(temp2<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ","), error=function(e){})
+  k<-temp2[min(which(temp2$V2 == " k")),]
+  #Wether it doesn't pass the test or is control test, we put NA, 
+  if (is.na(k$V1)){
+    success.time[n] <-NA
+  }else{
+    success.time[n] <- k$V1
+  }  
+}
 
-(which(temp2$V2 == " k"))
-temp2[(which(temp2$V2 == " k")),]
 
-cut<-min(which(temp$V2 == " p"))
-####
+#Here we extract the time neccesary to get out from the refuge
+getting.out.refuge.time<-vector()
 
 
+for (n in 1:146) {
+  tryCatch(temp3<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ","), error=function(e){})
+  #If there is a " t" in the current row, we extract the time until the activity button is pushed
+  if(temp3[1,2] == " t"){
+    getting.out.refuge.time[n]<-temp3[2,1]
+  }else{
+  #Otherwise, we assign an NA
+    getting.out.refuge.time[n]<-NA
+  }
+}  
+#Having a time of 450000ms means that they didn't leave the refuge
+#(Maybe switch the value for Inf, or create a new column of leaving/not leaving refuge?)
+getting.out.refuge.time    
 
-#OC69.1.dat, OC80.1.dat y OC141.1.dat no existen y ha repetido los anteriores
+####Time until touching every cue
+
+time.until.first.cue<-vector()
+time.until.second.cue<-vector()
+time.until.third.cue<-vector()
+time.until.fourth.cue<-vector()
+for (n in 1:146) {
+tryCatch(temp4<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ","), error=function(e){})
+q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+  time.until.first.cue[n] <- NA
+  }else{
+  time.until.first.cue[n] <- temp4[q,1]
+}
+
+w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+  time.until.second.cue[n] <- NA
+  }else{
+  time.until.second.cue[n] <- temp4[w,1]
+}
+
+e<-min(which(temp4$V2 == " e"))
+if(e == Inf){
+  time.until.third.cue[n] <- NA
+}else{
+  time.until.third.cue[n] <- temp4[e,1]
+}
+
+r<-min(which(temp4$V2 == " r"))
+if(r == Inf){
+  time.until.fourth.cue[n] <- NA
+}else{
+  time.until.fourth.cue[n] <- temp4[r,1]
+}
+
+}
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue, 2 cues, 3 cues and 4 cues
+time.until.cues<-cbind(time.until.first.cue, time.until.second.cue, 
+      time.until.third.cue, time.until.fourth.cue)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues[is.na(time.until.cues)] <- Inf
+
+
+
+touch.1.cue<-vector()
+touch.2.cues<-vector()
+touch.3.cues<-vector()
+touch.4.cues<-vector()
+  for (n in 1:146) {
+  touch.1.cue[n] <- sort(time.until.cues[n,], TRUE)[4]
+  touch.2.cues[n] <-(sort(time.until.cues[n,], TRUE)[4] + sort(time.until.cues[n,], TRUE)[3])
+  touch.3.cues[n] <-((sort(time.until.cues[n,], TRUE)[4] + sort(time.until.cues[n,], TRUE)[3] + 
+                        sort(time.until.cues[n,], TRUE)[2]))
+  touch.4.cues[n] <-(sort(time.until.cues[n,], TRUE)[4] + sort(time.until.cues[n,], TRUE)[3] + 
+                       sort(time.until.cues[n,], TRUE)[2] + sort(time.until.cues[n,], TRUE)[1])
+    }
+  cbind(touch.1.cue,touch.2.cues,touch.3.cues,touch.4.cues)
+
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue[touch.1.cue == Inf] <- NA
+touch.2.cues[touch.2.cues == Inf] <- NA
+touch.3.cues[touch.3.cues == Inf] <- NA
+touch.4.cues[touch.4.cues == Inf] <- NA
+
+
 
 
 library(dplyr)
 datatest1<-rename(datatest1, test = V1, species = V2, sex=V3, experiment.type=V4, correct.cue=V5, speed=V6)
 datatest1
+
 
 
 #We extract most of the data from the OCXX.1.cd.res archives.
@@ -126,12 +213,38 @@ refuge.re.enter<-(refuge.enter.times>0)
 (test == datatest1$test)
 
 
+#These columns came empty for this test
+nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+eating.time<-nastring
+eating.times<-nastring
+time.until.eating<-nastring
+lid.exploring.time<-nastring
+lid.exploring.times<-nastring
+length(eating.time)
 View(cbind(test, datatest1, activity.time, inactivity.time, refuge.time, 
-      activity.prop, inactivity.prop, refuge.prop, first.quadrant.prop, 
-      second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
-      first.cue.time, second.cue.time, third.cue.time, fourth.cue.time,
-      times.resting, escape.time, escape.attemps, refuge.enter.times, refuge.re.enter,
-      success))
+      getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
+      first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
+      first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
+      third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
+      touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues,
+      times.resting, escape.time, escape.attemps, 
+      refuge.enter.times, refuge.re.enter, success, success.time, 
+      eating.time, eating.times, time.until.eating,
+      lid.exploring.time, lid.exploring.times))
+
+test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time, 
+              getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
+              first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
+              first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
+              third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
+              touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues,
+              times.resting, escape.time, escape.attemps, 
+              refuge.enter.times, refuge.re.enter, success, success.time, 
+              eating.time, eating.times, time.until.eating,
+              lid.exploring.time, lid.exploring.times))
+getwd()
+write.csv(test1, "data/test1.csv")
 ###vamos por aquí-----
 
 
