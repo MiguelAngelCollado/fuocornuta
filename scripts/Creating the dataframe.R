@@ -243,8 +243,7 @@ test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time,
               refuge.enter.times, refuge.re.enter, success, success.time, 
               eating.time, eating.times, time.until.eating,
               lid.exploring.time, lid.exploring.times))
-getwd()
-write.csv(test1, "data/test1.csv")
+
 ###vamos por aquí-----
 
 
