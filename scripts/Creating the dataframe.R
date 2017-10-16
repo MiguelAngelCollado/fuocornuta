@@ -212,6 +212,8 @@ refuge.re.enter<-(refuge.enter.times>0)
 #This must be all TRUE so we can continue :)
 (test == datatest1$test)
 
+#We create the ID for every bee, based on the test vector
+ID<-gsub("\\.\\d", "", as.character(test))
 
 #These columns came empty for this test
 nastring<-seq(length.out = 146)
@@ -221,8 +223,13 @@ eating.times<-nastring
 time.until.eating<-nastring
 lid.exploring.time<-nastring
 lid.exploring.times<-nastring
+
+#This dataset were not cut
+cut.uncut<-rep("uncut",146)
+
+
 length(eating.time)
-View(cbind(test, datatest1, activity.time, inactivity.time, refuge.time, 
+View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time, 
       getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
       first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
@@ -231,7 +238,7 @@ View(cbind(test, datatest1, activity.time, inactivity.time, refuge.time,
       times.resting, escape.time, escape.attemps, 
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
-      lid.exploring.time, lid.exploring.times))
+      lid.exploring.time, lid.exploring.times, cut.uncut))
 
 test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time, 
               getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
@@ -242,32 +249,7 @@ test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time,
               times.resting, escape.time, escape.attemps, 
               refuge.enter.times, refuge.re.enter, success, success.time, 
               eating.time, eating.times, time.until.eating,
-              lid.exploring.time, lid.exploring.times))
-
-###vamos por aquí-----
-
-
-
-
-
-
-
-######
-n=103
-azx<- (refuge$StateAllDur.N > 1)
-
-######
-
-
-
-
-
-
-
-
-
-
-
+              lid.exploring.time, lid.exploring.times, cut.uncut))
 
 
 
@@ -277,9 +259,17 @@ azx<- (refuge$StateAllDur.N > 1)
 
 
 #Second test----
+#For this dataset, we will use the whole uncut data, including the states and behaviors
+#after eating
+temp=NULL
+n=NULL
+row<-NULL
+
+
 datatest2<-data.frame()
 
-for (n in 1:146) {
+#The first file is the OC8.2, so me wust start with the number 8
+for (n in 8:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".2.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
   row<-t(temp$V2)
   row<-as.vector(row)
@@ -290,6 +280,87 @@ for (n in 1:146) {
   datatest2[n,5] = row[5]
   datatest2[n,6] = row[6]
 }
+datatest2
+
+#We extract most of the data from the OCXX.2.cd.res archives.
+
+#We first create the blank vectors for this info
+
+activity.time2<-vector()
+inactivity.time2<-vector()
+test2<-vector()
+activity.prop2<-vector()
+inactivity.prop2<-vector()
+first.quadrant.prop2<-vector()
+second.quadrant.prop2<-vector()
+third.quadrant.prop2<-vector()
+fourth.quadrant.prop2<-vector()
+#####A partir de aquí hay que actualizarlo para este loop
+first.cue.time<-vector()
+second.cue.time<-vector()
+third.cue.time<-vector()
+fourth.cue.time<-vector()
+times.resting<-vector()
+escape.time<-vector()
+escape.attemps<-vector()
+refuge.enter.times<-vector()
+refuge.re.enter<-vector()
+success<-vector()
+n=8
+for (n in 8:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+  
+  #We extract from each data OCXX.2 dataframe the different behaviors and states
+  activity2<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity2<-subset(temp, subset = (temp$Behavior == " i"))
+  firstquadrant2<-subset(temp, subset = (temp$Behavior == " 1"))  
+  secondquadrant2<-subset(temp, subset = (temp$Behavior == " 2"))
+  thirquadrant2<-subset(temp, subset = (temp$Behavior == " 3"))
+  fourthquadrant2<-subset(temp, subset = (temp$Behavior == " 4"))
+  firstcue<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue<-subset(temp, subset = (temp$Behavior == " w"))
+  thirdcue<-subset(temp, subset = (temp$Behavior == " e"))
+  fourthcue<-subset(temp, subset = (temp$Behavior == " r"))
+  escape<-subset(temp, subset = (temp$Behavior == " o"))
+  succeding<-subset(temp, subset = (temp$Behavior == " k"))
+  #We extract the test info (OCXX.2) for assuring the coordination with the previous created
+  #dataframe
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+  
+  #We fill the blank vectors with the desired information
+  test2[n] = rowid
+  activity.time2[n] = activity2$StateAllDur.X
+  inactivity.time2[n] = inactivity2$StateAllDur.X
+  activity.prop2[n] = activity2$StateAllDur.Prop
+  inactivity.prop2[n] = inactivity2$StateAllDur.Prop
+  first.quadrant.prop2[n] = firstquadrant2$StateAllDur.Prop
+  second.quadrant.prop2[n] = secondquadrant2$StateAllDur.Prop
+  third.quadrant.prop2[n] = thirquadrant2$StateAllDur.Prop
+  fourth.quadrant.prop2[n] = fourthquadrant2$StateAllDur.Prop
+  first.cue.time[n] = firstcue$StateAllDur.X
+  second.cue.time[n] = secondcue$StateAllDur.X
+  third.cue.time[n] = thirdcue$StateAllDur.X
+  fourth.cue.time[n] = fourthcue$StateAllDur.X
+  times.resting[n] = inactivity$StateAllDur.N
+  escape.time[n] = escape$StateAllDur.X 
+  escape.attemps[n] = escape$StateAllDur.N
+  #We remove the initial status of being inside the refuge because it doesn't count 
+  #as re-entering, so we rest 1
+  refuge.enter.times[n] = (refuge$StateAllDur.N - 1)
+  success[n] = (succeding$StateAllDur.N>0)
+}
+activity.time2
+inactivity.time2
+test2
+
+
+#These columns are empty for this test
+nastring<-seq(length.out = 146)
+refuge.time2<- nastring
+###vamos por aquí-----
+
 
 #Third test----
 datatest3<-data.frame()
