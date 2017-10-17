@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC17.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Tue Oct 17 11:13:48 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC17.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 0.00, 0.00, 0.00, 0.0000
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 20.00, 223987.00, 11199.35, 0.9955
+0, u, Activity, , , 20.00, 224120.00, 11206.00, 0.9961
 0, w, Cardboard 2, , , 0.00, 0.00, 0.00, 0.0000

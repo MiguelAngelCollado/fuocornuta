@@ -215,6 +215,14 @@ refuge.re.enter<-(refuge.enter.times>0)
 #We create the ID for every bee, based on the test vector
 ID<-gsub("\\.\\d", "", as.character(test))
 
+#Did the bee ever leaved the refuge within the 15 minutes?
+refuge.time
+refuge.exit<-refuge.time
+refuge.exit[((refuge.exit > 0) & (refuge.exit < 450000))]<-1
+refuge.exit[refuge.exit == 450000]<-0
+refuge.exit[refuge.exit == 0]<-"No"
+refuge.exit[refuge.exit == "1"]<-"Yes"
+
 #These columns came empty for this test
 nastring<-seq(length.out = 146)
 nastring[ nastring > 0 ] <- NA
@@ -235,7 +243,7 @@ View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
       third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
       touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues,
-      times.resting, escape.time, escape.attemps, 
+      times.resting, escape.time, escape.attemps, refuge.exit,
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
       lid.exploring.time, lid.exploring.times, cut.uncut))
@@ -250,13 +258,6 @@ test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time,
               refuge.enter.times, refuge.re.enter, success, success.time, 
               eating.time, eating.times, time.until.eating,
               lid.exploring.time, lid.exploring.times, cut.uncut))
-
-
-
-
-
-
-
 
 #Second test----
 #For this dataset, we will use the whole uncut data, including the states and behaviors
@@ -295,18 +296,13 @@ first.quadrant.prop2<-vector()
 second.quadrant.prop2<-vector()
 third.quadrant.prop2<-vector()
 fourth.quadrant.prop2<-vector()
-#####A partir de aquí hay que actualizarlo para este loop
-first.cue.time<-vector()
-second.cue.time<-vector()
-third.cue.time<-vector()
-fourth.cue.time<-vector()
-times.resting<-vector()
-escape.time<-vector()
-escape.attemps<-vector()
-refuge.enter.times<-vector()
-refuge.re.enter<-vector()
-success<-vector()
-n=8
+first.cue.time2<-vector()
+second.cue.time2<-vector()
+times.resting2<-vector()
+escape.time2<-vector()
+escape.attemps2<-vector()
+
+n=13
 for (n in 8:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
   tryCatch(tempid<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
@@ -318,12 +314,9 @@ for (n in 8:146) {
   secondquadrant2<-subset(temp, subset = (temp$Behavior == " 2"))
   thirquadrant2<-subset(temp, subset = (temp$Behavior == " 3"))
   fourthquadrant2<-subset(temp, subset = (temp$Behavior == " 4"))
-  firstcue<-subset(temp, subset = (temp$Behavior == " q"))
-  secondcue<-subset(temp, subset = (temp$Behavior == " w"))
-  thirdcue<-subset(temp, subset = (temp$Behavior == " e"))
-  fourthcue<-subset(temp, subset = (temp$Behavior == " r"))
-  escape<-subset(temp, subset = (temp$Behavior == " o"))
-  succeding<-subset(temp, subset = (temp$Behavior == " k"))
+  firstcue2<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue2<-subset(temp, subset = (temp$Behavior == " w"))
+  escape2<-subset(temp, subset = (temp$Behavior == " o"))
   #We extract the test info (OCXX.2) for assuring the coordination with the previous created
   #dataframe
   rowid<-t(tempid$V2)
@@ -339,26 +332,43 @@ for (n in 8:146) {
   second.quadrant.prop2[n] = secondquadrant2$StateAllDur.Prop
   third.quadrant.prop2[n] = thirquadrant2$StateAllDur.Prop
   fourth.quadrant.prop2[n] = fourthquadrant2$StateAllDur.Prop
-  first.cue.time[n] = firstcue$StateAllDur.X
-  second.cue.time[n] = secondcue$StateAllDur.X
-  third.cue.time[n] = thirdcue$StateAllDur.X
-  fourth.cue.time[n] = fourthcue$StateAllDur.X
-  times.resting[n] = inactivity$StateAllDur.N
-  escape.time[n] = escape$StateAllDur.X 
-  escape.attemps[n] = escape$StateAllDur.N
-  #We remove the initial status of being inside the refuge because it doesn't count 
-  #as re-entering, so we rest 1
-  refuge.enter.times[n] = (refuge$StateAllDur.N - 1)
-  success[n] = (succeding$StateAllDur.N>0)
-}
+  first.cue.time2[n] = firstcue2$StateAllDur.X
+  second.cue.time2[n] = secondcue2$StateAllDur.X
+  times.resting2[n] = inactivity2$StateAllDur.N
+  escape.time2[n] = escape2$StateAllDur.X 
+  escape.attemps2[n] = escape2$StateAllDur.N
+  }
 activity.time2
 inactivity.time2
 test2
+activity.prop2
+inactivity.prop2
+first.quadrant.prop2
+second.quadrant.prop2
+third.quadrant.prop2
+fourth.quadrant.prop2
+first.cue.time2
+second.cue.time2
+times.resting2
+escape.time2
+escape.attemps2
 
+cbind(test2,(activity.prop2 + inactivity.prop2))
+(first.quadrant.prop2 + second.quadrant.prop2 + third.quadrant.prop2 + fourth.quadrant.prop2)
 
 #These columns are empty for this test
 nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+
 refuge.time2<- nastring
+third.cue.time.2<-nastring
+fourth.cue.time.2<-nastring
+refuge.enter.times.2<-nastring
+refuge.re.enter.2<-nastring
+success.2<-nastring
+getting.out.refuge.time2<-nastring
+refuge.prop2<-nastring
+
 ###vamos por aquí-----
 
 
@@ -408,3 +418,33 @@ for (n in 1:146) {
   datatest5[n,5] = row[5]
   datatest5[n,6] = row[6]
 }
+
+
+###comprobamos que el jwatcher no nos trollea y empieza el dataframe en la misma línea
+#siempre
+n=8
+elputojwatcher1<-vector()
+for (n in 1:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".1.cd.res"), skip = 0, sep = "=", header = FALSE, nrows = 1), error=function(e){})
+  temp$V2
+  elputojwatcher1[n]<-temp$V2
+}
+
+elputojwatcher2<-vector()
+for (n in 8:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 0, sep = "=", header = FALSE, nrows = 1), error=function(e){})
+  temp$V2
+  elputojwatcher2[n]<-temp$V2
+}
+
+#Que empiece siempre en cero todo
+n=8
+good.start.please<-vector()
+for (n in 1:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ",", nrows= 1), error=function(e){})
+  row<-t(temp$V2)
+  row<-as.vector(row)
+  good.start.please[n]<-temp$V1
+
+}
+which(good.start.please>0)
