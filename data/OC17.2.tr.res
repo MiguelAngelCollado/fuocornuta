@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC17.2.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Tue Oct 17 12:46:55 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC17.2.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -114,8 +114,8 @@ Trace, r, State, 0, 0
 Bin, 0, Offset, 0, 87437
 Trace, t, State, 0, 0
 
-Bin, 0, Offset, 0, 79, 79, 87437
-Trace, u, State, 0, 0, 1, 1
+Bin, 0, Offset, 0, 0, 87437
+Trace, u, State, 0, 1, 1
 
 Bin, 0, Offset, 0, 87437
 Trace, w, State, 0, 0

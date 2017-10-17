@@ -4,6 +4,8 @@
 #Build data frame for the first experiment
 #First we build the base data including ID, Species, Sex, Treatment or Experiment,
 #correct cardboard and speed of viewing
+
+#We extract data from the OCXX.1.dat archives
 temp=NULL
 n=NULL
 row<-NULL
@@ -54,7 +56,6 @@ for (n in 1:146) {
   }
 }  
 #Having a time of 450000ms means that they didn't leave the refuge
-#(Maybe switch the value for Inf, or create a new column of leaving/not leaving refuge?)
 getting.out.refuge.time    
 
 ####Time until touching every cue
@@ -259,9 +260,13 @@ test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time,
               eating.time, eating.times, time.until.eating,
               lid.exploring.time, lid.exploring.times, cut.uncut))
 
+
+(first.quadrant.prop + second.quadrant.prop + third.quadrant.prop + fourth.quadrant.prop)
 #Second test----
 #For this dataset, we will use the whole uncut data, including the states and behaviors
 #after eating
+
+#We extract data from the OCXX.2.dat archives
 temp=NULL
 n=NULL
 row<-NULL
@@ -283,7 +288,55 @@ for (n in 8:146) {
 }
 datatest2
 
-#We extract most of the data from the OCXX.2.cd.res archives.
+####Time until touching the first cue and the second
+
+time.until.first.cue2<-vector()
+time.until.second.cue2<-vector()
+n=20
+for (n in 8:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".2.dat"), skip = 24, sep = ","), error=function(e){})
+  q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+    time.until.first.cue2[n] <- NA
+  }else{
+    time.until.first.cue2[n] <- temp4[q,1]
+  }
+  
+  w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+    time.until.second.cue2[n] <- NA
+  }else{
+    time.until.second.cue2[n] <- temp4[w,1]
+  }
+  
+}
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue and 2 cues
+time.until.cues2<-cbind(time.until.first.cue2, time.until.second.cue2)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues2[is.na(time.until.cues2)] <- Inf
+
+
+
+touch.1.cue2<-vector()
+touch.2.cues2<-vector()
+for (n in 8:146) {
+  touch.1.cue2[n] <- sort(time.until.cues2[n,], TRUE)[2]
+  touch.2.cues2[n] <-(sort(time.until.cues2[n,], TRUE)[2] + sort(time.until.cues2[n,], TRUE)[1])
+}
+
+cbind(touch.1.cue2,touch.2.cues2)
+datatest2
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue2[touch.1.cue2 == Inf] <- NA
+touch.2.cues2[touch.2.cues2 == Inf] <- NA
+
+
+
+
+
+#We extract data from the OCXX.2.cd.res archives.
 
 #We first create the blank vectors for this info
 
@@ -353,6 +406,9 @@ times.resting2
 escape.time2
 escape.attemps2
 
+#This must be TRUE (or NA for the first 8) to continue
+(test2 == datatest2$V1)
+
 cbind(test2,(activity.prop2 + inactivity.prop2))
 (first.quadrant.prop2 + second.quadrant.prop2 + third.quadrant.prop2 + fourth.quadrant.prop2)
 
@@ -368,7 +424,10 @@ refuge.re.enter.2<-nastring
 success.2<-nastring
 getting.out.refuge.time2<-nastring
 refuge.prop2<-nastring
-
+time.until.third.cue2<-nastring
+time.until.fourth.cue2<-nastring
+touch.3.cues2<-nastring
+touch.4.cues<-nastring
 ###vamos por aquí-----
 
 
@@ -419,6 +478,7 @@ for (n in 1:146) {
   datatest5[n,6] = row[6]
 }
 
+#Data correction (don't run)----
 
 ###comprobamos que el jwatcher no nos trollea y empieza el dataframe en la misma línea
 #siempre
@@ -448,3 +508,16 @@ for (n in 1:146) {
 
 }
 which(good.start.please>0)
+
+good.start.please2<-vector()
+for (n in 8:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".2.dat"), skip = 24, sep = ",", nrows= 1), error=function(e){})
+  row<-t(temp$V2)
+  row<-as.vector(row)
+  good.start.please2[n]<-temp$V1
+  
+}
+good.start.please2
+which(good.start.please2>0)
+
+second.cue.time2

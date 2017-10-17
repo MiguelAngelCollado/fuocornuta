@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC62.1.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Tue Oct 17 13:13:16 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC62.1.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC62.1
-Answer.2=Osmi acornuta
+Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
 Answer.5=
