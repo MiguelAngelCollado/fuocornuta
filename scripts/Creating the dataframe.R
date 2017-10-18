@@ -232,7 +232,7 @@ eating.times<-nastring
 time.until.eating<-nastring
 lid.exploring.time<-nastring
 lid.exploring.times<-nastring
-
+correct.cue.time<-nastring
 #This dataset were not cut
 cut.uncut<-rep("uncut",146)
 
@@ -243,22 +243,12 @@ View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time,
       first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
       third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
-      touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues,
+      touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time,
       times.resting, escape.time, escape.attemps, refuge.exit,
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
       lid.exploring.time, lid.exploring.times, cut.uncut))
 
-test1<-(cbind(test, datatest1, activity.time, inactivity.time, refuge.time, 
-              getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
-              first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
-              first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
-              third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
-              touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues,
-              times.resting, escape.time, escape.attemps, 
-              refuge.enter.times, refuge.re.enter, success, success.time, 
-              eating.time, eating.times, time.until.eating,
-              lid.exploring.time, lid.exploring.times, cut.uncut))
 
 
 (first.quadrant.prop + second.quadrant.prop + third.quadrant.prop + fourth.quadrant.prop)
@@ -332,10 +322,14 @@ datatest2
 touch.1.cue2[touch.1.cue2 == Inf] <- NA
 touch.2.cues2[touch.2.cues2 == Inf] <- NA
 
-
-
-
-
+#Time until eating
+time.until.eating2<-vector()
+n=12
+for (n in 8:146) {
+tryCatch(temp<-read.table(paste0("data/OC",n,".2.dat"), skip = 24, sep = ","), error=function(e){})
+comer<-temp[min(which(temp$V2 == " p")),]
+time.until.eating2[n]<-comer$V1
+}
 #We extract data from the OCXX.2.cd.res archives.
 
 #We first create the blank vectors for this info
@@ -354,7 +348,8 @@ second.cue.time2<-vector()
 times.resting2<-vector()
 escape.time2<-vector()
 escape.attemps2<-vector()
-
+eating.time2<-vector()
+eating.times2<-vector()
 n=13
 for (n in 8:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
@@ -370,6 +365,7 @@ for (n in 8:146) {
   firstcue2<-subset(temp, subset = (temp$Behavior == " q"))
   secondcue2<-subset(temp, subset = (temp$Behavior == " w"))
   escape2<-subset(temp, subset = (temp$Behavior == " o"))
+  eating2<-subset(temp, subset = (temp$Behavior == " p"))
   #We extract the test info (OCXX.2) for assuring the coordination with the previous created
   #dataframe
   rowid<-t(tempid$V2)
@@ -390,7 +386,9 @@ for (n in 8:146) {
   times.resting2[n] = inactivity2$StateAllDur.N
   escape.time2[n] = escape2$StateAllDur.X 
   escape.attemps2[n] = escape2$StateAllDur.N
-  }
+  eating.time2[n] = eating2$StateAllDur.X
+  eating.times2[n] = eating2$StateAllDur.N
+    }
 activity.time2
 inactivity.time2
 test2
@@ -405,12 +403,39 @@ second.cue.time2
 times.resting2
 escape.time2
 escape.attemps2
-
+eating.time2
+eating.times2
+cbind(eating.time2, eating.times2)
 #This must be TRUE (or NA for the first 8) to continue
 (test2 == datatest2$V1)
 
+#We create the ID column
+ID2<-gsub("\\.\\d", "", as.character(test2))
+
 cbind(test2,(activity.prop2 + inactivity.prop2))
 (first.quadrant.prop2 + second.quadrant.prop2 + third.quadrant.prop2 + fourth.quadrant.prop2)
+
+
+#Time spent in the correct cue
+datatest2$V5
+first.cue.time2
+second.cue.time2
+correct.cue.time2<-vector()
+n=13
+for (n in 8:146) {
+  #We put the condition that if the correct cue is on the left, take the time spent
+  #in the firs cue (the one in the left), else, take the time spent in the second cue
+  #(the one in the right)
+  if ((datatest2$V5[n] == "Yellow left" | datatest2$V5[n] == "Blue left")) {
+    correct.cue.time2[n]<-first.cue.time2[n]
+  }else{
+    correct.cue.time2[n]<-second.cue.time2[n]
+  }
+}
+correct.cue.time2
+cbind(datatest2$V5, first.cue.time2, second.cue.time2, correct.cue.time2)
+
+
 
 #These columns are empty for this test
 nastring<-seq(length.out = 146)
@@ -427,9 +452,15 @@ refuge.prop2<-nastring
 time.until.third.cue2<-nastring
 time.until.fourth.cue2<-nastring
 touch.3.cues2<-nastring
-touch.4.cues<-nastring
-###vamos por aquí-----
+touch.4.cues2<-nastring
+refuge.exit.2<-nastring
+success.time2<-nastring
+lid.exploring.time2<-nastring
+lid.exploring.times2<-nastring
 
+#is the data cut after eating? No, it's not for this test
+cut.uncut2<-rep("uncut",146)
+###vamos por aquí----
 
 #Third test----
 datatest3<-data.frame()
