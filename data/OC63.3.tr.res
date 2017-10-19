@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC63.3.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:14:20 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC63.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC63.3
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
-Answer.5=Yellow  right
+Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
 Bin, 0, Offset, 0, 2029, 2029, 4182, 4182, 5950, 5950, 12446, 12446, 13534, 13534, 16982, 16982, 31190, 31190, 32214, 32214, 33669, 33669, 46237, 46237, 235102, 235102, 235638, 235638, 242350, 242350, 264342, 264342, 268230, 268230, 274630, 274630, 333927, 333927, 340078, 340078, 383014, 383014, 421911, 421911, 422590, 422590, 423197, 423197, 424494, 424494, 430798, 430798, 448942, 448942, 450000

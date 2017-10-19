@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC138.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:42 CEST 2017
+# Updated: Thu Oct 19 10:12:13 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC138.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC138.3
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
-Answer.5=Yello left
+Answer.5=Yellow left
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop

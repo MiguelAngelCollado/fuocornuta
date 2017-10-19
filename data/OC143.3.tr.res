@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC143.3.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Thu Oct 19 10:27:31 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC143.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC143.3
-Answer.2=OSmia cornuta
+Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
 Answer.5=Yellow right

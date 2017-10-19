@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC71.2.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:29:27 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC71.2.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC71.2
-Answer.2=OSmia cornuta
+Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
 Answer.5=Blue right

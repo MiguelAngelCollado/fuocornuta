@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC77.3.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:44:58 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC77.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -114,8 +114,8 @@ Trace, r, State, 0, 0
 Bin, 0, Offset, 0, 117979
 Trace, t, State, 0, 0
 
-Bin, 0, Offset, 0, 15, 15, 3260, 3260, 9093, 9093, 37223, 37223, 73893, 73893, 83639, 83639, 90015, 90015, 117979
-Trace, u, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1
+Bin, 0, Offset, 0, 0, 3260, 3260, 9093, 9093, 37223, 37223, 73893, 73893, 83639, 83639, 90015, 90015, 117979
+Trace, u, State, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1
 
 Bin, 0, Offset, 0, 117979
 Trace, w, State, 0, 0

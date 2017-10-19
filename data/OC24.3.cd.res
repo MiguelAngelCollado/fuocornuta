@@ -1,10 +1,10 @@
 FirstLineOfResults=78
 #-----------------------------------------------------------
-# Name: OC143.3.cd.res
+# Name: OC24.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Thu Oct 19 10:27:31 CEST 2017
+# Updated: Thu Oct 19 10:43:32 CEST 2017
 #-----------------------------------------------------------
-FocalDataFile=OC143.3.dat
+FocalDataFile=OC24.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
@@ -68,26 +68,26 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=OC143.3
+Answer.1=OC24.3
 Answer.2=Osmia cornuta
 Answer.3=Female
-Answer.4=Control
-Answer.5=Yellow right
+Answer.4=Treatment
+Answer.5=Yellow left
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
-0, 1, Quadrant 1, , , 27.00, 95886.00, 3551.33, 0.2131
-0, 2, Quadrant 2, , , 19.00, 63874.00, 3361.79, 0.1419
-0, 3, Quadrant 3, , , 12.00, 56818.00, 4734.83, 0.1263
-0, 4, Quadrant 4, , , 8.00, 36667.00, 4583.38, 0.0815
+0, 1, Quadrant 1, , , 16.00, 81267.00, 5079.19, 0.1806
+0, 2, Quadrant 2, , , 6.00, 49727.00, 8287.83, 0.1105
+0, 3, Quadrant 3, , , 6.00, 24586.00, 4097.67, 0.0546
+0, 4, Quadrant 4, , , 2.00, 15469.00, 7734.50, 0.0344
 0, e, Cardboard 3, , , 0.00, 0.00, 0.00, 0.0000
-0, i, Inactivity, , , 0.00, 0.00, 0.00, 0.0000
+0, i, Inactivity, , , 1.00, 14112.00, 14112.00, 0.0314
 0, j, Lid exploring, , , 0.00, 0.00, 0.00, 0.0000
 0, k, Succed, , , 0.00, 0.00, 0.00, 0.0000
-0, o, Escaping, , , 12.00, 306877.00, 25573.08, 0.6819
-0, p, Eating, , , 1.00, 54666.00, 54666.00, 0.1215
-0, q, Cardboard 1, , , 14.00, 75139.00, 5367.07, 0.1670
+0, o, Escaping, , , 19.00, 203602.00, 10715.89, 0.4524
+0, p, Eating, , , 1.00, 69585.00, 69585.00, 0.1546
+0, q, Cardboard 1, , , 9.00, 272479.00, 30275.44, 0.6055
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 14.00, 395334.00, 28238.14, 0.8785
-0, w, Cardboard 2, , , 10.00, 114756.00, 11475.60, 0.2550
+0, u, Activity, , , 21.00, 365876.00, 17422.67, 0.8131
+0, w, Cardboard 2, , , 2.00, 1340.00, 670.00, 0.0030

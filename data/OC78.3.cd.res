@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC78.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:27:03 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC78.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC78.3
-Answer.2=OSmia cornuta
+Answer.2=Osmia cornuta
 Answer.3=Male
 Answer.4=Treatment
 Answer.5=Blue left

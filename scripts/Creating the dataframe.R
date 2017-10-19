@@ -409,7 +409,7 @@ escape.attemps2
 eating.time2
 eating.times2
 cbind(eating.time2, eating.times2)
-#This must be TRUE (or NA for the first 8) to continue
+#This must be TRUE (or NA for the first 7) to continue
 (test2 == datatest2$V1)
 
 #We create the ID column
@@ -469,7 +469,6 @@ datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type
 datatest2
 
 
-###vamos por aquí----
 View(cbind(ID2, test2, datatest2, activity.time2, inactivity.time2, refuge.time2,
       getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
       first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
@@ -481,25 +480,13 @@ View(cbind(ID2, test2, datatest2, activity.time2, inactivity.time2, refuge.time2
       eating.time2, eating.times2, time.until.eating2,
       lid.exploring.time2, lid.exploring.times2, cut.uncut2))
 
-#####Modelo del primero para orientarte
-View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time, 
-           getting.out.refuge.time, activity.prop, inactivity.prop, refuge.prop, 
-           first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
-           first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
-           third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
-           touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time,
-           times.resting, escape.time, escape.attemps, refuge.exit,
-           refuge.enter.times, refuge.re.enter, success, success.time, 
-           eating.time, eating.times, time.until.eating,
-           lid.exploring.time, lid.exploring.times, cut.uncut))
-
-##############################
 
 
 #Third test----
 datatest3<-data.frame()
-
-for (n in 1:146) {
+n=9
+#We start at the number 9, because the first file to read is OC9.3
+for (n in 9:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".3.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
   row<-t(temp$V2)
   row<-as.vector(row)
@@ -510,6 +497,142 @@ for (n in 1:146) {
   datatest3[n,5] = row[5]
   datatest3[n,6] = row[6]
 }
+datatest3
+
+####Time until touching the first cue and the second
+
+time.until.first.cue3<-vector()
+time.until.second.cue3<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".3.dat"), skip = 24, sep = ","), error=function(e){})
+  q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+    time.until.first.cue3[n] <- NA
+  }else{
+    time.until.first.cue3[n] <- temp4[q,1]
+  }
+  
+  w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+    time.until.second.cue3[n] <- NA
+  }else{
+    time.until.second.cue3[n] <- temp4[w,1]
+  }
+  
+}
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue and 2 cues
+time.until.cues3<-cbind(time.until.first.cue3, time.until.second.cue3)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues3[is.na(time.until.cues3)] <- Inf
+
+
+
+touch.1.cue3<-vector()
+touch.2.cues3<-vector()
+for (n in 9:146) {
+  touch.1.cue3[n] <- sort(time.until.cues3[n,], TRUE)[2]
+  touch.2.cues3[n] <-(sort(time.until.cues3[n,], TRUE)[2] + sort(time.until.cues3[n,], TRUE)[1])
+}
+
+cbind(touch.1.cue3,touch.2.cues3)
+datatest3
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue3[touch.1.cue3 == Inf] <- NA
+touch.2.cues3[touch.2.cues3 == Inf] <- NA
+
+
+#Time until eating
+time.until.eating3<-vector()
+n=12
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".3.dat"), skip = 24, sep = ","), error=function(e){})
+  comer<-temp[min(which(temp$V2 == " p")),]
+  time.until.eating3[n]<-comer$V1
+}
+
+#We extract a lot of info from OCXX.3.cd.res files
+activity.time3<-vector()
+inactivity.time3<-vector()
+test3<-vector()
+activity.prop3<-vector()
+inactivity.prop3<-vector()
+first.quadrant.prop3<-vector()
+second.quadrant.prop3<-vector()
+third.quadrant.prop3<-vector()
+fourth.quadrant.prop3<-vector()
+first.cue.time3<-vector()
+second.cue.time3<-vector()
+times.resting3<-vector()
+escape.time3<-vector()
+escape.attemps3<-vector()
+eating.time3<-vector()
+eating.times3<-vector()
+n=9
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".3.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/OC",n,".3.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+  
+  #We extract from each data OCXX.2 dataframe the different behaviors and states
+  activity3<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity3<-subset(temp, subset = (temp$Behavior == " i"))
+  firstquadrant3<-subset(temp, subset = (temp$Behavior == " 1"))  
+  secondquadrant3<-subset(temp, subset = (temp$Behavior == " 2"))
+  thirquadrant3<-subset(temp, subset = (temp$Behavior == " 3"))
+  fourthquadrant3<-subset(temp, subset = (temp$Behavior == " 4"))
+  firstcue3<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue3<-subset(temp, subset = (temp$Behavior == " w"))
+  escape3<-subset(temp, subset = (temp$Behavior == " o"))
+  eating3<-subset(temp, subset = (temp$Behavior == " p"))
+  #We extract the test info (OCXX.2) for assuring the coordination with the previous created
+  #dataframe
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+  
+  #We fill the blank vectors with the desired information
+  test3[n] = rowid
+  activity.time3[n] = activity3$StateAllDur.X
+  inactivity.time3[n] = inactivity3$StateAllDur.X
+  activity.prop3[n] = activity3$StateAllDur.Prop
+  inactivity.prop3[n] = inactivity3$StateAllDur.Prop
+  first.quadrant.prop3[n] = firstquadrant3$StateAllDur.Prop
+  second.quadrant.prop3[n] = secondquadrant3$StateAllDur.Prop
+  third.quadrant.prop3[n] = thirquadrant3$StateAllDur.Prop
+  fourth.quadrant.prop3[n] = fourthquadrant3$StateAllDur.Prop
+  first.cue.time3[n] = firstcue3$StateAllDur.X
+  second.cue.time3[n] = secondcue3$StateAllDur.X
+  times.resting3[n] = inactivity3$StateAllDur.N
+  escape.time3[n] = escape3$StateAllDur.X 
+  escape.attemps3[n] = escape3$StateAllDur.N
+  eating.time3[n] = eating3$StateAllDur.X
+  eating.times3[n] = eating3$StateAllDur.N
+}
+activity.time3
+inactivity.time3
+test3
+activity.prop3
+inactivity.prop3
+first.quadrant.prop3
+second.quadrant.prop3
+third.quadrant.prop3
+fourth.quadrant.prop3
+first.cue.time3
+second.cue.time3
+times.resting3
+escape.time3
+escape.attemps3
+eating.time3
+eating.times3
+cbind(eating.time3, eating.times3)
+#This must be TRUE (or NA for the first 8) to continue
+(test3 == datatest3$V1)
+
+
+###vamos por aquí----
+
+
 
 #Fourth test----
 datatest4<-data.frame()
@@ -586,3 +709,31 @@ good.start.please2
 which(good.start.please2>0)
 
 second.cue.time2
+
+colores1<-datatest1$correct.cue
+colores1<-as.factor(colores1)
+
+colores2<-datatest2$correct.cue2
+colores2<-as.factor(colores2)
+
+colores3<-datatest3$V5
+colores3<-as.factor(colores3)
+levels(colores3)
+which(colores3 == "")
+which(colores3 == "Yello left")
+which(colores3 == "Yellow  right")
+
+memetemp<-datatest3$V1
+memetemp<-as.factor(memetemp)
+levels(memetemp)
+which(memetemp == "OSmia cornuta")
+
+good.start.please3<-vector()
+n=9
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".3.dat"), skip = 24, sep = ",", nrows= 1), error=function(e){})
+  good.start.please3[n]<-temp$V1
+  
+}
+length(good.start.please3)
+which(good.start.please3>0)

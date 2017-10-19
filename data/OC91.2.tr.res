@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC91.2.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:29:36 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC91.2.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC91.2
-Answer.2=OSmia cornuta
+Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
 Answer.5=Yellow right

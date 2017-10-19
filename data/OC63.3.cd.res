@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC63.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:14:20 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC63.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC63.3
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
-Answer.5=Yellow  right
+Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop

@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC85.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Thu Oct 19 10:45:12 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC85.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 2.00, 20697.00, 10348.50, 0.0460
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 2.00, 301816.00, 150908.00, 0.6707
+0, u, Activity, , , 2.00, 301843.00, 150921.50, 0.6708
 0, w, Cardboard 2, , , 4.00, 33359.00, 8339.75, 0.0741
