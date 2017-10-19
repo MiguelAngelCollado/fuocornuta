@@ -27,6 +27,7 @@ for (n in 1:146) {
 #OC69.1.dat, OC80.1.dat y OC141.1.dat no existen y ha repetido los anteriores, ya los borraremos
 
 
+
 #Here we extract the neccesary time for passing the first test
 success.time<-vector()
 for (n in 1:146) {
@@ -128,9 +129,6 @@ touch.4.cues[touch.4.cues == Inf] <- NA
 
 
 
-library(dplyr)
-datatest1<-rename(datatest1, test = V1, species = V2, sex=V3, experiment.type=V4, correct.cue=V5, speed=V6)
-datatest1
 
 
 
@@ -236,6 +234,10 @@ correct.cue.time<-nastring
 #This dataset were not cut
 cut.uncut<-rep("uncut",146)
 
+#Rename
+library(dplyr)
+datatest1<-rename(datatest1, test = V1, species = V2, sex=V3, experiment.type=V4, correct.cue=V5, speed=V6)
+datatest1
 
 length(eating.time)
 View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time, 
@@ -277,6 +279,7 @@ for (n in 8:146) {
   datatest2[n,6] = row[6]
 }
 datatest2
+
 
 ####Time until touching the first cue and the second
 
@@ -460,7 +463,38 @@ lid.exploring.times2<-nastring
 
 #is the data cut after eating? No, it's not for this test
 cut.uncut2<-rep("uncut",146)
+
+library(dplyr)
+datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type2=V4, correct.cue2=V5, speed2=V6)
+datatest2
+
+
 ###vamos por aquí----
+View(cbind(ID2, test2, datatest2, activity.time2, inactivity.time2, refuge.time2,
+      getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
+      first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
+      first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
+      third.cue.time.2, time.until.third.cue2, fourth.cue.time.2, time.until.fourth.cue2,
+      touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2,
+      times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
+      refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
+      eating.time2, eating.times2, time.until.eating2,
+      lid.exploring.time2, lid.exploring.times2, cut.uncut2))
+
+#####Modelo del primero para orientarte
+View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time, 
+           getting.out.refuge.time, activity.prop, inactivity.prop, refuge.prop, 
+           first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
+           first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
+           third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
+           touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time,
+           times.resting, escape.time, escape.attemps, refuge.exit,
+           refuge.enter.times, refuge.re.enter, success, success.time, 
+           eating.time, eating.times, time.until.eating,
+           lid.exploring.time, lid.exploring.times, cut.uncut))
+
+##############################
+
 
 #Third test----
 datatest3<-data.frame()
