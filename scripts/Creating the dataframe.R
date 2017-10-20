@@ -327,6 +327,24 @@ datatest2
 touch.1.cue2[touch.1.cue2 == Inf] <- NA
 touch.2.cues2[touch.2.cues2 == Inf] <- NA
 
+
+#We extract the time until touching the correct cue
+time.until.first.cue2
+time.until.second.cue2
+side2
+time.until.correct.cue2<-vector()
+n=9
+for (n in 8:146) {
+if (side2[n] == "Left") {
+  time.until.correct.cue2[n]<-time.until.first.cue2[n]
+}else{
+  time.until.correct.cue2[n]<-time.until.second.cue2[n]
+}
+  }
+time.until.correct.cue2
+cbind(time.until.first.cue2, time.until.second.cue2, time.until.correct.cue2, side2)
+
+
 #Time until eating
 time.until.eating2<-vector()
 n=12
