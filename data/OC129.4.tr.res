@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC129.4.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:42 CEST 2017
+# Updated: Fri Oct 20 10:58:48 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC129.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -68,7 +68,7 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=129.4
+Answer.1=OC129.4
 Answer.2=Osmia cornuta
 Answer.3=Male
 Answer.4=Treatment

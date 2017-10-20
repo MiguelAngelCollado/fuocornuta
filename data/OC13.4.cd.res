@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC13.4.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:42 CEST 2017
+# Updated: Fri Oct 20 10:59:00 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC13.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -69,7 +69,7 @@ Warnings:
 	No warnings to report.
  
 Answer.1=OC13.4
-Answer.2=OSmia cornuta
+Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
 Answer.5=Yellow right

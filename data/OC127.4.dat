@@ -12,7 +12,7 @@ StartTime=1499323116601
 # Observation stopped: Thu Jul 06 08:46:06 CEST 2017
 StopTime=1499323566601
  
-Answer.1=127.4
+Answer.1=OC127.4
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
@@ -22,7 +22,7 @@ Answer.6=2x
  
  
 #BEGIN DATA
-288, u
+0, u
 977, 3
 8315, 1
 9466, 2

@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC37.4.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Fri Oct 20 11:03:48 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC37.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -71,8 +71,8 @@ Warnings:
 Answer.1=OC37.4
 Answer.2=Osmia cornuta
 Answer.3=Female
-Answer.4=Control
-Answer.5=Treatment
+Answer.4=Treatment
+Answer.5=Blue left
 Answer.6=2x
 #BEGIN RESULTS
 Bin, 0, Offset, 0, 206831, 206831, 222023, 222023, 246767, 246767, 450000

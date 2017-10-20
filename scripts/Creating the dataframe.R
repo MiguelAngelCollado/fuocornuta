@@ -231,6 +231,8 @@ time.until.eating<-nastring
 lid.exploring.time<-nastring
 lid.exploring.times<-nastring
 correct.cue.time<-nastring
+side<-nastring
+color<-nastring
 #This dataset were not cut
 cut.uncut<-rep("uncut",146)
 
@@ -240,7 +242,7 @@ datatest1<-rename(datatest1, test = V1, species = V2, sex=V3, experiment.type=V4
 datatest1
 
 length(eating.time)
-View(cbind(ID,test, datatest1, activity.time, inactivity.time, refuge.time, 
+View(cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refuge.time, 
       getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
       first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
@@ -415,9 +417,6 @@ cbind(eating.time2, eating.times2)
 #We create the ID column
 ID2<-gsub("\\.\\d", "", as.character(test2))
 
-cbind(test2,(activity.prop2 + inactivity.prop2))
-(first.quadrant.prop2 + second.quadrant.prop2 + third.quadrant.prop2 + fourth.quadrant.prop2)
-
 
 #Time spent in the correct cue
 datatest2$V5
@@ -464,12 +463,26 @@ lid.exploring.times2<-nastring
 #is the data cut after eating? No, it's not for this test
 cut.uncut2<-rep("uncut",146)
 
+
+#exctract color
+color2<-gsub("Yellow right", "Yellow", as.character(datatest2$V5))
+color2<-gsub("Yellow left", "Yellow", as.character(color2))
+color2<-gsub("Blue left", "Blue", as.character(color2))
+color2<-gsub("Blue right", "Blue", as.character(color2))
+
+#extract correct side
+side2<-gsub("Yellow right", "Right", as.character(datatest2$V5))
+side2<-gsub("Blue right", "Right", as.character(side2))
+side2<-gsub("Yellow left", "Left", as.character(side2))
+side2<-gsub("Blue left", "Left", as.character(side2))
+
+
 library(dplyr)
 datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type2=V4, correct.cue2=V5, speed2=V6)
 datatest2
 
 
-View(cbind(ID2, test2, datatest2, activity.time2, inactivity.time2, refuge.time2,
+View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time2, refuge.time2,
       getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
       first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
       first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
@@ -629,16 +642,92 @@ cbind(eating.time3, eating.times3)
 #This must be TRUE (or NA for the first 8) to continue
 (test3 == datatest3$V1)
 
+#We create the ID column
+ID3<-gsub("\\.\\d", "", as.character(test3))
 
-###vamos por aquí----
+#Time spent in the correct cue
+datatest3$V5
+first.cue.time3
+second.cue.time3
+correct.cue.time3<-vector()
+n=13
+for (n in 9:146) {
+  #We put the condition that if the correct cue is on the left, take the time spent
+  #in the firs cue (the one in the left), else, take the time spent in the second cue
+  #(the one in the right)
+  if ((datatest3$V5[n] == "Yellow left" | datatest3$V5[n] == "Blue left")) {
+    correct.cue.time3[n]<-first.cue.time3[n]
+  }else{
+    correct.cue.time3[n]<-second.cue.time3[n]
+  }
+}
+correct.cue.time3
+cbind(datatest3$V5, first.cue.time3, second.cue.time3, correct.cue.time3)
+
+
+#These columns are empty for this test
+nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+
+refuge.time3<- nastring
+third.cue.time3<-nastring
+fourth.cue.time3<-nastring
+refuge.enter.times3<-nastring
+refuge.re.enter3<-nastring
+success3<-nastring
+getting.out.refuge.time3<-nastring
+refuge.prop3<-nastring
+time.until.third.cue3<-nastring
+time.until.fourth.cue3<-nastring
+touch.3.cues3<-nastring
+touch.4.cues3<-nastring
+refuge.exit3<-nastring
+success.time3<-nastring
+lid.exploring.time3<-nastring
+lid.exploring.times3<-nastring
+
+#is the data cut after eating? No, it's not for this test
+cut.uncut3<-rep("uncut",146)
+
+
+#exctract color
+color3<-gsub("Yellow right", "Yellow", as.character(datatest3$V5))
+color3<-gsub("Yellow left", "Yellow", as.character(color3))
+color3<-gsub("Blue left", "Blue", as.character(color3))
+color3<-gsub("Blue right", "Blue", as.character(color3))
+
+#extract correct side
+side3<-gsub("Yellow right", "Right", as.character(datatest3$V5))
+side3<-gsub("Blue right", "Right", as.character(side3))
+side3<-gsub("Yellow left", "Left", as.character(side3))
+side3<-gsub("Blue left", "Left", as.character(side3))
+
+library(dplyr)
+datatest3<-rename(datatest3, test3 = V1, species3 = V2, sex3=V3, experiment.type3=V4, correct.cue3=V5, speed3=V6)
+datatest3
+
+
+
+View(cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time3, refuge.time3,
+           getting.out.refuge.time3, activity.prop3, inactivity.prop3, refuge.prop3,
+           first.quadrant.prop3, second.quadrant.prop3, third.quadrant.prop3, fourth.quadrant.prop3,
+           first.cue.time3, time.until.first.cue3, second.cue.time3, time.until.second.cue3,
+           third.cue.time3, time.until.third.cue2, fourth.cue.time3, time.until.fourth.cue3,
+           touch.1.cue3, touch.2.cues3, touch.3.cues3, touch.4.cues3, correct.cue.time3,
+           times.resting3, escape.time3, escape.attemps3, refuge.exit3,
+           refuge.enter.times3, refuge.re.enter3, success3, success.time3,
+           eating.time3, eating.times3, time.until.eating3,
+           lid.exploring.time3, lid.exploring.times3, cut.uncut3))
+
+
 
 
 
 #Fourth test----
 datatest4<-data.frame()
 
-
-for (n in 1:146) {
+n=9
+for (n in 9:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".4.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
   row<-t(temp$V2)
   row<-as.vector(row)
@@ -649,6 +738,10 @@ for (n in 1:146) {
   datatest4[n,5] = row[5]
   datatest4[n,6] = row[6]
 }
+datatest4
+
+
+###vamos por aquí----
 
 #Fifth test-----
 datatest5<-data.frame()
@@ -737,3 +830,23 @@ for (n in 9:146) {
 }
 length(good.start.please3)
 which(good.start.please3>0)
+
+
+#er 4
+datatest4$V1
+
+memetemp<-datatest4$V6
+memetemp<-as.factor(memetemp)
+levels(memetemp)
+which(memetemp == "Treatment")
+
+good.start.please4<-vector()
+n=9
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".4.dat"), skip = 24, sep = ",", nrows= 1), error=function(e){})
+  good.start.please4[n]<-temp$V1
+  
+}
+length(good.start.please4)
+which(good.start.please4>0)
+

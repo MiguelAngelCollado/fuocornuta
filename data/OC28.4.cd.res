@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC28.4.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Fri Oct 20 11:03:38 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC28.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -72,7 +72,7 @@ Answer.1=OC28.4
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
-Answer.5=Treatment
+Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop

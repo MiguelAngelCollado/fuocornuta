@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC127.4.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:42 CEST 2017
+# Updated: Fri Oct 20 11:16:32 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC127.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -68,7 +68,7 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=127.4
+Answer.1=OC127.4
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Treatment
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 10.00, 20713.00, 2071.30, 0.0460
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 16.00, 449712.00, 28107.00, 0.9994
+0, u, Activity, , , 16.00, 450000.00, 28125.00, 1.0000
 0, w, Cardboard 2, , , 13.00, 42132.00, 3240.92, 0.0936

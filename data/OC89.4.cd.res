@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC89.4.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Fri Oct 20 11:16:00 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC89.4.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 6.00, 4712.00, 785.33, 0.0105
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 5.00, 449962.00, 89992.40, 0.9999
+0, u, Activity, , , 5.00, 450000.00, 90000.00, 1.0000
 0, w, Cardboard 2, , , 16.00, 220204.00, 13762.75, 0.4893
