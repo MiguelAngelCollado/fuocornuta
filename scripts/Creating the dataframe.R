@@ -329,6 +329,8 @@ touch.2.cues2[touch.2.cues2 == Inf] <- NA
 
 
 #We extract the time until touching the correct cue
+
+#You need this variables created before!
 time.until.first.cue2
 time.until.second.cue2
 side2
