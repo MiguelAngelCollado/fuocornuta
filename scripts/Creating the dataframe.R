@@ -233,6 +233,7 @@ lid.exploring.times<-nastring
 correct.cue.time<-nastring
 side<-nastring
 color<-nastring
+time.until.correct.cue<-nastring
 #This dataset were not cut
 cut.uncut<-rep("uncut",146)
 
@@ -247,7 +248,7 @@ View(cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refu
       first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
       third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
-      touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time,
+      touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time, time.until.correct.cue,
       times.resting, escape.time, escape.attemps, refuge.exit,
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
@@ -281,6 +282,18 @@ for (n in 8:146) {
   datatest2[n,6] = row[6]
 }
 datatest2
+
+#exctract color
+color2<-gsub("Yellow right", "Yellow", as.character(datatest2$V5))
+color2<-gsub("Yellow left", "Yellow", as.character(color2))
+color2<-gsub("Blue left", "Blue", as.character(color2))
+color2<-gsub("Blue right", "Blue", as.character(color2))
+
+#extract correct side
+side2<-gsub("Yellow right", "Right", as.character(datatest2$V5))
+side2<-gsub("Blue right", "Right", as.character(side2))
+side2<-gsub("Yellow left", "Left", as.character(side2))
+side2<-gsub("Blue left", "Left", as.character(side2))
 
 
 ####Time until touching the first cue and the second
@@ -484,18 +497,6 @@ lid.exploring.times2<-nastring
 cut.uncut2<-rep("uncut",146)
 
 
-#exctract color
-color2<-gsub("Yellow right", "Yellow", as.character(datatest2$V5))
-color2<-gsub("Yellow left", "Yellow", as.character(color2))
-color2<-gsub("Blue left", "Blue", as.character(color2))
-color2<-gsub("Blue right", "Blue", as.character(color2))
-
-#extract correct side
-side2<-gsub("Yellow right", "Right", as.character(datatest2$V5))
-side2<-gsub("Blue right", "Right", as.character(side2))
-side2<-gsub("Yellow left", "Left", as.character(side2))
-side2<-gsub("Blue left", "Left", as.character(side2))
-
 
 library(dplyr)
 datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type2=V4, correct.cue2=V5, speed2=V6)
@@ -507,7 +508,7 @@ View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time
       first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
       first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
       third.cue.time.2, time.until.third.cue2, fourth.cue.time.2, time.until.fourth.cue2,
-      touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2,
+      touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2, time.until.correct.cue2,
       times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
       refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
       eating.time2, eating.times2, time.until.eating2,
@@ -531,6 +532,19 @@ for (n in 9:146) {
   datatest3[n,6] = row[6]
 }
 datatest3
+
+#exctract color
+color3<-gsub("Yellow right", "Yellow", as.character(datatest3$V5))
+color3<-gsub("Yellow left", "Yellow", as.character(color3))
+color3<-gsub("Blue left", "Blue", as.character(color3))
+color3<-gsub("Blue right", "Blue", as.character(color3))
+
+#extract correct side
+side3<-gsub("Yellow right", "Right", as.character(datatest3$V5))
+side3<-gsub("Blue right", "Right", as.character(side3))
+side3<-gsub("Yellow left", "Left", as.character(side3))
+side3<-gsub("Blue left", "Left", as.character(side3))
+
 
 ####Time until touching the first cue and the second
 
@@ -575,6 +589,24 @@ datatest3
 #We don't want to deal with the infinite, so we switch it again to NA  
 touch.1.cue3[touch.1.cue3 == Inf] <- NA
 touch.2.cues3[touch.2.cues3 == Inf] <- NA
+
+#We extract the time until touching the correct cue
+
+#You need this variables created before!
+time.until.first.cue3
+time.until.second.cue3
+side3
+time.until.correct.cue3<-vector()
+n=9
+for (n in 9:146) {
+  if (side3[n] == "Left") {
+    time.until.correct.cue3[n]<-time.until.first.cue3[n]
+  }else{
+    time.until.correct.cue3[n]<-time.until.second.cue3[n]
+  }
+}
+time.until.correct.cue3
+cbind(time.until.first.cue3, time.until.second.cue3, time.until.correct.cue3, side3)
 
 
 #Time until eating
@@ -710,17 +742,6 @@ lid.exploring.times3<-nastring
 cut.uncut3<-rep("uncut",146)
 
 
-#exctract color
-color3<-gsub("Yellow right", "Yellow", as.character(datatest3$V5))
-color3<-gsub("Yellow left", "Yellow", as.character(color3))
-color3<-gsub("Blue left", "Blue", as.character(color3))
-color3<-gsub("Blue right", "Blue", as.character(color3))
-
-#extract correct side
-side3<-gsub("Yellow right", "Right", as.character(datatest3$V5))
-side3<-gsub("Blue right", "Right", as.character(side3))
-side3<-gsub("Yellow left", "Left", as.character(side3))
-side3<-gsub("Blue left", "Left", as.character(side3))
 
 library(dplyr)
 datatest3<-rename(datatest3, test3 = V1, species3 = V2, sex3=V3, experiment.type3=V4, correct.cue3=V5, speed3=V6)
@@ -732,8 +753,8 @@ View(cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time
            getting.out.refuge.time3, activity.prop3, inactivity.prop3, refuge.prop3,
            first.quadrant.prop3, second.quadrant.prop3, third.quadrant.prop3, fourth.quadrant.prop3,
            first.cue.time3, time.until.first.cue3, second.cue.time3, time.until.second.cue3,
-           third.cue.time3, time.until.third.cue2, fourth.cue.time3, time.until.fourth.cue3,
-           touch.1.cue3, touch.2.cues3, touch.3.cues3, touch.4.cues3, correct.cue.time3,
+           third.cue.time3, time.until.third.cue3, fourth.cue.time3, time.until.fourth.cue3,
+           touch.1.cue3, touch.2.cues3, touch.3.cues3, touch.4.cues3, correct.cue.time3, time.until.correct.cue3,
            times.resting3, escape.time3, escape.attemps3, refuge.exit3,
            refuge.enter.times3, refuge.re.enter3, success3, success.time3,
            eating.time3, eating.times3, time.until.eating3,
@@ -760,8 +781,249 @@ for (n in 9:146) {
 }
 datatest4
 
+#exctract color
+color4<-gsub("Yellow right", "Yellow", as.character(datatest4$V5))
+color4<-gsub("Yellow left", "Yellow", as.character(color4))
+color4<-gsub("Blue left", "Blue", as.character(color4))
+color4<-gsub("Blue right", "Blue", as.character(color4))
+
+#extract correct side
+side4<-gsub("Yellow right", "Right", as.character(datatest4$V5))
+side4<-gsub("Blue right", "Right", as.character(side4))
+side4<-gsub("Yellow left", "Left", as.character(side4))
+side4<-gsub("Blue left", "Left", as.character(side4))
+
+color4
+side4
+
+
+#Here we extract the neccesary time for passing the test
+success.time4<-vector()
+for (n in 9:146) {
+  tryCatch(temp2<-read.table(paste0("data/OC",n,".4.dat"), skip = 24, sep = ","), error=function(e){})
+  k<-temp2[min(which(temp2$V2 == " k")),]
+  #Wether it doesn't pass the test or is control test, we put NA, 
+  if (is.na(k$V1)){
+    success.time4[n] <-NA
+  }else{
+    success.time4[n] <- k$V1
+  }  
+}
+
+
+#we extract the time neccesary to reach the first (left) and second (right) cue
+time.until.first.cue4<-vector()
+time.until.second.cue4<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".4.dat"), skip = 24, sep = ","), error=function(e){})
+  q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+    time.until.first.cue4[n] <- NA
+  }else{
+    time.until.first.cue4[n] <- temp4[q,1]
+  }
+  
+  w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+    time.until.second.cue4[n] <- NA
+  }else{
+    time.until.second.cue4[n] <- temp4[w,1]
+  }
+  
+}
+
+time.until.first.cue4
+time.until.second.cue4
+
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue and 2 cues
+time.until.cues4<-cbind(time.until.first.cue4, time.until.second.cue4)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues4[is.na(time.until.cues4)] <- Inf
+
+
+
+touch.1.cue4<-vector()
+touch.2.cues4<-vector()
+for (n in 9:146) {
+  touch.1.cue4[n] <- sort(time.until.cues4[n,], TRUE)[2]
+  touch.2.cues4[n] <-(sort(time.until.cues4[n,], TRUE)[2] + sort(time.until.cues4[n,], TRUE)[1])
+}
+
+cbind(touch.1.cue4,touch.2.cues4)
+datatest4
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue4[touch.1.cue4 == Inf] <- NA
+touch.2.cues4[touch.2.cues4 == Inf] <- NA
+
+#We extract the time until touching the correct cue
+
+#You need this variables created before!
+time.until.first.cue4
+time.until.second.cue4
+side4
+time.until.correct.cue4<-vector()
+
+for (n in 9:146) {
+  if (side4[n] == "Left") {
+    time.until.correct.cue4[n]<-time.until.first.cue4[n]
+  }else{
+    time.until.correct.cue4[n]<-time.until.second.cue4[n]
+  }
+}
+time.until.correct.cue4
+cbind(time.until.first.cue4, time.until.second.cue4, time.until.correct.cue4, side4)
+
+
+activity.time4<-vector()
+inactivity.time4<-vector()
+test4<-vector()
+activity.prop4<-vector()
+inactivity.prop4<-vector()
+first.quadrant.prop4<-vector()
+second.quadrant.prop4<-vector()
+third.quadrant.prop4<-vector()
+fourth.quadrant.prop4<-vector()
+first.cue.time4<-vector()
+second.cue.time4<-vector()
+times.resting4<-vector()
+escape.time4<-vector()
+escape.attemps4<-vector()
+refuge.re.enter4<-vector()
+success4<-vector()
+n=1
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".4.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/OC",n,".4.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+  
+  #We extract from each data OCXX.1 dataframe the different behaviors and states
+  activity4<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity4<-subset(temp, subset = (temp$Behavior == " i"))
+  refuge4<-subset(temp, subset = (temp$Behavior == " t"))
+  firstquadrant4<-subset(temp, subset = (temp$Behavior == " 1"))  
+  secondquadrant4<-subset(temp, subset = (temp$Behavior == " 2"))
+  thirquadrant4<-subset(temp, subset = (temp$Behavior == " 3"))
+  fourthquadrant4<-subset(temp, subset = (temp$Behavior == " 4"))
+  firstcue4<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue4<-subset(temp, subset = (temp$Behavior == " w"))
+  thirdcue4<-subset(temp, subset = (temp$Behavior == " e"))
+  fourthcue4<-subset(temp, subset = (temp$Behavior == " r"))
+  escape4<-subset(temp, subset = (temp$Behavior == " o"))
+  succeding4<-subset(temp, subset = (temp$Behavior == " k"))
+  #We extract the test info (OCXX.1) for assuring the coordination with the previous created
+  #dataframe
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+  
+  #We fill the blank vectors with the desired information
+  test4[n] = rowid
+  activity.time4[n] = activity4$StateAllDur.X
+  inactivity.time4[n] = inactivity4$StateAllDur.X
+  activity.prop4[n] = activity4$StateAllDur.Prop
+  inactivity.prop4[n] = inactivity4$StateAllDur.Prop
+  first.quadrant.prop4[n] = firstquadrant4$StateAllDur.Prop
+  second.quadrant.prop4[n] = secondquadrant4$StateAllDur.Prop
+  third.quadrant.prop4[n] = thirquadrant4$StateAllDur.Prop
+  fourth.quadrant.prop4[n] = fourthquadrant4$StateAllDur.Prop
+  first.cue.time4[n] = firstcue4$StateAllDur.X
+  second.cue.time4[n] = secondcue4$StateAllDur.X
+  times.resting4[n] = inactivity4$StateAllDur.N
+  escape.time4[n] = escape4$StateAllDur.X 
+  escape.attemps4[n] = escape4$StateAllDur.N
+  success4[n] = (succeding4$StateAllDur.N>0)
+}
+
+
+test4
+activity.time4
+inactivity.time4
+activity.prop4
+inactivity.prop4
+first.quadrant.prop4
+second.quadrant.prop4
+third.quadrant.prop4
+fourth.quadrant.prop4
+first.cue.time4
+second.cue.time4
+times.resting4
+escape.time4 
+escape.attemps4
+success4
+
+
+#This must be TRUE (or NA for the first 8) to continue
+(test4 == datatest4$V1)
+
+#We create the ID column
+ID4<-gsub("\\.\\d", "", as.character(test4))
+
+#Time spent in the correct cue
+datatest4$V5
+first.cue.time4
+second.cue.time4
+correct.cue.time4<-vector()
+n=13
+for (n in 9:146) {
+  #We put the condition that if the correct cue is on the left, take the time spent
+  #in the firs cue (the one in the left), else, take the time spent in the second cue
+  #(the one in the right)
+  if ((datatest4$V5[n] == "Yellow left" | datatest4$V5[n] == "Blue left")) {
+    correct.cue.time4[n]<-first.cue.time4[n]
+  }else{
+    correct.cue.time4[n]<-second.cue.time4[n]
+  }
+}
+correct.cue.time4
+cbind(datatest4$V5, first.cue.time4, second.cue.time4, correct.cue.time4)
+
+
+#This test uses uncut data
+cut.uncut4<-rep("uncut",146)
+
+#These columns are empty for this test
+nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+
+refuge.time4<- nastring
+third.cue.time4<-nastring
+fourth.cue.time4<-nastring
+refuge.enter.times4<-nastring
+refuge.re.enter4<-nastring
+refuge.exit4<-nastring
+getting.out.refuge.time4<-nastring
+refuge.prop4<-nastring
+time.until.third.cue4<-nastring
+time.until.fourth.cue4<-nastring
+touch.3.cues4<-nastring
+touch.4.cues4<-nastring
+lid.exploring.time4<-nastring
+lid.exploring.times4<-nastring
+time.until.eating4<-nastring
+eating.time4<-nastring
+eating.times4<-nastring
+
+library(dplyr)
+datatest4<-rename(datatest4, test4 = V1, species4 = V2, sex4=V3, experiment.type4=V4, correct.cue4=V5, speed4=V6)
+datatest4
+
+
+
+View(cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time4, refuge.time4,
+           getting.out.refuge.time4, activity.prop4, inactivity.prop4, refuge.prop4,
+           first.quadrant.prop4, second.quadrant.prop4, third.quadrant.prop4, fourth.quadrant.prop4,
+           first.cue.time4, time.until.first.cue4, second.cue.time4, time.until.second.cue4,
+           third.cue.time4, time.until.third.cue4, fourth.cue.time4, time.until.fourth.cue4,
+           touch.1.cue4, touch.2.cues4, touch.3.cues4, touch.4.cues4, correct.cue.time4, time.until.correct.cue4,
+           times.resting4, escape.time4, escape.attemps4, refuge.exit4,
+           refuge.enter.times4, refuge.re.enter4, success4, success.time4,
+           eating.time4, eating.times4, time.until.eating4,
+           lid.exploring.time4, lid.exploring.times4, cut.uncut4))
+
 
 ###vamos por aquí----
+
 
 #Fifth test-----
 datatest5<-data.frame()
