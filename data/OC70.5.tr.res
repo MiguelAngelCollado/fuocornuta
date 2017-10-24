@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC70.5.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Tue Oct 24 08:53:17 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC70.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -114,8 +114,8 @@ Trace, r, State, 0, 0
 Bin, 0, Offset, 0, 450000
 Trace, t, State, 0, 0
 
-Bin, 0, Offset, 0, 78, 78, 57525, 57525, 450000
-Trace, u, State, 0, 0, 1, 1, 0, 0
+Bin, 0, Offset, 0, 0, 57525, 57525, 450000
+Trace, u, State, 0, 1, 1, 0, 0
 
 Bin, 0, Offset, 0, 450000
 Trace, w, State, 0, 0

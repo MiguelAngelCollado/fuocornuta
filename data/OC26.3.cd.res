@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC26.3.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Tue Oct 24 08:37:54 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC26.3.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -68,7 +68,7 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=OC26
+Answer.1=OC26.3
 Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control

@@ -1,10 +1,10 @@
 FirstLineOfResults=78
 #-----------------------------------------------------------
-# Name: OC70.5.cd.res
+# Name: OC130.5.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 24 08:53:17 CEST 2017
+# Updated: Tue Oct 24 08:57:13 CEST 2017
 #-----------------------------------------------------------
-FocalDataFile=OC70.5.dat
+FocalDataFile=OC130.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
@@ -68,26 +68,26 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=OC70.5
+Answer.1=OC130.5
 Answer.2=Osmia cornuta
-Answer.3=Female
+Answer.3=Male
 Answer.4=Treatment
-Answer.5=Blue right
+Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
-0, 1, Quadrant 1, , , 2.00, 416564.00, 208282.00, 0.9257
-0, 2, Quadrant 2, , , 0.00, 0.00, 0.00, 0.0000
+0, 1, Quadrant 1, , , 0.00, 0.00, 0.00, 0.0000
+0, 2, Quadrant 2, , , 2.00, 11789.00, 5894.50, 0.1434
 0, 3, Quadrant 3, , , 0.00, 0.00, 0.00, 0.0000
 0, 4, Quadrant 4, , , 0.00, 0.00, 0.00, 0.0000
 0, e, Cardboard 3, , , 0.00, 0.00, 0.00, 0.0000
-0, i, Inactivity, , , 1.00, 392475.00, 392475.00, 0.8722
-0, j, Lid exploring, , , 0.00, 0.00, 0.00, 0.0000
-0, k, Succed, , , 0.00, 0.00, 0.00, 0.0000
-0, o, Escaping, , , 0.00, 0.00, 0.00, 0.0000
+0, i, Inactivity, , , 0.00, 0.00, 0.00, 0.0000
+0, j, Lid exploring, , , 3.00, 65754.00, 21918.00, 0.7998
+0, k, Succed, , , 1.00, 8301.00, 8301.00, 0.1010
+0, o, Escaping, , , 1.00, 3694.00, 3694.00, 0.0449
 0, p, Eating, , , 0.00, 0.00, 0.00, 0.0000
-0, q, Cardboard 1, , , 1.00, 13759.00, 13759.00, 0.0306
+0, q, Cardboard 1, , , 0.00, 0.00, 0.00, 0.0000
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 1.00, 57525.00, 57525.00, 0.1278
-0, w, Cardboard 2, , , 0.00, 0.00, 0.00, 0.0000
+0, u, Activity, , , 2.00, 82215.00, 41107.50, 1.0000
+0, w, Cardboard 2, , , 2.00, 69568.00, 34784.00, 0.8462

@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC93.5.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:44 CEST 2017
+# Updated: Tue Oct 24 08:32:56 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC93.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -73,7 +73,7 @@ Answer.2=Osmia cornuta
 Answer.3=Female
 Answer.4=Control
 Answer.5=Blue left
-Answer.6=
+Answer.6=2x
 #BEGIN RESULTS
 Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
 0, 1, Quadrant 1, , , 14.00, 46013.00, 3286.64, 0.1023

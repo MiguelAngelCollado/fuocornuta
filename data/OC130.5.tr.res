@@ -1,10 +1,10 @@
 FirstLineOfResults=78
 #-----------------------------------------------------------
-# Name: OC70.5.cd.res
-# Format: Codes Down Results File 1.0
-# Updated: Tue Oct 24 08:53:17 CEST 2017
+# Name: OC130.5.tr.res
+# Format: Behaviour Trace Results File 1.0
+# Updated: Tue Oct 24 08:57:13 CEST 2017
 #-----------------------------------------------------------
-FocalDataFile=OC70.5.dat
+FocalDataFile=OC130.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
  
 Focal Analysis Master File summary for FU Experiments.faf.
@@ -68,26 +68,55 @@ Conditional Events:
 Warnings:
 	No warnings to report.
  
-Answer.1=OC70.5
+Answer.1=OC130.5
 Answer.2=Osmia cornuta
-Answer.3=Female
+Answer.3=Male
 Answer.4=Treatment
-Answer.5=Blue right
+Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
-Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, StateAllDur TT, StateAllDur X, StateAllDur Prop
-0, 1, Quadrant 1, , , 2.00, 416564.00, 208282.00, 0.9257
-0, 2, Quadrant 2, , , 0.00, 0.00, 0.00, 0.0000
-0, 3, Quadrant 3, , , 0.00, 0.00, 0.00, 0.0000
-0, 4, Quadrant 4, , , 0.00, 0.00, 0.00, 0.0000
-0, e, Cardboard 3, , , 0.00, 0.00, 0.00, 0.0000
-0, i, Inactivity, , , 1.00, 392475.00, 392475.00, 0.8722
-0, j, Lid exploring, , , 0.00, 0.00, 0.00, 0.0000
-0, k, Succed, , , 0.00, 0.00, 0.00, 0.0000
-0, o, Escaping, , , 0.00, 0.00, 0.00, 0.0000
-0, p, Eating, , , 0.00, 0.00, 0.00, 0.0000
-0, q, Cardboard 1, , , 1.00, 13759.00, 13759.00, 0.0306
-0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
-0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 1.00, 57525.00, 57525.00, 0.1278
-0, w, Cardboard 2, , , 0.00, 0.00, 0.00, 0.0000
+Bin, 0, Offset, 0, 82215
+Trace, 1, State, 0, 0
+
+Bin, 0, Offset, 0, 858, 858, 2899, 2899, 34249, 34249, 43997, 43997, 82215
+Trace, 2, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, 3, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, 4, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, e, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, i, State, 0, 0
+
+Bin, 0, Offset, 0, 4466, 4466, 38304, 38304, 41998, 41998, 42265, 42265, 42265, 42265, 73914, 73914, 82215
+Trace, j, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 73914, 73914, 82215
+Trace, k, State, 0, 0, 1, 1
+
+Bin, 0, Offset, 0, 38304, 38304, 41998, 41998, 82215
+Trace, o, State, 0, 0, 1, 1, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, p, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, q, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, r, State, 0, 0
+
+Bin, 0, Offset, 0, 82215
+Trace, t, State, 0, 0
+
+Bin, 0, Offset, 0, 0, 38980, 38980, 38980, 38980, 82215
+Trace, u, State, 0, 1, 1, 0, 0, 1, 1
+
+Bin, 0, Offset, 0, 2899, 2899, 34249, 34249, 43997, 43997, 82215
+Trace, w, State, 0, 0, 1, 1, 0, 0, 1, 1
+

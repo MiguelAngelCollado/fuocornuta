@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC128.5.cd.res
 # Format: Codes Down Results File 1.0
-# Updated: Tue Oct 10 13:27:42 CEST 2017
+# Updated: Tue Oct 24 08:55:18 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC128.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -89,5 +89,5 @@ Time Bin, Behavior, Behavior Name, Modifier, Modifier Name, StateAllDur N, State
 0, q, Cardboard 1, , , 0.00, 0.00, 0.00, 0.0000
 0, r, Cardboard 4, , , 0.00, 0.00, 0.00, 0.0000
 0, t, Refugee, , , 0.00, 0.00, 0.00, 0.0000
-0, u, Activity, , , 4.00, 123528.00, 30882.00, 0.9302
+0, u, Activity, , , 4.00, 123709.00, 30927.25, 0.9316
 0, w, Cardboard 2, , , 3.00, 70119.00, 23373.00, 0.5280

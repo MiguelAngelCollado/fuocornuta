@@ -1,5 +1,7 @@
 #Creating the dataframe
 
+#Uncut dataframes-----
+
 #First test----
 #Build data frame for the first experiment
 #First we build the base data including ID, Species, Sex, Treatment or Experiment,
@@ -1021,15 +1023,13 @@ View(cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time
            eating.time4, eating.times4, time.until.eating4,
            lid.exploring.time4, lid.exploring.times4, cut.uncut4))
 
-
-###vamos por aquí----
-
+#Cut dataframes
 
 #Fifth test-----
 datatest5<-data.frame()
 
-
-for (n in 1:146) {
+n=9
+for (n in 9:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".5.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
   row<-t(temp$V2)
   row<-as.vector(row)
@@ -1040,25 +1040,256 @@ for (n in 1:146) {
   datatest5[n,5] = row[5]
   datatest5[n,6] = row[6]
 }
+datatest5
 
+#exctract color
+color5<-gsub("Yellow right", "Yellow", as.character(datatest5$V5))
+color5<-gsub("Yellow left", "Yellow", as.character(color5))
+color5<-gsub("Blue left", "Blue", as.character(color5))
+color5<-gsub("Blue right", "Blue", as.character(color5))
+
+#extract correct side
+side5<-gsub("Yellow right", "Right", as.character(datatest5$V5))
+side5<-gsub("Blue right", "Right", as.character(side5))
+side5<-gsub("Yellow left", "Left", as.character(side5))
+side5<-gsub("Blue left", "Left", as.character(side5))
+
+color5
+side5
+
+#Here we extract the neccesary time for passing the test
+success.time5<-vector()
+for (n in 9:146) {
+  tryCatch(temp2<-read.table(paste0("data/OC",n,".5.dat"), skip = 24, sep = ","), error=function(e){})
+  k<-temp2[min(which(temp2$V2 == " k")),]
+  #Wether it doesn't pass the test or is control test, we put NA, 
+  if (is.na(k$V1)){
+    success.time5[n] <-NA
+  }else{
+    success.time5[n] <- k$V1
+  }  
+}
+success.time5
+
+#These two columns are the same for this experiments, because eating is success!
+time.until.eating5<-success.time5
+
+#we extract the time neccesary to reach the first (left) and second (right) cue
+time.until.first.cue5<-vector()
+time.until.second.cue5<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".5.dat"), skip = 24, sep = ","), error=function(e){})
+  q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+    time.until.first.cue5[n] <- NA
+  }else{
+    time.until.first.cue5[n] <- temp4[q,1]
+  }
+  
+  w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+    time.until.second.cue5[n] <- NA
+  }else{
+    time.until.second.cue5[n] <- temp4[w,1]
+  }
+  
+}
+
+time.until.first.cue5
+time.until.second.cue5
+
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue and 2 cues
+time.until.cues5<-cbind(time.until.first.cue5, time.until.second.cue5)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues5[is.na(time.until.cues5)] <- Inf
+
+
+
+touch.1.cue5<-vector()
+touch.2.cues5<-vector()
+for (n in 9:146) {
+  touch.1.cue5[n] <- sort(time.until.cues5[n,], TRUE)[2]
+  touch.2.cues5[n] <-(sort(time.until.cues5[n,], TRUE)[2] + sort(time.until.cues4[n,], TRUE)[1])
+}
+
+cbind(touch.1.cue5,touch.2.cues5)
+datatest5
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue5[touch.1.cue4 == Inf] <- NA
+touch.2.cues5[touch.2.cues4 == Inf] <- NA
+
+#We extract the time until touching the correct cue
+
+#You need this variables created before!
+time.until.first.cue5
+time.until.second.cue5
+side5
+time.until.correct.cue5<-vector()
+
+for (n in 9:146) {
+  if (side5[n] == "Left") {
+    time.until.correct.cue5[n]<-time.until.first.cue5[n]
+  }else{
+    time.until.correct.cue5[n]<-time.until.second.cue5[n]
+  }
+}
+time.until.correct.cue5
+cbind(time.until.first.cue5, time.until.second.cue5, time.until.correct.cue5, side5)
+
+activity.time5<-vector()
+inactivity.time5<-vector()
+test5<-vector()
+activity.prop5<-vector()
+inactivity.prop5<-vector()
+first.quadrant.prop5<-vector()
+second.quadrant.prop5<-vector()
+third.quadrant.prop5<-vector()
+fourth.quadrant.prop5<-vector()
+first.cue.time5<-vector()
+second.cue.time5<-vector()
+times.resting5<-vector()
+escape.time5<-vector()
+escape.attemps5<-vector()
+refuge.re.enter5<-vector()
+success5<-vector()
+lid.exploring.time5<-vector()
+lid.exploring.times5<-vector()
+n=1
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".5.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/OC",n,".5.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+  
+  #We extract from each data OCXX.5 dataframe the different behaviors and states
+  activity5<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity5<-subset(temp, subset = (temp$Behavior == " i"))
+  refuge5<-subset(temp, subset = (temp$Behavior == " t"))
+  firstquadrant5<-subset(temp, subset = (temp$Behavior == " 1"))  
+  secondquadrant5<-subset(temp, subset = (temp$Behavior == " 2"))
+  thirquadrant5<-subset(temp, subset = (temp$Behavior == " 3"))
+  fourthquadrant5<-subset(temp, subset = (temp$Behavior == " 4"))
+  firstcue5<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue5<-subset(temp, subset = (temp$Behavior == " w"))
+  thirdcue5<-subset(temp, subset = (temp$Behavior == " e"))
+  fourthcue5<-subset(temp, subset = (temp$Behavior == " r"))
+  escape5<-subset(temp, subset = (temp$Behavior == " o"))
+  succeding5<-subset(temp, subset = (temp$Behavior == " k"))
+  lid5<-subset(temp, subset = (temp$Behavior == " j" ))
+  #We extract the test info (OCXX.5) for assuring the coordination with the previous created
+  #dataframe
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+  
+  #We fill the blank vectors with the desired information
+  test5[n] = rowid
+  activity.time5[n] = activity5$StateAllDur.X
+  inactivity.time5[n] = inactivity5$StateAllDur.X
+  activity.prop5[n] = activity5$StateAllDur.Prop
+  inactivity.prop5[n] = inactivity5$StateAllDur.Prop
+  first.quadrant.prop5[n] = firstquadrant5$StateAllDur.Prop
+  second.quadrant.prop5[n] = secondquadrant5$StateAllDur.Prop
+  third.quadrant.prop5[n] = thirquadrant5$StateAllDur.Prop
+  fourth.quadrant.prop5[n] = fourthquadrant5$StateAllDur.Prop
+  first.cue.time5[n] = firstcue5$StateAllDur.X
+  second.cue.time5[n] = secondcue5$StateAllDur.X
+  times.resting5[n] = inactivity5$StateAllDur.N
+  escape.time5[n] = escape5$StateAllDur.X 
+  escape.attemps5[n] = escape5$StateAllDur.N
+  lid.exploring.time5[n] = lid5$StateAllDur.X
+  lid.exploring.times5[n] = lid5$StateAllDur.N
+  success5[n] = (succeding5$StateAllDur.N>0)
+}
+test5
+activity.time5
+inactivity.time5
+activity.prop5
+inactivity.prop5
+first.quadrant.prop5
+second.quadrant.prop5
+third.quadrant.prop5
+fourth.quadrant.prop5
+first.cue.time5
+second.cue.time5
+times.resting5
+escape.time5 
+escape.attemps5
+success5
+lid.exploring.time5
+lid.exploring.times5
+
+#This must be TRUE (or NA for the first 8) to continue
+(test5 == datatest5$V1)
+
+#We create the ID column
+ID5<-gsub("\\.\\d", "", as.character(test5))
+
+#Time spent in the correct cue
+datatest5$V5
+first.cue.time5
+second.cue.time5
+correct.cue.time5<-vector()
+n=13
+for (n in 9:146) {
+  #We put the condition that if the correct cue is on the left, take the time spent
+  #in the firs cue (the one in the left), else, take the time spent in the second cue
+  #(the one in the right)
+  if ((datatest5$V5[n] == "Yellow left" | datatest5$V5[n] == "Blue left")) {
+    correct.cue.time5[n]<-first.cue.time5[n]
+  }else{
+    correct.cue.time5[n]<-second.cue.time5[n]
+  }
+}
+correct.cue.time5
+cbind(datatest5$V5, first.cue.time5, second.cue.time5, correct.cue.time5)
+
+
+#This test uses uncut data
+cut.uncut5<-rep("cut",146)
+
+
+#These columns are NA's
+nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+
+refuge.time5<- nastring
+third.cue.time5<-nastring
+fourth.cue.time5<-nastring
+refuge.enter.times5<-nastring
+refuge.re.enter5<-nastring
+refuge.exit5<-nastring
+getting.out.refuge.time5<-nastring
+refuge.prop5<-nastring
+time.until.third.cue5<-nastring
+time.until.fourth.cue5<-nastring
+touch.3.cues5<-nastring
+touch.4.cues5<-nastring
+eating.time5<-nastring
+eating.times5<-nastring
+
+#Rename the datatest
+datatest5<-rename(datatest5, test5 = V1, species5 = V2, sex5=V3, experiment.type5=V4, correct.cue5=V5, speed5=V6)
+datatest5
+
+
+View(cbind(ID5, test5, datatest5, color5, side5, activity.time5, inactivity.time5, refuge.time5,
+           getting.out.refuge.time5, activity.prop5, inactivity.prop5, refuge.prop5,
+           first.quadrant.prop5, second.quadrant.prop5, third.quadrant.prop5, fourth.quadrant.prop5,
+           first.cue.time5, time.until.first.cue5, second.cue.time5, time.until.second.cue5,
+           third.cue.time5, time.until.third.cue5, fourth.cue.time5, time.until.fourth.cue5,
+           touch.1.cue5, touch.2.cues5, touch.3.cues5, touch.4.cues5, correct.cue.time5, time.until.correct.cue5,
+           times.resting5, escape.time5, escape.attemps5, refuge.exit5,
+           refuge.enter.times5, refuge.re.enter5, success5, success.time5,
+           eating.time5, eating.times5, time.until.eating5,
+           lid.exploring.time5, lid.exploring.times5, cut.uncut5))
+
+
+
+###vamos por aquí----
+cbind(success.time5,success5)
 #Data correction (don't run)----
 
-###comprobamos que el jwatcher no nos trollea y empieza el dataframe en la misma línea
-#siempre
-n=8
-elputojwatcher1<-vector()
-for (n in 1:146) {
-  tryCatch(temp<-read.table(paste0("data/OC",n,".1.cd.res"), skip = 0, sep = "=", header = FALSE, nrows = 1), error=function(e){})
-  temp$V2
-  elputojwatcher1[n]<-temp$V2
-}
-
-elputojwatcher2<-vector()
-for (n in 8:146) {
-  tryCatch(temp<-read.table(paste0("data/OC",n,".2.cd.res"), skip = 0, sep = "=", header = FALSE, nrows = 1), error=function(e){})
-  temp$V2
-  elputojwatcher2[n]<-temp$V2
-}
 
 #Que empiece siempre en cero todo
 n=8
@@ -1132,3 +1363,18 @@ for (n in 9:146) {
 length(good.start.please4)
 which(good.start.please4>0)
 
+#er 5
+memetemp<-datatest1$V1
+memetemp<-as.factor(memetemp)
+levels(memetemp)
+which(memetemp == "")
+
+good.start.please5<-vector()
+n=9
+for (n in 9:146) {
+  tryCatch(temp<-read.table(paste0("data/OC",n,".5.dat"), skip = 24, sep = ",", nrows= 1), error=function(e){})
+  good.start.please5[n]<-temp$V1
+  
+}
+length(good.start.please5)
+which(good.start.please5>0)

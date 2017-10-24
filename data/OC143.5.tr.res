@@ -2,7 +2,7 @@ FirstLineOfResults=78
 #-----------------------------------------------------------
 # Name: OC143.5.tr.res
 # Format: Behaviour Trace Results File 1.0
-# Updated: Tue Oct 10 13:27:43 CEST 2017
+# Updated: Tue Oct 24 08:57:53 CEST 2017
 #-----------------------------------------------------------
 FocalDataFile=OC143.5.dat
 FocalAnalysisMasterFile=FU Experiments.faf
@@ -114,8 +114,8 @@ Trace, r, State, 0, 0
 Bin, 0, Offset, 0, 450000
 Trace, t, State, 0, 0
 
-Bin, 0, Offset, 0, 424, 424, 71564, 71564, 339108, 339108, 375397, 375397, 450000
-Trace, u, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+Bin, 0, Offset, 0, 0, 71564, 71564, 339108, 339108, 375397, 375397, 450000
+Trace, u, State, 0, 1, 1, 0, 0, 1, 1, 0, 0
 
 Bin, 0, Offset, 0, 10241, 10241, 17363, 17363, 18341, 18341, 20462, 20462, 27335, 27335, 29676, 29676, 350533, 350533, 450000
 Trace, w, State, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1
