@@ -27,7 +27,7 @@ write.table(temp2, file = paste0("data/databeforeeating/OC",n,".2test.dat"))
 
 
 #Loop check----
-n=1
+n=13
 n=NULL
 cut=NULL
 for (n in 1:146) {
@@ -43,6 +43,23 @@ cut<-min(which(temp$V2 == " p"))
   temp2=NULL
   }
 }
+
+n=13
+###Paste the rest of the .dat file?
+temp<-read.table(paste0("data/OC",n,".2.dat"), skip = 24, sep = ",")
+
+temptexted<-readLines(paste0("data/databeforeeating/OC",n,".2cut.dat"))
+
+#######USE THIS TO IMPORT AND EXPORT DATA IN THE SAME FORMAT
+####### the argument n must be 24 + the number of rows until eating (named as cut in the loop)
+pretemp<-NULL
+
+pretemp<-readLines("data/OC13.2.dat"), n = (24+cut))
+pretemp<-readLines("data/OC13.2.dat", n = (24+61), skipNul = FALSE)
+
+
+write(pretemp, file = "data/databeforeeating/OCtest.dat")
+
 
 
 #####Loop for OCXX.2----
