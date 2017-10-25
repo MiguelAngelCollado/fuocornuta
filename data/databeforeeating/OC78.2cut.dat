@@ -1,6 +1,29 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 10650 " 3"
-"3" 12136 " 1"
-"4" 36748 " q"
-"5" 46626 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC78.2.dat
+# Format: Focal Data File 1.0
+# Updated: Mon Jul 24 13:49:08 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Mon Jul 24 13:19:47 CEST 2017
+StartTime=1500895187856
+# Observation stopped: Mon Jul 24 13:27:17 CEST 2017
+StopTime=1500895637856
+ 
+Answer.1=OC78.2
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+10650, 3
+12136, 1
+36748, q
+46626, p

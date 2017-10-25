@@ -1,11 +1,34 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 2013 " 1"
-"3" 5703 " o"
-"4" 8339 " u"
-"5" 12602 " 3"
-"6" 16981 " o"
-"7" 17904 " u"
-"8" 20202 " 1"
-"9" 20814 " q"
-"10" 24344 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC125.3.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Aug 29 09:34:55 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Aug 29 09:26:55 CEST 2017
+StartTime=1503991615088
+# Observation stopped: Tue Aug 29 09:34:25 CEST 2017
+StopTime=1503992065088
+ 
+Answer.1=OC125.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Control
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+2013, 1
+5703, o
+8339, u
+12602, 3
+16981, o
+17904, u
+20202, 1
+20814, q
+24344, p

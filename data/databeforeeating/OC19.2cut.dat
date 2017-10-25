@@ -1,12 +1,35 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 10606 " 1"
-"3" 80318 " q"
-"4" 91309 " 1"
-"5" 100061 " o"
-"6" 106950 " u"
-"7" 122374 " 2"
-"8" 131591 " o"
-"9" 133455 " u"
-"10" 146254 " w"
-"11" 152430 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC19.2.dat
+# Format: Focal Data File 1.0
+# Updated: Fri Jul 07 09:30:55 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Fri Jul 07 09:22:54 CEST 2017
+StartTime=1499412174009
+# Observation stopped: Fri Jul 07 09:30:24 CEST 2017
+StopTime=1499412624009
+ 
+Answer.1=OC19.2
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+10606, 1
+80318, q
+91309, 1
+100061, o
+106950, u
+122374, 2
+131591, o
+133455, u
+146254, w
+152430, p

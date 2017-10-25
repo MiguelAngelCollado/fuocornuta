@@ -1,13 +1,36 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 1485 " i"
-"3" 6559 " u"
-"4" 7714 " 2"
-"5" 16640 " 3"
-"6" 23695 " 4"
-"7" 31433 " 3"
-"8" 32020 " o"
-"9" 33176 " u"
-"10" 36424 " 1"
-"11" 37384 " q"
-"12" 39720 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC29.3.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Jul 11 14:41:24 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Jul 11 14:33:21 CEST 2017
+StartTime=1499776401703
+# Observation stopped: Tue Jul 11 14:40:51 CEST 2017
+StopTime=1499776851703
+ 
+Answer.1=OC29.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=Yellow left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+1485, i
+6559, u
+7714, 2
+16640, 3
+23695, 4
+31433, 3
+32020, o
+33176, u
+36424, 1
+37384, q
+39720, p

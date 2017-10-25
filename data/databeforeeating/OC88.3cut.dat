@@ -1,9 +1,32 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 2447 " 2"
-"3" 4703 " w"
-"4" 8136 " 2"
-"5" 9527 " o"
-"6" 10287 " u"
-"7" 12312 " w"
-"8" 21343 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC88.3.dat
+# Format: Focal Data File 1.0
+# Updated: Mon Aug 21 13:44:39 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Mon Aug 21 13:23:15 CEST 2017
+StartTime=1503314595603
+# Observation stopped: Mon Aug 21 13:30:45 CEST 2017
+StopTime=1503315045603
+ 
+Answer.1=OC88.3
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+2447, 2
+4703, w
+8136, 2
+9527, o
+10287, u
+12312, w
+21343, p

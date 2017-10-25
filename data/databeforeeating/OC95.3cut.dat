@@ -1,6 +1,29 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 7244 " 3"
-"3" 14941 " 1"
-"4" 19901 " q"
-"5" 24476 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC95.3.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Aug 22 11:36:23 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Aug 22 11:28:53 CEST 2017
+StartTime=1503394133353
+# Observation stopped: Tue Aug 22 11:36:23 CEST 2017
+StopTime=1503394583353
+ 
+Answer.1=OC95.3
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Control
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+7244, 3
+14941, 1
+19901, q
+24476, p

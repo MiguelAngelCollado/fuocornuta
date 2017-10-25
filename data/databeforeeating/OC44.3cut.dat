@@ -1,7 +1,30 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 3255 " 2"
-"3" 13681 " o"
-"4" 15716 " u"
-"5" 17589 " w"
-"6" 18784 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC44.3.dat
+# Format: Focal Data File 1.0
+# Updated: Fri Jul 14 12:38:41 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Fri Jul 14 12:26:17 CEST 2017
+StartTime=1500027977058
+# Observation stopped: Fri Jul 14 12:33:47 CEST 2017
+StopTime=1500028427058
+ 
+Answer.1=OC44.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=Yellow right
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+3255, 2
+13681, o
+15716, u
+17589, w
+18784, p

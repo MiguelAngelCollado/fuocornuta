@@ -1,20 +1,43 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 10235 " 2"
-"3" 11338 " w"
-"4" 15219 " 2"
-"5" 22771 " o"
-"6" 23227 " u"
-"7" 34795 " w"
-"8" 45971 " 2"
-"9" 46675 " w"
-"10" 49059 " 2"
-"11" 54018 " 1"
-"12" 56458 " 2"
-"13" 77674 " o"
-"14" 89043 " u"
-"15" 91355 " w"
-"16" 95730 " 2"
-"17" 98115 " 1"
-"18" 100843 " q"
-"19" 105483 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC56.3.dat
+# Format: Focal Data File 1.0
+# Updated: Wed Jul 19 08:21:45 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Wed Jul 19 08:13:23 CEST 2017
+StartTime=1500444803374
+# Observation stopped: Wed Jul 19 08:20:53 CEST 2017
+StopTime=1500445253374
+ 
+Answer.1=OC56.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Control
+Answer.5=Yellow left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+10235, 2
+11338, w
+15219, 2
+22771, o
+23227, u
+34795, w
+45971, 2
+46675, w
+49059, 2
+54018, 1
+56458, 2
+77674, o
+89043, u
+91355, w
+95730, 2
+98115, 1
+100843, q
+105483, p

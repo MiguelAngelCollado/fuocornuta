@@ -1,6 +1,29 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 4794 " 3"
-"3" 7259 " 1"
-"4" 9931 " q"
-"5" 14194 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC51.3.dat
+# Format: Focal Data File 1.0
+# Updated: Tue Jul 18 13:43:07 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Tue Jul 18 13:35:03 CEST 2017
+StartTime=1500377703643
+# Observation stopped: Tue Jul 18 13:42:33 CEST 2017
+StopTime=1500378153643
+ 
+Answer.1=OC51.3
+Answer.2=Osmia cornuta
+Answer.3=Male
+Answer.4=Treatment
+Answer.5=Yellow left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+4794, 3
+7259, 1
+9931, q
+14194, p

@@ -1,8 +1,31 @@
-"V1" "V2"
-"1" 0 " u"
-"2" 1656 " 2"
-"3" 3260 " w"
-"4" 4469 " 2"
-"5" 7386 " 1"
-"6" 8719 " q"
-"7" 10910 " p"
+FirstLineOfData=25
+#-----------------------------------------------------------
+# Name: OC73.2.dat
+# Format: Focal Data File 1.0
+# Updated: Mon Jul 24 11:35:23 CEST 2017
+#-----------------------------------------------------------
+ 
+FocalMasterFile=D:/JWatcher/Datos/FU Experiments.fmf
+ 
+# Observation started: Mon Jul 24 11:27:16 CEST 2017
+StartTime=1500888436941
+# Observation stopped: Mon Jul 24 11:34:46 CEST 2017
+StopTime=1500888886941
+ 
+Answer.1=OC73.2
+Answer.2=Osmia cornuta
+Answer.3=Female
+Answer.4=Treatment
+Answer.5=Blue left
+Answer.6=2x
+ 
+ 
+ 
+#BEGIN DATA
+0, u
+1656, 2
+3260, w
+4469, 2
+7386, 1
+8719, q
+10910, p
