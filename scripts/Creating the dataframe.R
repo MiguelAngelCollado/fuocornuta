@@ -42,6 +42,7 @@ for (n in 1:146) {
     success.time[n] <- k$V1
   }  
 }
+#warnings()
 
 
 #Here we extract the time neccesary to get out from the refuge
@@ -112,7 +113,7 @@ touch.1.cue<-vector()
 touch.2.cues<-vector()
 touch.3.cues<-vector()
 touch.4.cues<-vector()
-  for (n in 1:146) {
+for (n in 1:146) {
   touch.1.cue[n] <- sort(time.until.cues[n,], TRUE)[4]
   touch.2.cues[n] <-(sort(time.until.cues[n,], TRUE)[4] + sort(time.until.cues[n,], TRUE)[3])
   touch.3.cues[n] <-((sort(time.until.cues[n,], TRUE)[4] + sort(time.until.cues[n,], TRUE)[3] + 
@@ -222,7 +223,7 @@ refuge.exit<-refuge.time
 refuge.exit[((refuge.exit > 0) & (refuge.exit < 450000))]<-1
 refuge.exit[refuge.exit == 450000]<-0
 refuge.exit[refuge.exit == 0]<-"No"
-refuge.exit[refuge.exit == "1"]<-"Yes"
+refuge.exit[refuge.exit == 1]<-"Yes"
 
 #These columns came empty for this test
 nastring<-seq(length.out = 146)
