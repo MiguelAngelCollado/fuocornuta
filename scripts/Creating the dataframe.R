@@ -143,6 +143,7 @@ refuge.time<-vector()
 test<-vector()
 activity.prop<-vector()
 inactivity.prop<-vector()
+inactivity.times<-vector()
 refuge.prop<-vector()
 first.quadrant.prop<-vector()
 second.quadrant.prop<-vector()
@@ -188,6 +189,7 @@ for (n in 1:146) {
   refuge.time[n] = refuge$StateAllDur.X
   activity.prop[n] = activity$StateAllDur.Prop
   inactivity.prop[n] = inactivity$StateAllDur.Prop
+  inactivity.times[n] = inactivity$StateAllDur.N
   refuge.prop[n] = refuge$StateAllDur.Prop
   first.quadrant.prop[n] = firstquadrant$StateAllDur.Prop
   second.quadrant.prop[n] = secondquadrant$StateAllDur.Prop
@@ -515,7 +517,6 @@ View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time
       refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
       eating.time2, eating.times2, time.until.eating2,
       lid.exploring.time2, lid.exploring.times2, cut.uncut2))
-
 
 
 #Third test----
@@ -895,6 +896,8 @@ escape.time4<-vector()
 escape.attemps4<-vector()
 refuge.re.enter4<-vector()
 success4<-vector()
+#This is trying to eat
+eating.times4<-vector()
 n=1
 for (n in 9:146) {
   tryCatch(temp<-read.table(paste0("data/OC",n,".4.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
@@ -914,6 +917,7 @@ for (n in 9:146) {
   fourthcue4<-subset(temp, subset = (temp$Behavior == " r"))
   escape4<-subset(temp, subset = (temp$Behavior == " o"))
   succeding4<-subset(temp, subset = (temp$Behavior == " k"))
+  eating4<-subset(temp, subset = (temp$Behavior == " p"))
   #We extract the test info (OCXX.1) for assuring the coordination with the previous created
   #dataframe
   rowid<-t(tempid$V2)
@@ -935,8 +939,8 @@ for (n in 9:146) {
   escape.time4[n] = escape4$StateAllDur.X 
   escape.attemps4[n] = escape4$StateAllDur.N
   success4[n] = (succeding4$StateAllDur.N>0)
-}
-
+  eating.times4[n] = eating4$StateAllDur.N
+  }
 
 test4
 activity.time4
@@ -953,7 +957,7 @@ times.resting4
 escape.time4 
 escape.attemps4
 success4
-
+eating.times4
 
 #This must be TRUE (or NA for the first 8) to continue
 (test4 == datatest4$V1)
@@ -1004,7 +1008,6 @@ lid.exploring.time4<-nastring
 lid.exploring.times4<-nastring
 time.until.eating4<-nastring
 eating.time4<-nastring
-eating.times4<-nastring
 
 library(dplyr)
 datatest4<-rename(datatest4, test4 = V1, species4 = V2, sex4=V3, experiment.type4=V4, correct.cue4=V5, speed4=V6)
@@ -1378,3 +1381,9 @@ for (n in 9:146) {
 }
 length(good.start.please5)
 which(good.start.please5>0)
+
+
+
+
+success5
+nrow(unique(datatest5))
