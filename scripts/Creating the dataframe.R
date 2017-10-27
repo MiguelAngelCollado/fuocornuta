@@ -131,8 +131,25 @@ touch.4.cues[touch.4.cues == Inf] <- NA
 
 
 
-
-
+time.until.first.quadrant<-vector()
+time.until.second.quadrant<-vector()
+for (n in 1:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".1.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant[n] <- NA
+  }else{
+    time.until.first.quadrant[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant[n] <- NA
+  }else{
+    time.until.second.quadrant[n] <- temp4[second.quadrant,1]
+  }
+  
+}
 
 
 #We extract most of the data from the OCXX.1.cd.res archives.
@@ -239,6 +256,9 @@ correct.cue.time<-nastring
 side<-nastring
 color<-nastring
 time.until.correct.cue<-nastring
+time.until.correct.quadrant<-nastring
+time.until.lid.exploring<-nastring
+
 #This dataset were not cut
 cut.uncut<-rep("uncut",146)
 
@@ -254,7 +274,7 @@ View(cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refu
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
       third.cue.time, time.until.third.cue, fourth.cue.time, time.until.fourth.cue,
       touch.1.cue, touch.2.cues, touch.3.cues, touch.4.cues, correct.cue.time, time.until.correct.cue,
-      times.resting, escape.time, escape.attemps, refuge.exit,
+      time.until.lid.exploring, times.resting, escape.time, escape.attemps, refuge.exit,
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
       lid.exploring.time, lid.exploring.times, cut.uncut))
@@ -363,6 +383,45 @@ if (side2[n] == "Left") {
   }
 time.until.correct.cue2
 cbind(time.until.first.cue2, time.until.second.cue2, time.until.correct.cue2, side2)
+
+##Time until reaching the first quadrant and second
+
+time.until.first.quadrant2<-vector()
+time.until.second.quadrant2<-vector()
+n=20
+for (n in 8:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".2.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant2[n] <- NA
+  }else{
+    time.until.first.quadrant2[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant2[n] <- NA
+  }else{
+    time.until.second.quadrant2[n] <- temp4[second.quadrant,1]
+  }
+  
+}
+
+#You need this variables created before!
+time.until.first.quadrant2
+time.until.second.quadrant2
+side2
+time.until.correct.quadrant2<-vector()
+n=9
+for (n in 8:146) {
+  if (side2[n] == "Left") {
+    time.until.correct.quadrant2[n]<-time.until.first.quadrant2[n]
+  }else{
+    time.until.correct.quadrant2[n]<-time.until.second.quadrant2[n]
+  }
+}
+time.until.correct.quadrant2
+cbind(time.until.first.quadrant2, time.until.second.quadrant2, time.until.correct.quadrant2, side2)
 
 
 #Time until eating
@@ -497,6 +556,7 @@ refuge.exit.2<-nastring
 success.time2<-nastring
 lid.exploring.time2<-nastring
 lid.exploring.times2<-nastring
+time.until.lid.exploring2<-nastring
 
 #is the data cut after eating? No, it's not for this test
 cut.uncut2<-rep("uncut",146)
@@ -514,7 +574,8 @@ View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time
       first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
       third.cue.time.2, time.until.third.cue2, fourth.cue.time.2, time.until.fourth.cue2,
       touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2, time.until.correct.cue2,
-      times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
+      time.until.first.quadrant2, time.until.second.quadrant2, time.until.correct.quadrant2,
+      time.until.lid.exploring2, times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
       refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
       eating.time2, eating.times2, time.until.eating2,
       lid.exploring.time2, lid.exploring.times2, cut.uncut2))
@@ -611,6 +672,44 @@ for (n in 9:146) {
 }
 time.until.correct.cue3
 cbind(time.until.first.cue3, time.until.second.cue3, time.until.correct.cue3, side3)
+
+#time until reaching quadrants
+time.until.first.quadrant3<-vector()
+time.until.second.quadrant3<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".3.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant3[n] <- NA
+  }else{
+    time.until.first.quadrant3[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant3[n] <- NA
+  }else{
+    time.until.second.quadrant3[n] <- temp4[second.quadrant,1]
+  }
+}
+
+#You need this variables created before!
+time.until.first.quadrant3
+time.until.second.quadrant3
+side3
+time.until.correct.quadrant3<-vector()
+n=9
+for (n in 9:146) {
+  if (side3[n] == "Left") {
+    time.until.correct.quadrant3[n]<-time.until.first.quadrant3[n]
+  }else{
+    time.until.correct.quadrant3[n]<-time.until.second.quadrant3[n]
+  }
+}
+time.until.correct.quadrant3
+cbind(time.until.first.quadrant3, time.until.second.quadrant3, time.until.correct.quadrant3, side3)
+
 
 
 #Time until eating
@@ -741,6 +840,7 @@ refuge.exit3<-nastring
 success.time3<-nastring
 lid.exploring.time3<-nastring
 lid.exploring.times3<-nastring
+time.until.lid.exploring3<-nastring
 
 #is the data cut after eating? No, it's not for this test
 cut.uncut3<-rep("uncut",146)
@@ -759,6 +859,7 @@ View(cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time
            first.cue.time3, time.until.first.cue3, second.cue.time3, time.until.second.cue3,
            third.cue.time3, time.until.third.cue3, fourth.cue.time3, time.until.fourth.cue3,
            touch.1.cue3, touch.2.cues3, touch.3.cues3, touch.4.cues3, correct.cue.time3, time.until.correct.cue3,
+           time.until.first.quadrant3, time.until.second.quadrant3, time.until.correct.quadrant3, time.until.lid.exploring3,
            times.resting3, escape.time3, escape.attemps3, refuge.exit3,
            refuge.enter.times3, refuge.re.enter3, success3, success.time3,
            eating.time3, eating.times3, time.until.eating3,
@@ -879,6 +980,43 @@ for (n in 9:146) {
 }
 time.until.correct.cue4
 cbind(time.until.first.cue4, time.until.second.cue4, time.until.correct.cue4, side4)
+
+
+time.until.first.quadrant4<-vector()
+time.until.second.quadrant4<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".4.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant4[n] <- NA
+  }else{
+    time.until.first.quadrant4[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant4[n] <- NA
+  }else{
+    time.until.second.quadrant4[n] <- temp4[second.quadrant,1]
+  }
+}
+
+#You need this variables created before!
+time.until.first.quadrant4
+time.until.second.quadrant4
+side4
+time.until.correct.quadrant4<-vector()
+n=9
+for (n in 9:146) {
+  if (side4[n] == "Left") {
+    time.until.correct.quadrant4[n]<-time.until.first.quadrant4[n]
+  }else{
+    time.until.correct.quadrant4[n]<-time.until.second.quadrant4[n]
+  }
+}
+time.until.correct.quadrant4
+cbind(time.until.first.quadrant4, time.until.second.quadrant4, time.until.correct.quadrant4, side4)
 
 
 activity.time4<-vector()
@@ -1009,6 +1147,7 @@ lid.exploring.time4<-nastring
 lid.exploring.times4<-nastring
 time.until.eating4<-nastring
 eating.time4<-nastring
+time.until.lid.exploring4<-nastring
 
 library(dplyr)
 datatest4<-rename(datatest4, test4 = V1, species4 = V2, sex4=V3, experiment.type4=V4, correct.cue4=V5, speed4=V6)
@@ -1022,12 +1161,14 @@ View(cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time
            first.cue.time4, time.until.first.cue4, second.cue.time4, time.until.second.cue4,
            third.cue.time4, time.until.third.cue4, fourth.cue.time4, time.until.fourth.cue4,
            touch.1.cue4, touch.2.cues4, touch.3.cues4, touch.4.cues4, correct.cue.time4, time.until.correct.cue4,
-           times.resting4, escape.time4, escape.attemps4, refuge.exit4,
+           time.until.first.quadrant4, time.until.second.quadrant4, time.until.correct.quadrant4,
+           time.until.lid.exploring4, times.resting4, escape.time4, escape.attemps4, refuge.exit4,
            refuge.enter.times4, refuge.re.enter4, success4, success.time4,
            eating.time4, eating.times4, time.until.eating4,
            lid.exploring.time4, lid.exploring.times4, cut.uncut4))
 
-#Cut dataframes
+#Cut dataframes----
+
 
 #Fifth test-----
 datatest5<-data.frame()
@@ -1142,6 +1283,61 @@ for (n in 9:146) {
 }
 time.until.correct.cue5
 cbind(time.until.first.cue5, time.until.second.cue5, time.until.correct.cue5, side5)
+
+
+time.until.first.quadrant5<-vector()
+time.until.second.quadrant5<-vector()
+n=20
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".5.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant5[n] <- NA
+  }else{
+    time.until.first.quadrant5[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant5[n] <- NA
+  }else{
+    time.until.second.quadrant5[n] <- temp4[second.quadrant,1]
+  }
+}
+
+#You need this variables created before!
+time.until.first.quadrant5
+time.until.second.quadrant5
+side5
+time.until.correct.quadrant5<-vector()
+n=9
+for (n in 9:146) {
+  if (side5[n] == "Left") {
+    time.until.correct.quadrant5[n]<-time.until.first.quadrant5[n]
+  }else{
+    time.until.correct.quadrant5[n]<-time.until.second.quadrant5[n]
+  }
+}
+time.until.correct.quadrant5
+
+cbind(ID5, side5, time.until.first.quadrant5, time.until.second.quadrant5, time.until.correct.quadrant5)
+
+
+#Time until exploring the lid
+
+
+time.until.lid.exploring5<-vector()
+n=24
+for (n in 9:146) {
+  tryCatch(temp4<-read.table(paste0("data/OC",n,".5.dat"), skip = 24, sep = ","), error=function(e){})
+  j<-min(which(temp4$V2 == " j"))
+  if(j == Inf){
+    time.until.lid.exploring5[n] <- NA
+  }else{
+    time.until.lid.exploring5[n] <- temp4[j,1]
+  }
+
+}
 
 activity.time5<-vector()
 inactivity.time5<-vector()
@@ -1282,16 +1478,319 @@ View(cbind(ID5, test5, datatest5, color5, side5, activity.time5, inactivity.time
            first.quadrant.prop5, second.quadrant.prop5, third.quadrant.prop5, fourth.quadrant.prop5,
            first.cue.time5, time.until.first.cue5, second.cue.time5, time.until.second.cue5,
            third.cue.time5, time.until.third.cue5, fourth.cue.time5, time.until.fourth.cue5,
-           touch.1.cue5, touch.2.cues5, touch.3.cues5, touch.4.cues5, correct.cue.time5, time.until.correct.cue5,
-           times.resting5, escape.time5, escape.attemps5, refuge.exit5,
+           touch.1.cue5, touch.2.cues5, touch.3.cues5, touch.4.cues5, correct.cue.time5, 
+           time.until.correct.cue5, time.until.first.quadrant5, time.until.second.quadrant5, time.until.correct.quadrant5,
+           time.until.lid.exploring5, times.resting5, escape.time5, escape.attemps5, refuge.exit5,
            refuge.enter.times5, refuge.re.enter5, success5, success.time5,
            eating.time5, eating.times5, time.until.eating5,
            lid.exploring.time5, lid.exploring.times5, cut.uncut5))
 
 
 
-###vamos por aquí----
+
 cbind(success.time5,success5)
+
+
+#Now we extract all the data from the second and third test, but this time the data
+#is cut after eatong
+
+#Second test cut----
+#For this dataset, we will use only, including the states and behaviors
+#before eating
+
+#We extract data from the OCXX.2.dat archives
+
+
+datatest2cut<-data.frame()
+n=12
+#The first file is the OC12.2, so me wust start with the number 12
+for (n in 12:146) {
+  tryCatch(temp<-read.table(paste0("data/databeforeeating/OC",n,".2cut.dat"), skip = 14, sep = "=", nrows= 6), error=function(e){})
+  row<-t(temp$V2)
+  row<-as.vector(row)
+  datatest2cut[n,1] = row[1]
+  datatest2cut[n,2] = row[2]
+  datatest2cut[n,3] = row[3]
+  datatest2cut[n,4] = row[4]
+  datatest2cut[n,5] = row[5]
+  datatest2cut[n,6] = row[6]
+}
+datatest2cut
+
+#exctract color
+color2cut<-gsub("Yellow right", "Yellow", as.character(datatest2cut$V5))
+color2cut<-gsub("Yellow left", "Yellow", as.character(color2cut))
+color2cut<-gsub("Blue left", "Blue", as.character(color2cut))
+color2cut<-gsub("Blue right", "Blue", as.character(color2cut))
+
+#extract correct side
+side2cut<-gsub("Yellow right", "Right", as.character(datatest2cut$V5))
+side2cut<-gsub("Blue right", "Right", as.character(side2cut))
+side2cut<-gsub("Yellow left", "Left", as.character(side2cut))
+side2cut<-gsub("Blue left", "Left", as.character(side2cut))
+
+
+####Time until touching the first cue and the second
+
+time.until.first.cue2cut<-vector()
+time.until.second.cue2cut<-vector()
+n=12
+for (n in 12:146) {
+  tryCatch(temp4<-read.table(paste0("data/databeforeeating/OC",n,".2cut.dat"), skip = 24, sep = ","), error=function(e){})
+  q<-min(which(temp4$V2 == " q"))
+  if(q == Inf){
+    time.until.first.cue2cut[n] <- NA
+  }else{
+    time.until.first.cue2cut[n] <- temp4[q,1]
+  }
+  
+  w<-min(which(temp4$V2 == " w"))
+  if(w == Inf){
+    time.until.second.cue2cut[n] <- NA
+  }else{
+    time.until.second.cue2cut[n] <- temp4[w,1]
+  }
+  
+}
+
+#We create an object binding all, with this new object we can extract the time
+# spent to touch 1 cue and 2 cues
+time.until.cues2cut<-cbind(time.until.first.cue2cut, time.until.second.cue2cut)
+#For programing utility, we will consider not touching a cue, to spent infinite time
+time.until.cues2cut[is.na(time.until.cues2cut)] <- Inf
+
+
+
+touch.1.cue2cut<-vector()
+touch.2.cues2cut<-vector()
+for (n in 12:146) {
+  touch.1.cue2cut[n] <- sort(time.until.cues2cut[n,], TRUE)[2]
+  touch.2.cues2cut[n] <-(sort(time.until.cues2cut[n,], TRUE)[2] + sort(time.until.cues2cut[n,], TRUE)[1])
+}
+
+cbind(touch.1.cue2cut,touch.2.cues2cut)
+#We don't want to deal with the infinite, so we switch it again to NA  
+touch.1.cue2cut[touch.1.cue2cut == Inf] <- NA
+touch.2.cues2cut[touch.2.cues2cut == Inf] <- NA
+
+
+#We extract the time until touching the correct cue
+
+#You need this variables created before!
+time.until.first.cue2cut
+time.until.second.cue2cut
+side2cut
+time.until.correct.cue2cut<-vector()
+n=9
+for (n in 12:146) {
+  if (side2cut[n] == "Left") {
+    time.until.correct.cue2cut[n]<-time.until.first.cue2cut[n]
+  }else{
+    time.until.correct.cue2cut[n]<-time.until.second.cue2cut[n]
+  }
+}
+time.until.correct.cue2cut
+cbind(time.until.first.cue2, time.until.second.cue2, time.until.correct.cue2, side2)
+
+##Time until reaching the first quadrant and second
+
+time.until.first.quadrant2cut<-vector()
+time.until.second.quadrant2cut<-vector()
+n=12
+for (n in 12:146) {
+  tryCatch(temp4<-read.table(paste0("data/databeforeeating/OC",n,".2cut.dat"), skip = 24, sep = ","), error=function(e){})
+  first.quadrant<-min(which(temp4$V2 == " 1"))
+  if(first.quadrant == Inf){
+    time.until.first.quadrant2cut[n] <- NA
+  }else{
+    time.until.first.quadrant2cut[n] <- temp4[first.quadrant,1]
+  }
+  
+  second.quadrant<-min(which(temp4$V2 == " 2"))
+  if(second.quadrant == Inf){
+    time.until.second.quadrant2cut[n] <- NA
+  }else{
+    time.until.second.quadrant2cut[n] <- temp4[second.quadrant,1]
+  }
+  
+}
+
+#You need this variables created before!
+time.until.first.quadrant2cut
+time.until.second.quadrant2cut
+side2cut
+time.until.correct.quadrant2cut<-vector()
+n=9
+for (n in 12:146) {
+  if (side2cut[n] == "Left") {
+    time.until.correct.quadrant2cut[n]<-time.until.first.quadrant2cut[n]
+  }else{
+    time.until.correct.quadrant2cut[n]<-time.until.second.quadrant2cut[n]
+  }
+}
+time.until.correct.quadrant2cut
+View(cbind(time.until.first.quadrant2cut, time.until.second.quadrant2cut, time.until.correct.quadrant2cut, side2cut))
+
+
+#Time until eating
+time.until.eating2cut<-vector()
+n=12
+for (n in 12:146) {
+  tryCatch(temp<-read.table(paste0("data/databeforeeating/OC",n,".2cut.dat"), skip = 24, sep = ","), error=function(e){})
+  comer<-temp[min(which(temp$V2 == " p")),]
+  time.until.eating2cut[n]<-comer$V1
+}
+#We extract data from the OCXX.2.cd.res archives.
+
+#We first create the blank vectors for this info
+
+activity.time2cut<-vector()
+inactivity.time2cut<-vector()
+test2cut<-vector()
+activity.prop2cut<-vector()
+inactivity.prop2cut<-vector()
+first.quadrant.prop2cut<-vector()
+second.quadrant.prop2cut<-vector()
+third.quadrant.prop2cut<-vector()
+fourth.quadrant.prop2cut<-vector()
+first.cue.time2cut<-vector()
+second.cue.time2cut<-vector()
+times.resting2cut<-vector()
+escape.time2cut<-vector()
+escape.attemps2cut<-vector()
+eating.time2cut<-vector()
+eating.times2cut<-vector()
+n=12
+for (n in 12:146) {
+  tryCatch(temp<-read.table(paste0("data/databeforeeating/OC",n,".2cut.cd.res"), skip = 77, sep = ",", header = TRUE), error=function(e){})
+  tryCatch(tempid<-read.table(paste0("data/databeforeeating/OC",n,".2cut.cd.res"), skip = 70, sep = "=", nrows = 1), error=function(e){})
+  
+  #We extract from each data OCXX.2 dataframe the different behaviors and states
+  activity2cut<-subset(temp, subset = (temp$Behavior == " u"))
+  inactivity2cut<-subset(temp, subset = (temp$Behavior == " i"))
+  firstquadrant2cut<-subset(temp, subset = (temp$Behavior == " 1"))  
+  secondquadrant2cut<-subset(temp, subset = (temp$Behavior == " 2"))
+  thirquadrant2cut<-subset(temp, subset = (temp$Behavior == " 3"))
+  fourthquadrant2cut<-subset(temp, subset = (temp$Behavior == " 4"))
+  firstcue2cut<-subset(temp, subset = (temp$Behavior == " q"))
+  secondcue2cut<-subset(temp, subset = (temp$Behavior == " w"))
+  escape2cut<-subset(temp, subset = (temp$Behavior == " o"))
+  eating2cut<-subset(temp, subset = (temp$Behavior == " p"))
+  #We extract the test info (OCXX.2) for assuring the coordination with the previous created
+  #dataframe
+  rowid<-t(tempid$V2)
+  rowid<-as.vector(rowid)
+  
+  #We fill the blank vectors with the desired information
+  test2cut[n] = rowid
+  activity.time2cut[n] = activity2cut$StateAllDur.X
+  inactivity.time2cut[n] = inactivity2cut$StateAllDur.X
+  activity.prop2cut[n] = activity2cut$StateAllDur.Prop
+  inactivity.prop2cut[n] = inactivity2cut$StateAllDur.Prop
+  first.quadrant.prop2cut[n] = firstquadrant2cut$StateAllDur.Prop
+  second.quadrant.prop2cut[n] = secondquadrant2cut$StateAllDur.Prop
+  third.quadrant.prop2cut[n] = thirquadrant2cut$StateAllDur.Prop
+  fourth.quadrant.prop2cut[n] = fourthquadrant2cut$StateAllDur.Prop
+  first.cue.time2cut[n] = firstcue2cut$StateAllDur.X
+  second.cue.time2cut[n] = secondcue2cut$StateAllDur.X
+  times.resting2cut[n] = inactivity2cut$StateAllDur.N
+  escape.time2cut[n] = escape2cut$StateAllDur.X 
+  escape.attemps2cut[n] = escape2cut$StateAllDur.N
+  eating.time2cut[n] = eating2cut$StateAllDur.X
+  eating.times2cut[n] = eating2cut$StateAllDur.N
+}
+activity.time2cut
+inactivity.time2cut
+test2cut
+activity.prop2cut
+inactivity.prop2cut
+first.quadrant.prop2cut
+second.quadrant.prop2cut
+third.quadrant.prop2cut
+fourth.quadrant.prop2cut
+first.cue.time2cut
+second.cue.time2cut
+times.resting2cut
+escape.time2cut
+escape.attemps2cut
+eating.time2cut
+eating.times2cut
+cbind(eating.time2cut, eating.times2cut)
+#This must be TRUE (or NA for the first 7) to continue
+(test2cut == datatest2cut$V1)
+
+##vamos por aquí---------
+
+#We create the ID column
+ID2<-gsub("\\.\\d", "", as.character(test2))
+
+
+#Time spent in the correct cue
+datatest2$V5
+first.cue.time2
+second.cue.time2
+correct.cue.time2<-vector()
+n=13
+for (n in 8:146) {
+  #We put the condition that if the correct cue is on the left, take the time spent
+  #in the firs cue (the one in the left), else, take the time spent in the second cue
+  #(the one in the right)
+  if ((datatest2$V5[n] == "Yellow left" | datatest2$V5[n] == "Blue left")) {
+    correct.cue.time2[n]<-first.cue.time2[n]
+  }else{
+    correct.cue.time2[n]<-second.cue.time2[n]
+  }
+}
+correct.cue.time2
+cbind(datatest2$V5, first.cue.time2, second.cue.time2, correct.cue.time2)
+
+
+
+#These columns are empty for this test
+nastring<-seq(length.out = 146)
+nastring[ nastring > 0 ] <- NA
+
+refuge.time2<- nastring
+third.cue.time.2<-nastring
+fourth.cue.time.2<-nastring
+refuge.enter.times.2<-nastring
+refuge.re.enter.2<-nastring
+success.2<-nastring
+getting.out.refuge.time2<-nastring
+refuge.prop2<-nastring
+time.until.third.cue2<-nastring
+time.until.fourth.cue2<-nastring
+touch.3.cues2<-nastring
+touch.4.cues2<-nastring
+refuge.exit.2<-nastring
+success.time2<-nastring
+lid.exploring.time2<-nastring
+lid.exploring.times2<-nastring
+time.until.lid.exploring2<-nastring
+
+#is the data cut after eating? No, it's not for this test
+cut.uncut2<-rep("uncut",146)
+
+
+
+library(dplyr)
+datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type2=V4, correct.cue2=V5, speed2=V6)
+datatest2
+
+
+View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time2, refuge.time2,
+           getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
+           first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
+           first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
+           third.cue.time.2, time.until.third.cue2, fourth.cue.time.2, time.until.fourth.cue2,
+           touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2, time.until.correct.cue2,
+           time.until.first.quadrant2, time.until.second.quadrant2, time.until.correct.quadrant2,
+           time.until.lid.exploring2, times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
+           refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
+           eating.time2, eating.times2, time.until.eating2,
+           lid.exploring.time2, lid.exploring.times2, cut.uncut2))
+
+
 #Data correction (don't run)----
 
 
