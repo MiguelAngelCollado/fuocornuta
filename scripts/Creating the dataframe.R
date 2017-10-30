@@ -2089,7 +2089,7 @@ View(cbind(ID3cut, test3cut, datatest3cut, color3cut, side3cut, activity.time3cu
            lid.exploring.time3cut, lid.exploring.times3cut, cut.uncut3cut))
 
 #Correcting times----
-
+##########(Limpia toda esta mierda y deja la funci´ón solo)---------
 #We need now to  correct the time of the strings, because the videos were
 #watched at 2x speed or even 4x
 
