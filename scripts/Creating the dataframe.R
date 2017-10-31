@@ -2066,9 +2066,8 @@ lid.exploring.time3cut<-nastring
 lid.exploring.times3cut<-nastring
 time.until.lid.exploring3cut<-nastring
 
-#is the data cut after eating? No, it's not for this test
+#is the data cut after eating? It is for this test
 cut.uncut3cut<-rep("cut",146)
-
 
 
 library(dplyr)
@@ -2089,50 +2088,12 @@ View(cbind(ID3cut, test3cut, datatest3cut, color3cut, side3cut, activity.time3cu
            lid.exploring.time3cut, lid.exploring.times3cut, cut.uncut3cut))
 
 #Correcting times----
-##########(Limpia toda esta mierda y deja la funci´ón solo)---------
 #We need now to  correct the time of the strings, because the videos were
 #watched at 2x speed or even 4x
 
 
-ID
-test
-datatest1
-color
-side
-
-n=20
-activity.time.temp<-NULL
-for (n in 1:146) {
-if (datatest1$speed[n] == "2x") {
-  activity.time.temp[n] = 2*activity.time[n]
-}else{
-  if (datatest1$speed[n] == "4x") {
-    activity.time.temp[n] = 4*activity.time[n]
-  }else{
-    activity.time.temp[n] = "Algo ha fallado"
-  }
-}
-}
-
-###############
-refuge.time.temp<-NULL
-for (n in 1:146) {
-  if (datatest1$speed[n] == "2x") {
-    refuge.time.temp[n] = 2*refuge.time[n]
-  }else{
-    if (datatest1$speed[n] == "4x") {
-      refuge.time.temp[n] = 4*refuge.time[n]
-    }else{
-      refuge.time.temp[n] = "Algo ha fallado"
-    }
-  }
-}
-
-###############
-
-rm(correct.time)
 #We are make a function to correct the time, reading the speed variable
-#This only works if datatest$V5 has been modified
+#This only works if datatestX$V5 has been modified
 refuge.time
 vector.to.correct=refuge.time
 correcting.time<-function(choose.datatest, vector.to.correct, n.lenght){
@@ -2152,33 +2113,35 @@ correcting.time<-function(choose.datatest, vector.to.correct, n.lenght){
   out 
   }
 
-vector.to.correct=NULL
-activity.time.check<-correcting.time(choose.datatest = datatest1, vector.to.correct = activity.time, n.lenght = (1:146))
-inactivity.time.check<-correcting.time(choose.datatest = datatest1, vector.to.correct = inactivity.time, n.lenght = (1:146))
-refuge.time.check<-correcting.time(choose.datatest = datatest1, vector.to.correct = refuge.time, n.lenght = (1:146))
+#We correct the neccesary vectors
+#Datatest1
+activity.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = activity.time, n.lenght = (1:146))
+inactivity.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = inactivity.time, n.lenght = (1:146))
+refuge.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = refuge.time, n.lenght = (1:146))
+getting.out.refuge.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = getting.out.refuge.time, n.lenght = (1:146)) 
+first.cue.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = first.cue.time, n.lenght = (1:146))
+time.until.first.cue.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = time.until.first.cue, n.lenght = (1:146))
+second.cue.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = second.cue.time, n.lenght = (1:146))
+time.until.second.cue.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = time.until.second.cue, n.lenght = (1:146))
+third.cue.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = third.cue.time, n.lenght = (1:146))
+time.until.third.cue.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = time.until.third.cue, n.lenght = (1:146))
+fourth.cue.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = fourth.cue.time, n.lenght = (1:146))
+time.until.fourth.cue.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = time.until.fourth.cue, n.lenght = (1:146))
+touch.1.cue.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = touch.1.cue, n.lenght = (1:146))
+touch.2.cues.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = touch.2.cues, n.lenght = (1:146))
+touch.3.cues.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = touch.3.cues, n.lenght = (1:146))
+touch.4.cues.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = touch.4.cues, n.lenght = (1:146))
+escape.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = escape.time, n.lenght = (1:146))
+success.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.correct = success.time, n.lenght = (1:146))
 
-activity.time.temp == activity.time.check
-inactivity.time.temp == inactivity.time.check
-refuge.time.temp == refuge.time.check
+#Datatest2
+activity.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = activity.time2, n.lenght = (8:146))
+inactivity.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = inactivity.time2, n.lenght = (8:146))
 
 #Vamos por aquí---------
-vector.to.correct
-activity.time
-activity.time.temp
-datatest1$speed
-View(cbind(datatest1$speed, activity.time.temp/activity.time, activity.time, activity.time.temp))
-activity.time > 450000
-activity.time.temp == lol
-#We apply the correction then
-############activity.time<-activity.time.temp
-
-
-inactivity.time
 
 refuge.time
-
 getting.out.refuge.time 
-
 activity.prop
 inactivity.prop
 refuge.prop
@@ -2186,59 +2149,39 @@ first.quadrant.prop
 second.quadrant.prop
 third.quadrant.prop
 fourth.quadrant.prop
-
 first.cue.time
-
 time.until.first.cue
-
 second.cue.time
-
 time.until.second.cue
-
 third.cue.time
-
 time.until.third.cue
-
 fourth.cue.time
-
 time.until.fourth.cue
-
 touch.1.cue
-
 touch.2.cues
-
 touch.3.cues
-
 touch.4.cues
-
 correct.cue.time
-
 time.until.correct.cue
-
 time.until.lid.exploring
-
 times.resting
-
 escape.time
-
 escape.attemps
 refuge.exit 
 refuge.enter.times
 refuge.re.enter
 success
-
 success.time
-
 eating.time
-
 eating.times
-
 time.until.eating
-
 lid.exploring.time
-
 lid.exploring.times
 cut.uncut
+
+
+
+
 
 
 #modelo
@@ -2291,11 +2234,52 @@ cut.uncut
 
 
 ##We are going to build the dataframes
-#Individual dataframes----
-#For this dataframes, we are going to include only the vectors with data,
-#removing those NA strings
 
-trial1<-cbind(ID, datatest1)
+#Individual dataframes----
+##For this dataframes, we are going to include only the vectors with data,
+#removing annoying NA strings
+
+trial1<-cbind(ID, datatest1, activity.time.corrected, inactivity.time.corrected, refuge.time.corrected,
+              getting.out.refuge.time.corrected, activity.prop, inactivity.prop, refuge.prop,
+              first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
+              first.cue.time.corrected, time.until.first.cue.corrected, second.cue.time.corrected, time.until.second.cue.corrected, 
+              third.cue.time.corrected, time.until.third.cue.corrected, fourth.cue.time.corrected, time.until.fourth.cue.corrected,
+              touch.1.cue.corrected, touch.2.cues.corrected, touch.3.cues.corrected, touch.4.cues.corrected, times.resting, 
+              escape.time.corrected, escape.attemps, refuge.exit,
+              refuge.enter.times, refuge.re.enter, success, success.time.corrected, 
+              cut.uncut)
+
+is.data.frame(trial1)
+View(trial1)
+
+#Rename
+library(dplyr)
+colnames(trial1)
+trial1<-rename(trial1, activity.time = activity.time.corrected,
+               inactivity.time = inactivity.time.corrected,
+               refuge.time = refuge.time.corrected,
+               getting.out.refuge.time = getting.out.refuge.time.corrected,
+               first.cue.time = first.cue.time.corrected,
+               time.until.first.cue = time.until.first.cue.corrected,
+               second.cue.time = second.cue.time.corrected,
+               time.until.second.cue = time.until.second.cue.corrected,
+               third.cue.time = third.cue.time.corrected,
+               time.until.third.cue = time.until.third.cue.corrected,
+               fourth.cue.time = fourth.cue.time.corrected,
+               time.until.fourth.cue = time.until.fourth.cue.corrected,
+               touch.1.cue = touch.1.cue.corrected,
+               touch.2.cues = touch.2.cues.corrected,
+               touch.3.cues = touch.3.cues.corrected,
+               touch.4.cues = touch.4.cues.corrected,
+               escape.time = escape.time.corrected,
+               success.time = success.time.corrected)
+View(trial1)
+trial1$activity.time == activity.time.corrected
+#One big dataframe-------
+
+
+
+
 
 #Data correction (don't run)----
 
