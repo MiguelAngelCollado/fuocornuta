@@ -541,18 +541,18 @@ nastring<-seq(length.out = 146)
 nastring[ nastring > 0 ] <- NA
 
 refuge.time2<- nastring
-third.cue.time.2<-nastring
-fourth.cue.time.2<-nastring
-refuge.enter.times.2<-nastring
-refuge.re.enter.2<-nastring
-success.2<-nastring
+third.cue.time2<-nastring
+fourth.cue.time2<-nastring
+refuge.enter.times2<-nastring
+refuge.re.enter2<-nastring
+success2<-nastring
 getting.out.refuge.time2<-nastring
 refuge.prop2<-nastring
 time.until.third.cue2<-nastring
 time.until.fourth.cue2<-nastring
 touch.3.cues2<-nastring
 touch.4.cues2<-nastring
-refuge.exit.2<-nastring
+refuge.exit2<-nastring
 success.time2<-nastring
 lid.exploring.time2<-nastring
 lid.exploring.times2<-nastring
@@ -572,11 +572,11 @@ View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time
       getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
       first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
       first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
-      third.cue.time.2, time.until.third.cue2, fourth.cue.time.2, time.until.fourth.cue2,
+      third.cue.time2, time.until.third.cue2, fourth.cue.time2, time.until.fourth.cue2,
       touch.1.cue2, touch.2.cues2, touch.3.cues2, touch.4.cues2, correct.cue.time2, time.until.correct.cue2,
       time.until.first.quadrant2, time.until.second.quadrant2, time.until.correct.quadrant2,
-      time.until.lid.exploring2, times.resting2, escape.time2, escape.attemps2, refuge.exit.2,
-      refuge.enter.times.2, refuge.re.enter.2, success.2, success.time2,
+      time.until.lid.exploring2, times.resting2, escape.time2, escape.attemps2, refuge.exit2,
+      refuge.enter.times2, refuge.re.enter2, success2, success.time2,
       eating.time2, eating.times2, time.until.eating2,
       lid.exploring.time2, lid.exploring.times2, cut.uncut2))
 
@@ -2137,51 +2137,20 @@ success.time.corrected<-correcting.time(choose.datatest = datatest1, vector.to.c
 #Datatest2
 activity.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = activity.time2, n.lenght = (8:146))
 inactivity.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = inactivity.time2, n.lenght = (8:146))
-
-#Vamos por aquí---------
-
-refuge.time
-getting.out.refuge.time 
-activity.prop
-inactivity.prop
-refuge.prop
-first.quadrant.prop
-second.quadrant.prop
-third.quadrant.prop
-fourth.quadrant.prop
-first.cue.time
-time.until.first.cue
-second.cue.time
-time.until.second.cue
-third.cue.time
-time.until.third.cue
-fourth.cue.time
-time.until.fourth.cue
-touch.1.cue
-touch.2.cues
-touch.3.cues
-touch.4.cues
-correct.cue.time
-time.until.correct.cue
-time.until.lid.exploring
-times.resting
-escape.time
-escape.attemps
-refuge.exit 
-refuge.enter.times
-refuge.re.enter
-success
-success.time
-eating.time
-eating.times
-time.until.eating
-lid.exploring.time
-lid.exploring.times
-cut.uncut
-
-
-
-
+first.cue.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = first.cue.time2, n.lenght = (8:146))
+time.until.first.cue2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.first.cue2, n.lenght = (8:146))
+second.cue.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = second.cue.time2, n.lenght = (8:146))
+time.until.second.cue2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.second.cue2, n.lenght = (8:146))
+touch.1.cue2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = touch.1.cue2, n.lenght = (8:146))
+touch.2.cues2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = touch.2.cues2, n.lenght = (8:146))
+correct.cue.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = correct.cue.time2, n.lenght = (8:146))
+time.until.correct.cue2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.correct.cue2, n.lenght = (8:146))
+escape.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = escape.time2, n.lenght = (8:146))
+eating.time2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = eating.time2, n.lenght = (8:146))
+time.until.correct.quadrant2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.correct.quadrant2, n.lenght = (8:146))
+time.until.eating2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.eating2, n.lenght = (8:146))
+time.until.second.quadrant2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.second.quadrant2, n.lenght = (8:146))
+time.until.first.quadrant2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.first.quadrant2, n.lenght = (8:146))
 
 
 #modelo
@@ -2250,8 +2219,16 @@ trial1<-cbind(ID, datatest1, activity.time.corrected, inactivity.time.corrected,
               cut.uncut)
 
 is.data.frame(trial1)
-View(trial1)
 
+trial2<-cbind(ID2, datatest2, color2, side2, activity.time2.corrected, inactivity.time2.corrected, 
+           activity.prop2, inactivity.prop2, first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
+           first.cue.time2.corrected, time.until.first.cue2.corrected, second.cue.time2.corrected, time.until.second.cue2.corrected,
+           touch.1.cue2.corrected, touch.2.cues2.corrected, correct.cue.time2.corrected, time.until.correct.cue2.corrected,
+           time.until.first.quadrant2.corrected, time.until.second.quadrant2.corrected, time.until.correct.quadrant2.corrected,
+           times.resting2, escape.time2.corrected, escape.attemps2, eating.time2.corrected, eating.times2, time.until.eating2.corrected,
+           cut.uncut2)
+
+View(trial2)
 #Rename
 library(dplyr)
 colnames(trial1)
@@ -2273,8 +2250,31 @@ trial1<-rename(trial1, activity.time = activity.time.corrected,
                touch.4.cues = touch.4.cues.corrected,
                escape.time = escape.time.corrected,
                success.time = success.time.corrected)
-View(trial1)
-trial1$activity.time == activity.time.corrected
+###C´ámbiale el nombre a todoo!!!-----
+trial2<-rename(trial2, activity.time = activity.time2.corrected,
+              inactivity.time = inactivity.time2.corrected,
+              first.cue.time = first.cue.time2.corrected, 
+              time.until.first.cue = time.until.first.cue2.corrected, 
+              second.cue.time = second.cue.time2.corrected, 
+              time.until.second.cue = time.until.second.cue2.corrected,
+              touch.1.cue = touch.1.cue2.corrected, 
+              touch.2.cues = touch.2.cues2.corrected, 
+              correct.cue.time = correct.cue.time2.corrected, 
+              time.until.correct.cue = time.until.correct.cue2.corrected,
+              time.until.first.quadrant = time.until.first.quadrant2.corrected, 
+              time.until.second.quadrant = time.until.second.quadrant2.corrected, 
+              time.until.correct.quadrant = time.until.correct.quadrant2.corrected,
+              escape.time = escape.time2.corrected, 
+              eating.time = eating.time2.corrected, 
+              time.until.eating = time.until.eating2.corrected)
+
+
+View(trial2)
+
+
+#Vamos por aquí---------
+
+
 #One big dataframe-------
 
 
