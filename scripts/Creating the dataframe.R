@@ -2152,6 +2152,42 @@ time.until.eating2.corrected<-correcting.time(choose.datatest = datatest2, vecto
 time.until.second.quadrant2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.second.quadrant2, n.lenght = (8:146))
 time.until.first.quadrant2.corrected<-correcting.time(choose.datatest = datatest2, vector.to.correct = time.until.first.quadrant2, n.lenght = (8:146))
 
+#Datatest3
+activity.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = activity.time3, n.lenght = (9:146))
+inactivity.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = inactivity.time3, n.lenght = (9:146))
+first.cue.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = first.cue.time3, n.lenght = (9:146))
+time.until.first.cue3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.first.cue3, n.lenght = (9:146))
+second.cue.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = second.cue.time3, n.lenght = (9:146))
+time.until.second.cue3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.second.cue3, n.lenght = (9:146))
+touch.1.cue3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = touch.1.cue3, n.lenght = (9:146))
+touch.2.cues3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = touch.2.cues3, n.lenght = (9:146))
+correct.cue.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = correct.cue.time3, n.lenght = (9:146))
+time.until.correct.cue3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.correct.cue3, n.lenght = (9:146))
+escape.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = escape.time3, n.lenght = (9:146))
+eating.time3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = eating.time3, n.lenght = (9:146))
+time.until.correct.quadrant3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.correct.quadrant3, n.lenght = (9:146))
+time.until.eating3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.eating3, n.lenght = (9:146))
+time.until.second.quadrant3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.second.quadrant3, n.lenght = (9:146))
+time.until.first.quadrant3.corrected<-correcting.time(choose.datatest = datatest3, vector.to.correct = time.until.first.quadrant3, n.lenght = (9:146))
+
+#Datatest4
+activity.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = activity.time4, n.lenght = (9:146))
+inactivity.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = inactivity.time4, n.lenght = (9:146))
+first.cue.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = first.cue.time4, n.lenght = (9:146))
+time.until.first.cue4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.first.cue4, n.lenght = (9:146))
+second.cue.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = second.cue.time4, n.lenght = (9:146))
+time.until.second.cue4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.second.cue4, n.lenght = (9:146))
+touch.1.cue4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = touch.1.cue4, n.lenght = (9:146))
+touch.2.cues4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = touch.2.cues4, n.lenght = (9:146))
+correct.cue.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = correct.cue.time4, n.lenght = (9:146))
+time.until.correct.cue4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.correct.cue4, n.lenght = (9:146))
+escape.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = escape.time4, n.lenght = (9:146))
+time.until.correct.quadrant4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.correct.quadrant4, n.lenght = (9:146))
+time.until.second.quadrant4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.second.quadrant4, n.lenght = (9:146))
+time.until.first.quadrant4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = time.until.first.quadrant4, n.lenght = (9:146))
+success.time4.corrected<-correcting.time(choose.datatest = datatest4, vector.to.correct = success.time4, n.lenght = (9:146))
+
+
 
 #modelo
 ID
@@ -2228,7 +2264,25 @@ trial2<-cbind(ID2, datatest2, color2, side2, activity.time2.corrected, inactivit
            times.resting2, escape.time2.corrected, escape.attemps2, eating.time2.corrected, eating.times2, time.until.eating2.corrected,
            cut.uncut2)
 
-View(trial2)
+trial3<-cbind(ID3, datatest3, color3, side3, activity.time3.corrected, inactivity.time3.corrected, 
+              activity.prop3, inactivity.prop3, first.quadrant.prop3, second.quadrant.prop3, third.quadrant.prop3, fourth.quadrant.prop3,
+              first.cue.time3.corrected, time.until.first.cue3.corrected, second.cue.time3.corrected, time.until.second.cue3.corrected,
+              touch.1.cue3.corrected, touch.2.cues3.corrected, correct.cue.time3.corrected, time.until.correct.cue3.corrected,
+              time.until.first.quadrant3.corrected, time.until.second.quadrant3.corrected, time.until.correct.quadrant3.corrected,
+              times.resting3, escape.time3.corrected, escape.attemps3, eating.time3.corrected, eating.times3, time.until.eating3.corrected,
+              cut.uncut3)
+
+
+trial4<-cbind(ID4, datatest4, color4, side4, activity.time4.corrected, inactivity.time4.corrected,
+           activity.prop4, inactivity.prop4, first.quadrant.prop4, second.quadrant.prop4, third.quadrant.prop4, fourth.quadrant.prop4,
+           first.cue.time4.corrected, time.until.first.cue4.corrected, second.cue.time4.corrected, time.until.second.cue4.corrected,
+           touch.1.cue4.corrected, touch.2.cues4.corrected, correct.cue.time4.corrected, time.until.correct.cue4.corrected,
+           time.until.first.quadrant4.corrected, time.until.second.quadrant4.corrected, time.until.correct.quadrant4.corrected,
+           times.resting4, escape.time4.corrected, escape.attemps4, success4, success.time4.corrected,
+           eating.times4, cut.uncut4)
+
+
+View(trial4)
 #Rename
 library(dplyr)
 colnames(trial1)
@@ -2250,7 +2304,7 @@ trial1<-rename(trial1, activity.time = activity.time.corrected,
                touch.4.cues = touch.4.cues.corrected,
                escape.time = escape.time.corrected,
                success.time = success.time.corrected)
-###C´ámbiale el nombre a todoo!!!-----
+
 trial2<-rename(trial2, activity.time = activity.time2.corrected,
               inactivity.time = inactivity.time2.corrected,
               first.cue.time = first.cue.time2.corrected, 
@@ -2266,12 +2320,73 @@ trial2<-rename(trial2, activity.time = activity.time2.corrected,
               time.until.correct.quadrant = time.until.correct.quadrant2.corrected,
               escape.time = escape.time2.corrected, 
               eating.time = eating.time2.corrected, 
-              time.until.eating = time.until.eating2.corrected)
+              time.until.eating = time.until.eating2.corrected,
+              ID = ID2, test = test2, species = species2, sex = sex2,
+              experiment.type = experiment.type2, correct.cue = correct.cue2,
+              speed = speed2, color = color2, side = side2, activity.prop = activity.prop2,
+              inactivity.prop = inactivity.prop2, first.quadrant.prop = first.quadrant.prop2,
+              second.quadrant.prop = second.quadrant.prop2, third.quadrant.prop = third.quadrant.prop2,
+              fourth.quadrant.prop = fourth.quadrant.prop2, times.resting = times.resting2,
+              escape.attemps = escape.attemps2, eating.times = eating.times2, cut.uncut = cut.uncut2
+              )
 
 
-View(trial2)
+trial3<-rename(trial3, activity.time = activity.time3.corrected,
+               inactivity.time = inactivity.time3.corrected,
+               first.cue.time = first.cue.time3.corrected, 
+               time.until.first.cue = time.until.first.cue3.corrected, 
+               second.cue.time = second.cue.time3.corrected, 
+               time.until.second.cue = time.until.second.cue3.corrected,
+               touch.1.cue = touch.1.cue3.corrected, 
+               touch.2.cues = touch.2.cues3.corrected, 
+               correct.cue.time = correct.cue.time3.corrected, 
+               time.until.correct.cue = time.until.correct.cue3.corrected,
+               time.until.first.quadrant = time.until.first.quadrant3.corrected, 
+               time.until.second.quadrant = time.until.second.quadrant3.corrected, 
+               time.until.correct.quadrant = time.until.correct.quadrant3.corrected,
+               escape.time = escape.time3.corrected, 
+               eating.time = eating.time3.corrected, 
+               time.until.eating = time.until.eating3.corrected,
+               ID = ID3, test = test3, species = species3, sex = sex3,
+               experiment.type = experiment.type3, correct.cue = correct.cue3,
+               speed = speed3, color = color3, side = side3, activity.prop = activity.prop3,
+               inactivity.prop = inactivity.prop3, first.quadrant.prop = first.quadrant.prop3,
+               second.quadrant.prop = second.quadrant.prop3, third.quadrant.prop = third.quadrant.prop3,
+               fourth.quadrant.prop = fourth.quadrant.prop3, times.resting = times.resting3,
+               escape.attemps = escape.attemps3, eating.times = eating.times3, cut.uncut = cut.uncut3
+)
+
+trial4<-rename(trial4, activity.time = activity.time4.corrected,
+               inactivity.time = inactivity.time4.corrected,
+               first.cue.time = first.cue.time4.corrected, 
+               time.until.first.cue = time.until.first.cue4.corrected, 
+               second.cue.time = second.cue.time4.corrected, 
+               time.until.second.cue = time.until.second.cue4.corrected,
+               touch.1.cue = touch.1.cue4.corrected, 
+               touch.2.cues = touch.2.cues4.corrected, 
+               correct.cue.time = correct.cue.time4.corrected, 
+               time.until.correct.cue = time.until.correct.cue4.corrected,
+               time.until.first.quadrant = time.until.first.quadrant4.corrected, 
+               time.until.second.quadrant = time.until.second.quadrant4.corrected, 
+               time.until.correct.quadrant = time.until.correct.quadrant4.corrected,
+               escape.time = escape.time4.corrected, 
+               ID = ID4, test = test4, species = species4, sex = sex4,
+               experiment.type = experiment.type4, correct.cue = correct.cue4,
+               speed = speed4, color = color4, side = side4, activity.prop = activity.prop4,
+               inactivity.prop = inactivity.prop4, first.quadrant.prop = first.quadrant.prop4,
+               second.quadrant.prop = second.quadrant.prop4, third.quadrant.prop = third.quadrant.prop4,
+               fourth.quadrant.prop = fourth.quadrant.prop4, times.resting = times.resting4,
+               escape.attemps = escape.attemps4, eating.times = eating.times4, cut.uncut = cut.uncut4,
+               success = success4, success.time = success.time4.corrected
+               )
+
+colnames(trial4)
 
 
+nrow(unique(trial1))
+nrow(unique(trial2))
+nrow(unique(trial3))
+nrow(unique(trial4))
 #Vamos por aquí---------
 
 
