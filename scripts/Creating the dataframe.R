@@ -1761,7 +1761,7 @@ time.until.third.cue2cut<-nastring
 time.until.fourth.cue2cut<-nastring
 touch.3.cues2cut<-nastring
 touch.4.cues2cut<-nastring
-refuge.exit.2cut<-nastring
+refuge.exit2cut<-nastring
 success.time2cut<-nastring
 
 lid.exploring.time2cut<-nastring
@@ -2060,7 +2060,7 @@ time.until.third.cue3cut<-nastring
 time.until.fourth.cue3cut<-nastring
 touch.3.cues3cut<-nastring
 touch.4.cues3cut<-nastring
-refuge.exit.3cut<-nastring
+refuge.exit3cut<-nastring
 success.time3cut<-nastring
 lid.exploring.time3cut<-nastring
 lid.exploring.times3cut<-nastring
@@ -2591,7 +2591,7 @@ trial3
 trial3cut
 trial4
 trial5
-
+trial5
 #One big dataframe-------
 
 jigsaw1<-cbind(ID, datatest1, color, side, activity.time.corrected, inactivity.time.corrected, refuge.time.corrected, 
@@ -2599,14 +2599,14 @@ jigsaw1<-cbind(ID, datatest1, color, side, activity.time.corrected, inactivity.t
            first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
            first.cue.time.corrected, time.until.first.cue.corrected, second.cue.time.corrected, time.until.second.cue.corrected, 
            third.cue.time.corrected, time.until.third.cue.corrected, fourth.cue.time.corrected, time.until.fourth.cue.corrected,
-           touch.1.cue.corrected, touch.2.cues.corrected, touch.3.cues.corrected, touch.4.cues, correct.cue.time, time.until.correct.cue,
+           touch.1.cue.corrected, touch.2.cues.corrected, touch.3.cues.corrected, touch.4.cues.corrected, correct.cue.time, time.until.correct.cue,
            time.until.first.quadrant.corrected, time.until.second.quadrant.corrected, time.until.correct.quadrant,
            time.until.lid.exploring, times.resting, escape.time.corrected, escape.attemps, refuge.exit,
            refuge.enter.times, refuge.re.enter, success, success.time.corrected, 
            eating.time, eating.times, time.until.eating,
            lid.exploring.time, lid.exploring.times, cut.uncut)
 
-jigsaw2<-cbind(ID2, datatest2, color2, side2, activity.time2cut.corrected, inactivity.time2cut.corrected, refuge.time2,
+jigsaw2<-cbind(ID2, datatest2, color2, side2, activity.time2.corrected, inactivity.time2.corrected, refuge.time2,
            getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
            first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
            first.cue.time2.corrected, time.until.first.cue2.corrected, second.cue.time2.corrected, time.until.second.cue2.corrected,
@@ -2617,16 +2617,369 @@ jigsaw2<-cbind(ID2, datatest2, color2, side2, activity.time2cut.corrected, inact
            refuge.enter.times2, refuge.re.enter2, success2, success.time2,
            eating.time2.corrected, eating.times2, time.until.eating2.corrected,
            lid.exploring.time2, lid.exploring.times2, cut.uncut2)
-length(jigsaw1)
+
+jigsaw3<-cbind(ID3, datatest3, color3, side3, activity.time3.corrected, inactivity.time3.corrected, refuge.time3,
+               getting.out.refuge.time3, activity.prop3, inactivity.prop3, refuge.prop3,
+               first.quadrant.prop3, second.quadrant.prop3, third.quadrant.prop3, fourth.quadrant.prop3,
+               first.cue.time3.corrected, time.until.first.cue3.corrected, second.cue.time3.corrected, time.until.second.cue3.corrected,
+               third.cue.time3, time.until.third.cue3, fourth.cue.time3, time.until.fourth.cue3,
+               touch.1.cue3.corrected, touch.2.cues3.corrected, touch.3.cues3, touch.4.cues3, correct.cue.time3.corrected, time.until.correct.cue3.corrected,
+               time.until.first.quadrant3.corrected, time.until.second.quadrant3.corrected, time.until.correct.quadrant3.corrected,
+               time.until.lid.exploring3, times.resting3, escape.time3.corrected, escape.attemps3, refuge.exit3,
+               refuge.enter.times3, refuge.re.enter3, success3, success.time3,
+               eating.time3.corrected, eating.times3, time.until.eating3.corrected,
+               lid.exploring.time3, lid.exploring.times3, cut.uncut3)
+
+jigsaw4<-cbind(ID4, datatest4, color4, side4, activity.time4.corrected, inactivity.time4.corrected, refuge.time4,
+               getting.out.refuge.time4, activity.prop4, inactivity.prop4, refuge.prop4,
+               first.quadrant.prop4, second.quadrant.prop4, third.quadrant.prop4, fourth.quadrant.prop4,
+               first.cue.time4.corrected, time.until.first.cue4.corrected, second.cue.time4.corrected, time.until.second.cue4.corrected,
+               third.cue.time4, time.until.third.cue4, fourth.cue.time4, time.until.fourth.cue4,
+               touch.1.cue4.corrected, touch.2.cues4.corrected, touch.3.cues4, touch.4.cues4, correct.cue.time4.corrected, time.until.correct.cue4.corrected,
+               time.until.first.quadrant4.corrected, time.until.second.quadrant4.corrected, time.until.correct.quadrant4.corrected,
+               time.until.lid.exploring4, times.resting4, escape.time4.corrected, escape.attemps4, refuge.exit4,
+               refuge.enter.times4, refuge.re.enter4, success4, success.time4,
+               eating.time4, eating.times4, time.until.eating4,
+               lid.exploring.time4, lid.exploring.times4, cut.uncut4)
+
+jigsaw5<-cbind(ID5, datatest5, color5, side5, activity.time5.corrected, inactivity.time5.corrected, refuge.time5,
+               getting.out.refuge.time5, activity.prop5, inactivity.prop5, refuge.prop5,
+               first.quadrant.prop5, second.quadrant.prop5, third.quadrant.prop5, fourth.quadrant.prop5,
+               first.cue.time5.corrected, time.until.first.cue5.corrected, second.cue.time5.corrected, time.until.second.cue5.corrected,
+               third.cue.time5, time.until.third.cue5, fourth.cue.time5, time.until.fourth.cue5,
+               touch.1.cue5.corrected, touch.2.cues5.corrected, touch.3.cues5, touch.4.cues5, correct.cue.time5.corrected, time.until.correct.cue5.corrected,
+               time.until.first.quadrant5.corrected, time.until.second.quadrant5.corrected, time.until.correct.quadrant5.corrected,
+               time.until.lid.exploring5, times.resting5, escape.time5.corrected, escape.attemps5, refuge.exit5,
+               refuge.enter.times5, refuge.re.enter5, success5, success.time5,
+               eating.time5, eating.times5, time.until.eating5.corrected,
+               lid.exploring.time5, lid.exploring.times5, cut.uncut5)
+
+jigsaw2cut<-cbind(ID2cut, datatest2cut, color2cut, side2cut, activity.time2cut.corrected, inactivity.time2cut.corrected, refuge.time2cut,
+               getting.out.refuge.time2cut, activity.prop2cut, inactivity.prop2cut, refuge.prop2cut,
+               first.quadrant.prop2cut, second.quadrant.prop2cut, third.quadrant.prop2cut, fourth.quadrant.prop2cut,
+               first.cue.time2cut.corrected, time.until.first.cue2cut.corrected, second.cue.time2cut.corrected, time.until.second.cue2cut.corrected,
+               third.cue.time2cut, time.until.third.cue2cut, fourth.cue.time2cut, time.until.fourth.cue2cut,
+               touch.1.cue2cut.corrected, touch.2.cues2cut.corrected, touch.3.cues2cut, touch.4.cues2cut, correct.cue.time2cut.corrected, time.until.correct.cue2cut.corrected,
+               time.until.first.quadrant2cut.corrected, time.until.second.quadrant2cut.corrected, time.until.correct.quadrant2cut.corrected,
+               time.until.lid.exploring2cut, times.resting2cut, escape.time2cut.corrected, escape.attemps2cut, refuge.exit2cut,
+               refuge.enter.times2cut, refuge.re.enter2cut, success2cut, success.time2cut,
+               eating.time2cut.corrected, eating.times2cut, time.until.eating2cut.corrected,
+               lid.exploring.time2cut, lid.exploring.times2cut, cut.uncut2cut)
+
+jigsaw3cut<-cbind(ID3cut, datatest3cut, color3cut, side3cut, activity.time3cut.corrected, inactivity.time3cut.corrected, refuge.time3cut,
+                  getting.out.refuge.time3cut, activity.prop3cut, inactivity.prop3cut, refuge.prop3cut,
+                  first.quadrant.prop3cut, second.quadrant.prop3cut, third.quadrant.prop3cut, fourth.quadrant.prop3cut,
+                  first.cue.time3cut.corrected, time.until.first.cue3cut.corrected, second.cue.time3cut.corrected, time.until.second.cue3cut.corrected,
+                  third.cue.time3cut, time.until.third.cue3cut, fourth.cue.time3cut, time.until.fourth.cue3cut,
+                  touch.1.cue3cut.corrected, touch.2.cues3cut.corrected, touch.3.cues3cut, touch.4.cues3cut, correct.cue.time3cut.corrected, time.until.correct.cue3cut.corrected,
+                  time.until.first.quadrant3cut.corrected, time.until.second.quadrant3cut.corrected, time.until.correct.quadrant3cut.corrected,
+                  time.until.lid.exploring3cut, times.resting3cut, escape.time3cut.corrected, escape.attemps3cut, refuge.exit3cut,
+                  refuge.enter.times3cut, refuge.re.enter3cut, success3cut, success.time3cut,
+                  eating.time3cut.corrected, eating.times3cut, time.until.eating3cut.corrected,
+                  lid.exploring.time3cut, lid.exploring.times3cut, cut.uncut3cut)
 
 
 
-#Vamos por aquí---------
+colnames(jigsaw1)
+
+jigsaw1<-rename(jigsaw1, activity.time = activity.time.corrected,
+       inactivity.time = inactivity.time.corrected,
+       refuge.time = refuge.time.corrected,
+       getting.out.refuge.time = getting.out.refuge.time.corrected,
+       first.cue.time = first.cue.time.corrected,
+       time.until.first.cue = time.until.first.cue.corrected,
+       second.cue.time = second.cue.time.corrected,
+       time.until.second.cue = time.until.second.cue.corrected,
+       third.cue.time = third.cue.time.corrected,
+       time.until.third.cue = time.until.third.cue.corrected,
+       fourth.cue.time = fourth.cue.time.corrected,
+       time.until.fourth.cue = time.until.fourth.cue.corrected,
+       touch.1.cue = touch.1.cue.corrected,
+       touch.2.cues = touch.2.cues.corrected,
+       touch.3.cues = touch.3.cues.corrected,
+       touch.4.cues = touch.4.cues.corrected,
+       escape.time = escape.time.corrected,
+       success.time = success.time.corrected,
+       time.until.first.quadrant = time.until.first.quadrant.corrected,
+       time.until.second.quadrant = time.until.second.quadrant.corrected)
+
+colnames(jigsaw3) == colnames(jigsaw2)
+jigsaw2<-rename(jigsaw2, activity.time = activity.time2.corrected,
+                         inactivity.time = inactivity.time2.corrected,
+                         first.cue.time = first.cue.time2.corrected, 
+                         time.until.first.cue = time.until.first.cue2.corrected, 
+                         second.cue.time = second.cue.time2.corrected, 
+                         time.until.second.cue = time.until.second.cue2.corrected,
+                         touch.1.cue = touch.1.cue2.corrected, 
+                         touch.2.cues = touch.2.cues2.corrected, 
+                         correct.cue.time = correct.cue.time2.corrected, 
+                         time.until.correct.cue = time.until.correct.cue2.corrected,
+                         time.until.first.quadrant = time.until.first.quadrant2.corrected, 
+                         time.until.second.quadrant = time.until.second.quadrant2.corrected, 
+                         time.until.correct.quadrant = time.until.correct.quadrant2.corrected,
+                         escape.time = escape.time2.corrected, 
+                         eating.time = eating.time2.corrected, 
+                         time.until.eating = time.until.eating2.corrected,
+                         ID = ID2, test = test2, species = species2, sex = sex2,
+                         experiment.type = experiment.type2, correct.cue = correct.cue2,
+                         speed = speed2, color = color2, side = side2, activity.prop = activity.prop2,
+                         inactivity.prop = inactivity.prop2, first.quadrant.prop = first.quadrant.prop2,
+                         second.quadrant.prop = second.quadrant.prop2, third.quadrant.prop = third.quadrant.prop2,
+                         fourth.quadrant.prop = fourth.quadrant.prop2, times.resting = times.resting2,
+                         escape.attemps = escape.attemps2, eating.times = eating.times2, cut.uncut = cut.uncut2,
+                         refuge.time = refuge.time2, getting.out.refuge.time = getting.out.refuge.time2,
+                         refuge.prop = refuge.prop2, third.cue.time = third.cue.time2, time.until.third.cue = time.until.third.cue2,
+                         fourth.cue.time = fourth.cue.time2, time.until.fourth.cue = time.until.fourth.cue2,
+                         touch.3.cues = touch.3.cues2, touch.4.cues = touch.4.cues2, time.until.lid.exploring = time.until.lid.exploring2,
+                         refuge.re.enter = refuge.re.enter2, success = success2, success.time = success.time2, lid.exploring.time = lid.exploring.time2,
+                         lid.exploring.times = lid.exploring.times2, refuge.exit = refuge.exit2, refuge.enter.times = refuge.enter.times2)
+
+jigsaw3<-rename(jigsaw3, activity.time = activity.time3.corrected,
+                inactivity.time = inactivity.time3.corrected,
+                first.cue.time = first.cue.time3.corrected, 
+                time.until.first.cue = time.until.first.cue3.corrected, 
+                second.cue.time = second.cue.time3.corrected, 
+                time.until.second.cue = time.until.second.cue3.corrected,
+                touch.1.cue = touch.1.cue3.corrected, 
+                touch.2.cues = touch.2.cues3.corrected, 
+                correct.cue.time = correct.cue.time3.corrected, 
+                time.until.correct.cue = time.until.correct.cue3.corrected,
+                time.until.first.quadrant = time.until.first.quadrant3.corrected, 
+                time.until.second.quadrant = time.until.second.quadrant3.corrected, 
+                time.until.correct.quadrant = time.until.correct.quadrant3.corrected,
+                escape.time = escape.time3.corrected, 
+                eating.time = eating.time3.corrected, 
+                time.until.eating = time.until.eating3.corrected,
+                ID = ID3, test = test3, species = species3, sex = sex3,
+                experiment.type = experiment.type3, correct.cue = correct.cue3,
+                speed = speed3, color = color3, side = side3, activity.prop = activity.prop3,
+                inactivity.prop = inactivity.prop3, first.quadrant.prop = first.quadrant.prop3,
+                second.quadrant.prop = second.quadrant.prop3, third.quadrant.prop = third.quadrant.prop3,
+                fourth.quadrant.prop = fourth.quadrant.prop3, times.resting = times.resting3,
+                escape.attemps = escape.attemps3, eating.times = eating.times3, cut.uncut = cut.uncut3,
+                refuge.time = refuge.time3, getting.out.refuge.time = getting.out.refuge.time3,
+                refuge.prop = refuge.prop3, third.cue.time = third.cue.time3, time.until.third.cue = time.until.third.cue3,
+                fourth.cue.time = fourth.cue.time3, time.until.fourth.cue = time.until.fourth.cue3,
+                touch.3.cues = touch.3.cues3, touch.4.cues = touch.4.cues3, time.until.lid.exploring = time.until.lid.exploring3,
+                refuge.re.enter = refuge.re.enter3, success = success3, success.time = success.time3, lid.exploring.time = lid.exploring.time3,
+                lid.exploring.times = lid.exploring.times3, refuge.exit = refuge.exit3, refuge.enter.times = refuge.enter.times3)
+
+colnames(jigsaw4) == colnames(jigsaw3)
+
+jigsaw4<-rename(jigsaw4, activity.time = activity.time4.corrected,
+                inactivity.time = inactivity.time4.corrected,
+                first.cue.time = first.cue.time4.corrected, 
+                time.until.first.cue = time.until.first.cue4.corrected, 
+                second.cue.time = second.cue.time4.corrected, 
+                time.until.second.cue = time.until.second.cue4.corrected,
+                touch.1.cue = touch.1.cue4.corrected, 
+                touch.2.cues = touch.2.cues4.corrected, 
+                correct.cue.time = correct.cue.time4.corrected, 
+                time.until.correct.cue = time.until.correct.cue4.corrected,
+                time.until.first.quadrant = time.until.first.quadrant4.corrected, 
+                time.until.second.quadrant = time.until.second.quadrant4.corrected, 
+                time.until.correct.quadrant = time.until.correct.quadrant4.corrected,
+                escape.time = escape.time4.corrected, 
+                eating.time = eating.time4, 
+                time.until.eating = time.until.eating4,
+                ID = ID4, test = test4, species = species4, sex = sex4,
+                experiment.type = experiment.type4, correct.cue = correct.cue4,
+                speed = speed4, color = color4, side = side4, activity.prop = activity.prop4,
+                inactivity.prop = inactivity.prop4, first.quadrant.prop = first.quadrant.prop4,
+                second.quadrant.prop = second.quadrant.prop4, third.quadrant.prop = third.quadrant.prop4,
+                fourth.quadrant.prop = fourth.quadrant.prop4, times.resting = times.resting4,
+                escape.attemps = escape.attemps4, eating.times = eating.times4, cut.uncut = cut.uncut4,
+                refuge.time = refuge.time4, getting.out.refuge.time = getting.out.refuge.time4,
+                refuge.prop = refuge.prop4, third.cue.time = third.cue.time4, time.until.third.cue = time.until.third.cue4,
+                fourth.cue.time = fourth.cue.time4, time.until.fourth.cue = time.until.fourth.cue4,
+                touch.3.cues = touch.3.cues4, touch.4.cues = touch.4.cues4, time.until.lid.exploring = time.until.lid.exploring4,
+                refuge.re.enter = refuge.re.enter4, success = success4, success.time = success.time4, lid.exploring.time = lid.exploring.time4,
+                lid.exploring.times = lid.exploring.times4, refuge.exit = refuge.exit4, refuge.enter.times = refuge.enter.times4)
+
+colnames(jigsaw5) == colnames(jigsaw4)
+
+jigsaw5<-rename(jigsaw5, activity.time = activity.time5.corrected,
+                inactivity.time = inactivity.time5.corrected,
+                first.cue.time = first.cue.time5.corrected, 
+                time.until.first.cue = time.until.first.cue5.corrected, 
+                second.cue.time = second.cue.time5.corrected, 
+                time.until.second.cue = time.until.second.cue5.corrected,
+                touch.1.cue = touch.1.cue5.corrected, 
+                touch.2.cues = touch.2.cues5.corrected, 
+                correct.cue.time = correct.cue.time5.corrected, 
+                time.until.correct.cue = time.until.correct.cue5.corrected,
+                time.until.first.quadrant = time.until.first.quadrant5.corrected, 
+                time.until.second.quadrant = time.until.second.quadrant5.corrected, 
+                time.until.correct.quadrant = time.until.correct.quadrant5.corrected,
+                escape.time = escape.time5.corrected, 
+                eating.time = eating.time5, 
+                time.until.eating = time.until.eating5.corrected,
+                ID = ID5, test = test5, species = species5, sex = sex5,
+                experiment.type = experiment.type5, correct.cue = correct.cue5,
+                speed = speed5, color = color5, side = side5, activity.prop = activity.prop5,
+                inactivity.prop = inactivity.prop5, first.quadrant.prop = first.quadrant.prop5,
+                second.quadrant.prop = second.quadrant.prop5, third.quadrant.prop = third.quadrant.prop5,
+                fourth.quadrant.prop = fourth.quadrant.prop5, times.resting = times.resting5,
+                escape.attemps = escape.attemps5, eating.times = eating.times5, cut.uncut = cut.uncut5,
+                refuge.time = refuge.time5, getting.out.refuge.time = getting.out.refuge.time5,
+                refuge.prop = refuge.prop5, third.cue.time = third.cue.time5, time.until.third.cue = time.until.third.cue5,
+                fourth.cue.time = fourth.cue.time5, time.until.fourth.cue = time.until.fourth.cue5,
+                touch.3.cues = touch.3.cues5, touch.4.cues = touch.4.cues5, time.until.lid.exploring = time.until.lid.exploring5,
+                refuge.re.enter = refuge.re.enter5, success = success5, success.time = success.time5, lid.exploring.time = lid.exploring.time5,
+                lid.exploring.times = lid.exploring.times5, refuge.exit = refuge.exit5, refuge.enter.times = refuge.enter.times5)
+
+jigsaw2cut<-rename(jigsaw2cut, activity.time = activity.time2cut.corrected,
+                inactivity.time = inactivity.time2cut.corrected,
+                first.cue.time = first.cue.time2cut.corrected, 
+                time.until.first.cue = time.until.first.cue2cut.corrected, 
+                second.cue.time = second.cue.time2cut.corrected, 
+                time.until.second.cue = time.until.second.cue2cut.corrected,
+                touch.1.cue = touch.1.cue2cut.corrected, 
+                touch.2.cues = touch.2.cues2cut.corrected, 
+                correct.cue.time = correct.cue.time2cut.corrected, 
+                time.until.correct.cue = time.until.correct.cue2cut.corrected,
+                time.until.first.quadrant = time.until.first.quadrant2cut.corrected, 
+                time.until.second.quadrant = time.until.second.quadrant2cut.corrected, 
+                time.until.correct.quadrant = time.until.correct.quadrant2cut.corrected,
+                escape.time = escape.time2cut.corrected, 
+                eating.time = eating.time2cut.corrected, 
+                time.until.eating = time.until.eating2cut.corrected,
+                ID = ID2cut, test = test2cut, species = species2cut, sex = sex2cut,
+                experiment.type = experiment.type2cut, correct.cue = correct.cue2cut,
+                speed = speed2cut, color = color2cut, side = side2cut, activity.prop = activity.prop2cut,
+                inactivity.prop = inactivity.prop2cut, first.quadrant.prop = first.quadrant.prop2cut,
+                second.quadrant.prop = second.quadrant.prop2cut, third.quadrant.prop = third.quadrant.prop2cut,
+                fourth.quadrant.prop = fourth.quadrant.prop2cut, times.resting = times.resting2cut,
+                escape.attemps = escape.attemps2cut, eating.times = eating.times2cut, cut.uncut = cut.uncut2cut,
+                refuge.time = refuge.time2cut, getting.out.refuge.time = getting.out.refuge.time2cut,
+                refuge.prop = refuge.prop2cut, third.cue.time = third.cue.time2cut, time.until.third.cue = time.until.third.cue2cut,
+                fourth.cue.time = fourth.cue.time2cut, time.until.fourth.cue = time.until.fourth.cue2cut,
+                touch.3.cues = touch.3.cues2cut, touch.4.cues = touch.4.cues2cut, time.until.lid.exploring = time.until.lid.exploring2cut,
+                refuge.re.enter = refuge.re.enter2cut, success = success2cut, success.time = success.time2cut, lid.exploring.time = lid.exploring.time2cut,
+                lid.exploring.times = lid.exploring.times2cut, refuge.exit = refuge.exit2cut, refuge.enter.times = refuge.enter.times2cut)
+
+jigsaw3cut<-rename(jigsaw3cut, activity.time = activity.time3cut.corrected,
+                   inactivity.time = inactivity.time3cut.corrected,
+                   first.cue.time = first.cue.time3cut.corrected, 
+                   time.until.first.cue = time.until.first.cue3cut.corrected, 
+                   second.cue.time = second.cue.time3cut.corrected, 
+                   time.until.second.cue = time.until.second.cue3cut.corrected,
+                   touch.1.cue = touch.1.cue3cut.corrected, 
+                   touch.2.cues = touch.2.cues3cut.corrected, 
+                   correct.cue.time = correct.cue.time3cut.corrected, 
+                   time.until.correct.cue = time.until.correct.cue3cut.corrected,
+                   time.until.first.quadrant = time.until.first.quadrant3cut.corrected, 
+                   time.until.second.quadrant = time.until.second.quadrant3cut.corrected, 
+                   time.until.correct.quadrant = time.until.correct.quadrant3cut.corrected,
+                   escape.time = escape.time3cut.corrected, 
+                   eating.time = eating.time3cut.corrected, 
+                   time.until.eating = time.until.eating3cut.corrected,
+                   ID = ID3cut, test = test3cut, species = species3cut, sex = sex3cut,
+                   experiment.type = experiment.type3cut, correct.cue = correct.cue3cut,
+                   speed = speed3cut, color = color3cut, side = side3cut, activity.prop = activity.prop3cut,
+                   inactivity.prop = inactivity.prop3cut, first.quadrant.prop = first.quadrant.prop3cut,
+                   second.quadrant.prop = second.quadrant.prop3cut, third.quadrant.prop = third.quadrant.prop3cut,
+                   fourth.quadrant.prop = fourth.quadrant.prop3cut, times.resting = times.resting3cut,
+                   escape.attemps = escape.attemps3cut, eating.times = eating.times3cut, cut.uncut = cut.uncut3cut,
+                   refuge.time = refuge.time3cut, getting.out.refuge.time = getting.out.refuge.time3cut,
+                   refuge.prop = refuge.prop3cut, third.cue.time = third.cue.time3cut, time.until.third.cue = time.until.third.cue3cut,
+                   fourth.cue.time = fourth.cue.time3cut, time.until.fourth.cue = time.until.fourth.cue3cut,
+                   touch.3.cues = touch.3.cues3cut, touch.4.cues = touch.4.cues3cut, time.until.lid.exploring = time.until.lid.exploring3cut,
+                   refuge.re.enter = refuge.re.enter3cut, success = success3cut, success.time = success.time3cut, lid.exploring.time = lid.exploring.time3cut,
+                   lid.exploring.times = lid.exploring.times3cut, refuge.exit = refuge.exit3cut, refuge.enter.times = refuge.enter.times3cut)
+
+colnames(jigsaw1) == colnames(jigsaw3cut)
+
+
+jigsaw1<-remove.na.rows(select.trial = jigsaw1)
+jigsaw2<-remove.na.rows(select.trial = jigsaw2)
+jigsaw3<-remove.na.rows(select.trial = jigsaw3)
+jigsaw4<-remove.na.rows(select.trial = jigsaw4)
+jigsaw5<-remove.na.rows(select.trial = jigsaw5)
+jigsaw2cut<-remove.na.rows(select.trial = jigsaw2cut)
+jigsaw3cut<-remove.na.rows(select.trial = jigsaw3cut)
+
+
+#We remove repetitions created for using tryCatch() :D
+jigsaw1<-unique(jigsaw1)
+jigsaw2<-unique(jigsaw2)
+jigsaw3<-unique(jigsaw3)
+jigsaw4<-unique(jigsaw4)
+jigsaw5<-unique(jigsaw5)
+jigsaw2cut<-unique(jigsaw2cut)
+jigsaw3cut<-unique(jigsaw3cut)
+
+
+View(rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut))
+
+
+
+
+
+#Final dataframes
+
+trial1
+trial2
+trial2cut
+trial3
+trial3cut
+trial4
+trial5
+trial5
+
+data<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
+
+
+#END---------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 #Data correction (don't run)----
-
 
 #Que empiece siempre en cero todo
 n=8
