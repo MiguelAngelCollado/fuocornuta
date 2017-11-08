@@ -269,7 +269,7 @@ datatest1<-rename(datatest1, test = V1, species = V2, sex=V3, experiment.type=V4
 datatest1
 
 length(eating.time)
-View(cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refuge.time, 
+cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refuge.time, 
       getting.out.refuge.time ,activity.prop, inactivity.prop, refuge.prop, 
       first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
       first.cue.time, time.until.first.cue, second.cue.time, time.until.second.cue, 
@@ -278,7 +278,7 @@ View(cbind(ID,test, datatest1, color, side, activity.time, inactivity.time, refu
       time.until.lid.exploring, times.resting, escape.time, escape.attemps, refuge.exit,
       refuge.enter.times, refuge.re.enter, success, success.time, 
       eating.time, eating.times, time.until.eating,
-      lid.exploring.time, lid.exploring.times, cut.uncut))
+      lid.exploring.time, lid.exploring.times, cut.uncut)
 
 
 
@@ -569,7 +569,7 @@ datatest2<-rename(datatest2, test2 = V1, species2 = V2, sex2=V3, experiment.type
 datatest2
 
 
-View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time2, refuge.time2,
+cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time2, refuge.time2,
       getting.out.refuge.time2, activity.prop2, inactivity.prop2, refuge.prop2,
       first.quadrant.prop2, second.quadrant.prop2, third.quadrant.prop2, fourth.quadrant.prop2,
       first.cue.time2, time.until.first.cue2, second.cue.time2, time.until.second.cue2,
@@ -579,7 +579,7 @@ View(cbind(ID2, test2, datatest2, color2, side2, activity.time2, inactivity.time
       time.until.lid.exploring2, times.resting2, escape.time2, escape.attemps2, refuge.exit2,
       refuge.enter.times2, refuge.re.enter2, success2, success.time2,
       eating.time2, eating.times2, time.until.eating2,
-      lid.exploring.time2, lid.exploring.times2, cut.uncut2))
+      lid.exploring.time2, lid.exploring.times2, cut.uncut2)
 
 
 #Third test----
@@ -854,7 +854,7 @@ datatest3
 
 
 
-View(cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time3, refuge.time3,
+cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time3, refuge.time3,
            getting.out.refuge.time3, activity.prop3, inactivity.prop3, refuge.prop3,
            first.quadrant.prop3, second.quadrant.prop3, third.quadrant.prop3, fourth.quadrant.prop3,
            first.cue.time3, time.until.first.cue3, second.cue.time3, time.until.second.cue3,
@@ -864,7 +864,7 @@ View(cbind(ID3, test3, datatest3, color3, side3, activity.time3, inactivity.time
            times.resting3, escape.time3, escape.attemps3, refuge.exit3,
            refuge.enter.times3, refuge.re.enter3, success3, success.time3,
            eating.time3, eating.times3, time.until.eating3,
-           lid.exploring.time3, lid.exploring.times3, cut.uncut3))
+           lid.exploring.time3, lid.exploring.times3, cut.uncut3)
 
 
 
@@ -1156,7 +1156,7 @@ datatest4
 
 
 
-View(cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time4, refuge.time4,
+cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time4, refuge.time4,
            getting.out.refuge.time4, activity.prop4, inactivity.prop4, refuge.prop4,
            first.quadrant.prop4, second.quadrant.prop4, third.quadrant.prop4, fourth.quadrant.prop4,
            first.cue.time4, time.until.first.cue4, second.cue.time4, time.until.second.cue4,
@@ -1166,7 +1166,7 @@ View(cbind(ID4, test4, datatest4, color4, side4, activity.time4, inactivity.time
            time.until.lid.exploring4, times.resting4, escape.time4, escape.attemps4, refuge.exit4,
            refuge.enter.times4, refuge.re.enter4, success4, success.time4,
            eating.time4, eating.times4, time.until.eating4,
-           lid.exploring.time4, lid.exploring.times4, cut.uncut4))
+           lid.exploring.time4, lid.exploring.times4, cut.uncut4)
 
 #Cut dataframes----
 
@@ -1472,7 +1472,7 @@ datatest5<-rename(datatest5, test5 = V1, species5 = V2, sex5=V3, experiment.type
 datatest5
 
 
-View(cbind(ID5, test5, datatest5, color5, side5, activity.time5, inactivity.time5, refuge.time5,
+cbind(ID5, test5, datatest5, color5, side5, activity.time5, inactivity.time5, refuge.time5,
            getting.out.refuge.time5, activity.prop5, inactivity.prop5, refuge.prop5,
            first.quadrant.prop5, second.quadrant.prop5, third.quadrant.prop5, fourth.quadrant.prop5,
            first.cue.time5, time.until.first.cue5, second.cue.time5, time.until.second.cue5,
@@ -1482,7 +1482,7 @@ View(cbind(ID5, test5, datatest5, color5, side5, activity.time5, inactivity.time
            time.until.lid.exploring5, times.resting5, escape.time5, escape.attemps5, refuge.exit5,
            refuge.enter.times5, refuge.re.enter5, success5, success.time5,
            eating.time5, eating.times5, time.until.eating5,
-           lid.exploring.time5, lid.exploring.times5, cut.uncut5))
+           lid.exploring.time5, lid.exploring.times5, cut.uncut5)
 
 
 
@@ -1628,7 +1628,7 @@ for (n in 12:146) {
   }
 }
 time.until.correct.quadrant2cut
-View(cbind(time.until.first.quadrant2cut, time.until.second.quadrant2cut, time.until.correct.quadrant2cut, side2cut))
+cbind(time.until.first.quadrant2cut, time.until.second.quadrant2cut, time.until.correct.quadrant2cut, side2cut)
 
 
 #Time until eating
@@ -1778,8 +1778,7 @@ library(dplyr)
 datatest2cut<-rename(datatest2cut, test2cut = V1, species2cut = V2, sex2cut=V3, experiment.type2cut=V4, correct.cue2cut=V5, speed2cut=V6)
 datatest2cut
 
-
-View(cbind(ID2cut, test2cut, datatest2cut, color2cut, side2cut, activity.time2cut, inactivity.time2cut, refuge.time2cut,
+cbind(ID2cut, test2cut, datatest2cut, color2cut, side2cut, activity.time2cut, inactivity.time2cut, refuge.time2cut,
            getting.out.refuge.time2cut, activity.prop2cut, inactivity.prop2cut, refuge.prop2cut,
            first.quadrant.prop2cut, second.quadrant.prop2cut, third.quadrant.prop2cut, fourth.quadrant.prop2cut,
            first.cue.time2cut, time.until.first.cue2cut, second.cue.time2cut, time.until.second.cue2cut,
@@ -1789,7 +1788,7 @@ View(cbind(ID2cut, test2cut, datatest2cut, color2cut, side2cut, activity.time2cu
            time.until.lid.exploring2cut, times.resting2cut, escape.time2cut, escape.attemps2cut, refuge.exit.2cut,
            refuge.enter.times.2cut, refuge.re.enter.2cut, success.2cut, success.time2cut,
            eating.time2cut, eating.times2cut, time.until.eating2cut,
-           lid.exploring.time2cut, lid.exploring.times2cut, cut.uncut2cut))
+           lid.exploring.time2cut, lid.exploring.times2cut, cut.uncut2cut)
 
 
 
@@ -1891,7 +1890,7 @@ for (n in 12:146) {
   }
 }
 time.until.correct.cue3cut
-View(cbind(time.until.first.cue3cut, time.until.second.cue3cut, time.until.correct.cue3cut, side3cut))
+cbind(time.until.first.cue3cut, time.until.second.cue3cut, time.until.correct.cue3cut, side3cut)
 
 ##Time until reaching the first quadrant and second
 
@@ -2040,7 +2039,7 @@ for (n in 12:146) {
   }
 }
 correct.cue.time3cut
-View(cbind(datatest3cut$correct.cue3cut, first.cue.time3cut, second.cue.time3cut, correct.cue.time3cut))
+cbind(datatest3cut$correct.cue3cut, first.cue.time3cut, second.cue.time3cut, correct.cue.time3cut)
 
 
 
@@ -2075,7 +2074,7 @@ datatest3cut<-rename(datatest3cut, test3cut = V1, species3cut = V2, sex3cut=V3, 
 datatest3cut
 
 
-View(cbind(ID3cut, test3cut, datatest3cut, color3cut, side3cut, activity.time3cut, inactivity.time3cut, refuge.time3cut,
+cbind(ID3cut, test3cut, datatest3cut, color3cut, side3cut, activity.time3cut, inactivity.time3cut, refuge.time3cut,
            getting.out.refuge.time3cut, activity.prop3cut, inactivity.prop3cut, refuge.prop3cut,
            first.quadrant.prop3cut, second.quadrant.prop3cut, third.quadrant.prop3cut, fourth.quadrant.prop3cut,
            first.cue.time3cut, time.until.first.cue3cut, second.cue.time3cut, time.until.second.cue3cut,
@@ -2085,7 +2084,7 @@ View(cbind(ID3cut, test3cut, datatest3cut, color3cut, side3cut, activity.time3cu
            time.until.lid.exploring3cut, times.resting3cut, escape.time3cut, escape.attemps3cut, refuge.exit.3cut,
            refuge.enter.times.3cut, refuge.re.enter.3cut, success.3cut, success.time3cut,
            eating.time3cut, eating.times3cut, time.until.eating3cut,
-           lid.exploring.time3cut, lid.exploring.times3cut, cut.uncut3cut))
+           lid.exploring.time3cut, lid.exploring.times3cut, cut.uncut3cut)
 
 
 #Correcting times----
@@ -2910,7 +2909,7 @@ jigsaw2cut<-unique(jigsaw2cut)
 jigsaw3cut<-unique(jigsaw3cut)
 
 
-View(rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut))
+rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
 
 
 
@@ -2925,10 +2924,8 @@ trial3
 trial3cut
 trial4
 trial5
-trial5
 
 data<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
-
 
 #END---------
 
