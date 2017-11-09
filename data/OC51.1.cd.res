@@ -71,7 +71,7 @@ Warnings:
 Answer.1=OC51.1
 Answer.2=Osmia cornuta
 Answer.3=Male
-Answer.4=Treatment
+Answer.4=Control
 Answer.5=
 Answer.6=4x
 #BEGIN RESULTS

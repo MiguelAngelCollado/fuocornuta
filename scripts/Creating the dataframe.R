@@ -2916,16 +2916,23 @@ rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
 
 
 #Final dataframes
-
 trial1
+write.csv(trial1, "data/dataframes/trial1.csv")
 trial2
+write.csv(trial2, "data/dataframes/trial2.csv")
 trial2cut
+write.csv(trial2cut, "data/dataframes/trial2cut.csv")
 trial3
+write.csv(trial3, "data/dataframes/trial3.csv")
 trial3cut
+write.csv(trial3cut, "data/dataframes/trial3cut.csv")
 trial4
+write.csv(trial4, "data/dataframes/trial4.csv")
 trial5
+write.csv(trial5, "data/dataframes/trial5.csv")
 
-data<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
+datafull<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
+write.csv(datafull, "data/dataframes/datafull.csv")
 
 #END---------
 
