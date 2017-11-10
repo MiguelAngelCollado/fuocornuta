@@ -2345,7 +2345,7 @@ trial5<-cbind(ID5, datatest5, color5, side5, activity.time5.corrected, inactivit
               touch.1.cue5.corrected, touch.2.cues5.corrected, correct.cue.time5.corrected, time.until.correct.cue5.corrected,
               time.until.first.quadrant5.corrected, time.until.second.quadrant5.corrected, time.until.correct.quadrant5.corrected,
               time.until.lid.exploring5.corrected, times.resting5, escape.time5.corrected, escape.attemps5, 
-              success5, success.time5.corrected, time.until.eating5.corrected, lid.exploring.time5.corrected, cut.uncut5)
+              success5, success.time5.corrected, time.until.eating5.corrected, lid.exploring.time5.corrected, lid.exploring.times5, cut.uncut5)
 
 trial2cut<-cbind(ID2cut, datatest2cut, color2cut, side2cut, activity.time2cut.corrected, inactivity.time2cut.corrected, 
               activity.prop2cut, inactivity.prop2cut, first.quadrant.prop2cut, second.quadrant.prop2cut, third.quadrant.prop2cut, fourth.quadrant.prop2cut,
@@ -2490,8 +2490,9 @@ trial5<-rename(trial5, activity.time = activity.time5.corrected,
                success = success5, success.time = success.time5.corrected,
                time.until.lid.exploring = time.until.lid.exploring5.corrected,
                time.until.eating = time.until.eating5.corrected,
-               lid.exploring.time = lid.exploring.time5.corrected
-)
+               lid.exploring.time = lid.exploring.time5.corrected,
+               lid.exploring.times = lid.exploring.times5  
+               )
 
 
 trial2cut<-rename(trial2cut, activity.time = activity.time2cut.corrected,
@@ -2931,6 +2932,7 @@ write.csv(trial4, "data/dataframes/trial4.csv")
 trial5
 write.csv(trial5, "data/dataframes/trial5.csv")
 
+colnames(jigsaw1) == colnames(jigsaw2)
 datafull<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
 write.csv(datafull, "data/dataframes/datafull.csv")
 
