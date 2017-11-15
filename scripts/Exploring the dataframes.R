@@ -68,7 +68,7 @@ colnames(shyness)
 shyness<-rename(shyness, test = trial1t.test, refuge.time = trial1t.refuge.time, 
                 refuge.enter.times = trial1t.refuge.enter.times)
 
-#Innovation
+#Innovation----
 trial5t$success #Is dicotomical
 trial5t$success.time 
 
@@ -76,7 +76,7 @@ innovation<-data.frame(
   trial5t$test,
   trial5t$success.time)
 
-#Exploration
+#Exploration----
 trial1t$ID 
 trial1t$time.until.first.cue
 trial1t$time.until.second.cue
@@ -172,10 +172,10 @@ summary(pcr.shyness)
 plot(pcr.shyness, type = "l")
 biplot(pcr.shyness)
 
-#We see one by one
+colnames(explora.merge.1)
+#we use the correlation matrix to do a ggheatmap#########
 
-##########
-cormat<-cor(na.omit(explora.merge.1[2:16]))
+cormat<-cor(na.omit(explora.merge.1[6:16]))
 library(reshape2)
 melted_cormat <- melt(cormat)
 head(melted_cormat)
