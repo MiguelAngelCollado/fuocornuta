@@ -59,13 +59,13 @@ cor(shyness$refuge.time, shyness$refuge.prop) #We can eliminate refuge.prop
 cor(shyness$getting.out.refuge.time, shyness$refuge.time) #I select refuge.time, because it has more information in re.enter cases
 
 #So we define SHYNESS as
-shyness<-data.frame(trial1t$test,
+shyness<-data.frame(trial1t$ID,
                     trial1t$refuge.time,
                     trial1t$refuge.enter.times
 )
 library(dplyr)
 colnames(shyness)
-shyness<-rename(shyness, test = trial1t.test, refuge.time = trial1t.refuge.time, 
+shyness<-rename(shyness, ID = trial1t.ID, refuge.time = trial1t.refuge.time, 
                 refuge.enter.times = trial1t.refuge.enter.times)
 
 #Innovation----
@@ -73,11 +73,14 @@ trial5t$success #Is dicotomical
 trial5t$success.time 
 
 innovation<-data.frame(
-  trial5t$test,
+  trial5t$ID,
   trial5t$success.time)
+
+innovation<-rename(innovation, ID = trial5t.ID, success.time = trial5t.success.time)
 
 #Exploration----
 trial1t$ID 
+trial1t$refuge.exit
 trial1t$time.until.first.cue
 trial1t$time.until.second.cue
 trial1t$time.until.third.cue
@@ -92,6 +95,7 @@ trial1t$first.cue.time
 trial1t$second.cue.time
 trial1t$third.cue.time
 trial1t$fourth.cue.time
+trial1t$total.cue.time
 trial2t$ID
 trial2t$time.until.correct.cue
 trial2t$time.until.correct.quadrant
@@ -102,6 +106,7 @@ trial5t$ID
 
 #We have different lenght vectors that we need to merge in a dataframe
 merge1<-data.frame(trial1t$ID,
+                   trial1t$refuge.exit,
                    trial1t$time.until.first.cue,
                    trial1t$time.until.second.cue,
                    trial1t$time.until.third.cue,
@@ -114,12 +119,12 @@ merge1<-data.frame(trial1t$ID,
                    trial1t$first.cue.time,
                    trial1t$second.cue.time,
                    trial1t$third.cue.time,
-                   trial1t$fourth.cue.time
-)
+                   trial1t$fourth.cue.time,
+                   trial1t$total.cue.time)
 library(dplyr)
-colnames(merge1)
 
 merge1<-rename(merge1, ID = trial1t.ID,
+       refuge.exit = trial1t.refuge.exit,
        time.until.first.cue = trial1t.time.until.first.cue, 
        time.until.second.cue = trial1t.time.until.second.cue, 
        time.until.third.cue = trial1t.time.until.third.cue,
@@ -132,50 +137,46 @@ merge1<-rename(merge1, ID = trial1t.ID,
        first.cue.time = trial1t.first.cue.time,       
        second.cue.time = trial1t.second.cue.time,
        third.cue.time = trial1t.third.cue.time,
-       fourth.cue.time = trial1t.fourth.cue.time      
+       fourth.cue.time = trial1t.fourth.cue.time,
+       total.cue.time = trial1t.total.cue.time
        )
-
+colnames(merge1)
 merge2<-data.frame(trial2t$ID,
                    trial2t$time.until.correct.cue,
                    trial2t$time.until.correct.quadrant
 )
-colnames(merge2)
+
 merge2<-rename(merge2, ID = trial2t.ID, time.until.correct.cue = trial2t.time.until.correct.cue,     
                time.until.correct.quadrant = trial2t.time.until.correct.quadrant)
-colnames(merge3)
+
 merge3<-data.frame(trial5t$ID,
                    trial5t$time.until.lid.exploring,
                    trial5t$lid.exploring.time,
                    trial5t$lid.exploring.times
                    )
-merge3<-rename(merge, ID=trial5t.ID, time.until.lid.exploring = trial5t.time.until.lid.exploring,
-lid.exploring.time= trial5t.lid.exploring.time, lid.exploring.time = trial5t.lid.exploring.times)
+merge3<-rename(merge3, ID=trial5t.ID, time.until.lid.exploring = trial5t.time.until.lid.exploring,
+lid.exploring.time= trial5t.lid.exploring.time, lid.exploring.times = trial5t.lid.exploring.times)
 
 colnames(trial5t)
 
 #Those who never left the refuge we can't use them to measure exploration
-which(is.na(merge1$time.until.first.cue))
-merge1.1<-merge1[-c(2,3,18,26,30,31,34,36,38,40,44,47,53,76),]
+which(merge1$refuge.exit == "No")
+merge1.1<-merge1[-c(3,18,30,34,40,44,47,53,76),]
 colnames(merge1)
 nrow(merge1.1)
 nrow(merge2)
 colnames(merge2)
 explora.merge.1<-(merge(merge1.1,merge2, by = "ID"))
+explora.merge.2<-(merge(merge1.1, merge3, by = "ID"))
 
 colnames(explora.merge.1)
-pairs(explora.merge.1[2:16])
-View(cor(na.omit(explora.merge.1[2:16])))
-pcr.shyness<-prcomp(shyness[2:5], center = TRUE,
-                    scale. = TRUE, na.action = na.omit)
-pcr.shyness
-summary(pcr.shyness)
-plot(pcr.shyness, type = "l")
-biplot(pcr.shyness)
+pairs(explora.merge.1[,3:18])
+View(cor(na.omit(explora.merge.1[,3:18])))
 
 colnames(explora.merge.1)
-#we use the correlation matrix to do a ggheatmap#########
-
-cormat<-cor(na.omit(explora.merge.1[6:16]))
+#we do a function to do ggheatmaps, for easily visualization
+heatmap<-function(data, columns){
+cormat<-cor(na.omit(data[columns]))
 library(reshape2)
 melted_cormat <- melt(cormat)
 head(melted_cormat)
@@ -233,6 +234,62 @@ ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
                                    size = 12, hjust = 1))+
   coord_fixed()
 # Print the heatmap
-print(ggheatmap)
-View(cormat)
-#########
+print(ggheatmap)}
+#It makes sense to select touch.4.cues, total.cue.time, 
+#and time.until.correct.cue from the second trial
+
+heatmap(data = explora.merge.1, columns = 7:18)
+
+#From the fifth trial, we could extract one more variable to define exploration
+colnames(explora.merge.2)
+heatmap(data = explora.merge.2, columns = (7:19))
+
+corlids<-cor(na.omit(explora.merge.2[7:19]))
+colnames(corlids)
+corlids2<- abs(corlids[,11:13])
+#time.until.lid.exploring5 is the best candidate
+colMeans(corlids2)
+
+#So we define exploration as
+exploration1<-data.frame(trial1t$ID,
+                         trial1t$touch.4.cues,
+                         trial1t$total.cue.time)
+
+exploration1<-rename(exploration1, touch.4.cues = trial1t.touch.4.cues, 
+                     total.cue.time = trial1t.total.cue.time, ID = trial1t.ID)
+exploration2<-data.frame(trial2t$ID, trial2t$time.until.correct.cue)
+exploration2<-rename(exploration2, ID = trial2t.ID, time.until.correct.cue = trial2t.time.until.correct.cue)
+
+exploration3<-data.frame(trial5t$ID,
+                         trial5t$time.until.lid.exploring)
+colnames(exploration3)
+exploration3<-rename(exploration3, ID = trial5t.ID, 
+                     time.until.lid.exploring = trial5t.time.until.lid.exploring)
+  
+exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
+
+
+#Activity----
+#is activity.time correlated
+activity1<-data.frame(trial1t$ID, trial1t$activity.time)
+colnames(activity1)<-c("ID","activity.time1")
+activity4<-data.frame(trial4t$ID, trial4t$activity.time)
+colnames(activity4)<-c("ID","activity.time4")
+
+activity5<-data.frame(trial5t$ID,trial5t$activity.time)
+colnames(activity5)<-c("ID","activity.time5")
+
+activity2cut<-data.frame(trial2cutt$ID,trial2cutt$activity.time)
+colnames(activity2cut)<-c("ID","activity.time2cut")
+
+activity3cut<-data.frame(trial3cutt$ID,trial3cutt$activity.time)
+colnames(activity3cut)<-c("ID","activity.time3cut")
+
+nrow(activity5)
+
+merge(merge(merge(merge(activity1,activity4, by = "ID"),activity3cut, by="ID"), activity5, by="ID"), activity2cut, by="ID")
+merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
+activitycor<-merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
+
+cor(activitycor[2:4])
+heatmap(data = activitycor, columns = 2:4)

@@ -2570,7 +2570,6 @@ trial4
 trial5
 trial5
 #One big dataframe-------
-#ADD TOTAL.CUE.TIME HERE NOOB-----------
 jigsaw1<-cbind(ID, datatest1, color, side, activity.time.corrected, inactivity.time.corrected, refuge.time.corrected, 
            getting.out.refuge.time.corrected ,activity.prop, inactivity.prop, refuge.prop, 
            first.quadrant.prop, second.quadrant.prop, third.quadrant.prop, fourth.quadrant.prop,
