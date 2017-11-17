@@ -270,12 +270,13 @@ exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exp
 
 
 #Activity----
+
+#Different variables along the trials are not correlated!! Which one shall we choose?
 #is activity.time correlated
 activity1<-data.frame(trial1t$ID, trial1t$activity.time)
 colnames(activity1)<-c("ID","activity.time1")
 activity4<-data.frame(trial4t$ID, trial4t$activity.time)
 colnames(activity4)<-c("ID","activity.time4")
-
 activity5<-data.frame(trial5t$ID,trial5t$activity.time)
 colnames(activity5)<-c("ID","activity.time5")
 
@@ -293,3 +294,188 @@ activitycor<-merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
 
 cor(activitycor[2:4])
 heatmap(data = activitycor, columns = 2:4)
+#They are not correlated :(
+
+#is inactivity time correlated?
+inactivity1<-data.frame(trial1t$ID, trial1t$inactivity.time)
+colnames(inactivity1)<-c("ID","inactivity.time1")
+inactivity4<-data.frame(trial4t$ID, trial4t$inactivity.time)
+colnames(inactivity4)<-c("ID","inactivity.time4")
+
+inactivity5<-data.frame(trial5t$ID,trial5t$inactivity.time)
+colnames(inactivity5)<-c("ID","inactivity.time5")
+
+
+inactivitycor<-merge(merge(inactivity1,inactivity4, by="ID"), inactivity5, by = "ID")
+
+#is not correlated, but we have a lot of ceroes here, of bees who didn't rest
+cor(inactivitycor[2:4])
+pairs(inactivitycor[2:4])
+
+#is times resting correlated between trials
+resting1<-data.frame(trial1t$ID, trial1t$times.resting)
+colnames(resting1)<-c("ID","times.resting1")
+resting4<-data.frame(trial4t$ID, trial4t$times.resting)
+colnames(resting4)<-c("ID","times.resting4")
+resting5<-data.frame(trial5t$ID,trial5t$times.resting)
+colnames(resting5)<-c("ID","times.resting5")
+
+#Nope, but maybe correlations are not good for this comparision
+restingcor<-merge(merge(resting1,resting4, by="ID"), resting5, by = "ID")
+cor(restingcor[2:4])
+pairs(restingcor[2:4])
+
+
+#Is escaping time correlated between trials?
+escape1<-data.frame(trial1t$ID, trial1t$escape.time)
+colnames(escape1)<-c("ID","escape1")
+escape4<-data.frame(trial4t$ID, trial4t$escape.time)
+colnames(escape4)<-c("ID","escape4")
+escape5<-data.frame(trial5t$ID,trial5t$escape.time)
+colnames(escape5)<-c("ID","escape5")
+
+escapecor<-merge(merge(escape1,escape4, by="ID"), escape5, by = "ID")
+cor(escapecor[2:4])
+pairs(escapecor[2:4])
+
+#are escape attemps correlated
+escapea1<-data.frame(trial1t$ID, trial1t$escape.attemps)
+colnames(escapea1)<-c("ID","escapea1")
+escapea4<-data.frame(trial4t$ID, trial4t$escape.attemps)
+colnames(escapea4)<-c("ID","escapea4")
+escapea5<-data.frame(trial5t$ID,trial5t$escape.attemps)
+colnames(escapea5)<-c("ID","escapea5")
+
+escapeacor<-merge(merge(escapea1,escapea4, by="ID"), escapea5, by = "ID")
+cor(escapeacor[2:4])
+pairs(escapeacor[2:4])
+
+#Let's compare the different variables withing the same trials
+
+activityt1<-data.frame(trial1t$ID,
+                       trial1t$activity.time,
+                       trial1t$inactivity.time,
+                       trial1t$times.resting,
+                       trial1t$escape.time,
+                       trial1t$escape.attemps)
+activityt1<-rename(activityt1, ID = trial1t.ID, activity.time = trial1t.activity.time,
+       inactivity.time = trial1t.inactivity.time, times.resting = trial1t.times.resting,
+       escape.time = trial1t.escape.time, escape.attemps = trial1t.escape.attemps)
+
+pairs(activityt1[2:6])
+cor(activityt1[2:6])
+
+
+activityt2<-data.frame(trial2t$ID,
+                       trial2t$activity.time,
+                       trial2t$inactivity.time,
+                       trial2t$times.resting,
+                       trial2t$escape.time,
+                       trial2t$escape.attemps)
+activityt2<-rename(activityt2, ID = trial2t.ID, activity.time = trial2t.activity.time,
+                   inactivity.time = trial2t.inactivity.time, times.resting = trial2t.times.resting,
+                   escape.time = trial2t.escape.time, escape.attemps = trial2t.escape.attemps)
+
+pairs(activityt2[2:6])
+cor(activityt2[2:6])
+
+
+activityt3<-data.frame(trial3t$ID,
+                       trial3t$activity.time,
+                       trial3t$inactivity.time,
+                       trial3t$times.resting,
+                       trial3t$escape.time,
+                       trial3t$escape.attemps)
+activityt3<-rename(activityt3, ID = trial3t.ID, activity.time = trial3t.activity.time,
+                   inactivity.time = trial3t.inactivity.time, times.resting = trial3t.times.resting,
+                   escape.time = trial3t.escape.time, escape.attemps = trial3t.escape.attemps)
+
+pairs(activityt3[2:6])
+cor(activityt3[2:6])
+
+
+
+activityt4<-data.frame(trial4t$ID,
+                       trial4t$activity.time,
+                       trial4t$inactivity.time,
+                       trial4t$times.resting,
+                       trial4t$escape.time,
+                       trial4t$escape.attemps)
+activityt4<-rename(activityt4, ID = trial4t.ID, activity.time = trial4t.activity.time,
+                   inactivity.time = trial4t.inactivity.time, times.resting = trial4t.times.resting,
+                   escape.time = trial4t.escape.time, escape.attemps = trial4t.escape.attemps)
+
+pairs(activityt4[2:6])
+cor(activityt4[2:6])
+
+
+activityt5<-data.frame(trial5t$ID,
+                       trial5t$activity.time,
+                       trial5t$inactivity.time,
+                       trial5t$times.resting,
+                       trial5t$escape.time,
+                       trial5t$escape.attemps)
+activityt5<-rename(activityt5, ID = trial5t.ID, activity.time = trial5t.activity.time,
+                   inactivity.time = trial5t.inactivity.time, times.resting = trial5t.times.resting,
+                   escape.time = trial5t.escape.time, escape.attemps = trial5t.escape.attemps)
+
+pairs(activityt5[2:6])
+cor(activityt5[2:6])
+
+activityt2cut<-data.frame(trial2cutt$ID,
+                       trial2cutt$activity.time,
+                       trial2cutt$inactivity.time,
+                       trial2cutt$times.resting,
+                       trial2cutt$escape.time,
+                       trial2cutt$escape.attemps)
+activityt2cut<-rename(activityt2cut, ID = trial2cutt.ID, activity.time = trial2cutt.activity.time,
+                   inactivity.time = trial2cutt.inactivity.time, times.resting = trial2cutt.times.resting,
+                   escape.time = trial2cutt.escape.time, escape.attemps = trial2cutt.escape.attemps)
+
+pairs(activityt2cut[2:6])
+cor(activityt2cut[2:6])
+
+
+activityt3cut<-data.frame(trial3cutt$ID,
+                          trial3cutt$activity.time,
+                          trial3cutt$inactivity.time,
+                          trial3cutt$times.resting,
+                          trial3cutt$escape.time,
+                          trial3cutt$escape.attemps)
+activityt3cut<-rename(activityt3cut, ID = trial3cutt.ID, activity.time = trial3cutt.activity.time,
+                      inactivity.time = trial3cutt.inactivity.time, times.resting = trial3cutt.times.resting,
+                      escape.time = trial3cutt.escape.time, escape.attemps = trial3cutt.escape.attemps)
+
+pairs(activityt3cut[2:6])
+cor(activityt3cut[2:6])
+
+
+
+
+
+
+
+pairs(activityt1[2:6])
+
+pairs(activityt2[2:6])
+
+pairs(activityt3[2:6])
+
+pairs(activityt4[2:6])
+
+pairs(activityt5[2:6])
+
+pairs(activityt2cut[2:6])
+
+pairs(activityt3cut[2:6])
+
+#################################AAAAAAAAAA
+cor(activityt1[2:6])
+cor(activityt2[2:6])
+cor(activityt3[2:6])
+cor(activityt4[2:6])
+cor(activityt5[2:6])
+cor(activityt2cut[2:6])
+cor(activityt3cut[2:6])
+
+#Activity time and escape time are well correlated and makes sense
