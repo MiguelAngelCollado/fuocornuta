@@ -1,14 +1,14 @@
 #Exploring the data
 #Import data----
 #We import first our data
-trial1 <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial1.csv")
-trial2 <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial2.csv")
-trial2cut <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial2cut.csv")
-trial3 <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial3.csv")
-trial3cut <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial3cut.csv")
-trial4 <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial4.csv")
-trial5 <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/trial5.csv")
-datafull <- read.csv("~/Desktop/Tesis/R/fuocornuta/data/dataframes/datafull.csv")
+trial1 <- read.csv("data/dataframes/trial1.csv")
+trial2 <- read.csv("data/dataframes/trial2.csv")
+trial2cut <- read.csv("data/dataframes/trial2cut.csv")
+trial3 <- read.csv("data/dataframes/trial3.csv")
+trial3cut <- read.csv("data/dataframes/trial3cut.csv")
+trial4 <- read.csv("data/dataframes/trial4.csv")
+trial5 <- read.csv("data/dataframes/trial5.csv")
+datafull <- read.csv("data/dataframes/datafull.csv")
 
 #We extract only the treatment trials, not control ones
 trial1t<-subset(trial1, subset = (trial1$experiment.type == "Treatment"))
