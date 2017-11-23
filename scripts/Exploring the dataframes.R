@@ -171,9 +171,8 @@ explora.merge.2<-(merge(merge1.1, merge3, by = "ID"))
 
 colnames(explora.merge.1)
 pairs(explora.merge.1[,3:18])
-View(cor(na.omit(explora.merge.1[,3:18])))
+cor(na.omit(explora.merge.1[,3:18]))
 
-colnames(explora.merge.1)
 #we do a function to do ggheatmaps, for easily visualization
 heatmap<-function(data, columns){
 cormat<-cor(na.omit(data[columns]))
