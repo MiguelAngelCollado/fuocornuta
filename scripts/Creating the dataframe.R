@@ -2559,6 +2559,22 @@ trial5<-unique(trial5)
 trial2cut<-unique(trial2cut)
 trial3cut<-unique(trial3cut)
 
+#We add IT, and brain weights
+
+octraits <- read.csv("data/osmia.cornuta.traits.csv")
+colnames(octraits)
+optic.lobes.weight<-octraits$Brain.Weight..mg. - octraits$No.optic.lobes.weight
+traits<-data.frame(octraits$ID, octraits$IT, octraits$Brain.Weight..mg., octraits$No.optic.lobes.weight, optic.lobes.weight)
+colnames(traits)<-c("ID", "IT", "brain.weight", "no.optic.lobes.weight", "optic.lobes.weight")
+
+trial1<-merge(trial1, traits, by = "ID", all.x = TRUE)
+trial2<-merge(trial2, traits, by = "ID", all.x = TRUE)
+trial2cut<-merge(trial2cut, traits, by = "ID", all.x = TRUE)
+trial3<-merge(trial3, traits, by = "ID", all.x = TRUE)
+trial3cut<-merge(trial3cut, traits, by = "ID", all.x = TRUE)
+trial4<-merge(trial4, traits, by = "ID", all.x = TRUE)
+trial5<-merge(trial5, traits, by = "ID", all.x = TRUE)
+
 
 #So we finally have here every trial data separatedly
 trial1
@@ -2568,7 +2584,7 @@ trial3
 trial3cut
 trial4
 trial5
-trial5
+nrow(trial5)
 #One big dataframe-------
 jigsaw1<-cbind(ID, datatest1, color, side, activity.time.corrected, inactivity.time.corrected, refuge.time.corrected, 
            getting.out.refuge.time.corrected ,activity.prop, inactivity.prop, refuge.prop, 
@@ -2892,6 +2908,25 @@ jigsaw5<-unique(jigsaw5)
 jigsaw2cut<-unique(jigsaw2cut)
 jigsaw3cut<-unique(jigsaw3cut)
 
+#We add IT and brains measurements
+octraits <- read.csv("data/osmia.cornuta.traits.csv")
+colnames(octraits)
+optic.lobes.weight<-octraits$Brain.Weight..mg. - octraits$No.optic.lobes.weight
+traits<-data.frame(octraits$ID, octraits$IT, octraits$Brain.Weight..mg., octraits$No.optic.lobes.weight, optic.lobes.weight)
+colnames(traits)<-c("ID", "IT", "brain.weight", "no.optic.lobes.weight", "optic.lobes.weight")
+
+jigsaw1<-merge(jigsaw1, traits, by = "ID", all.x = TRUE)
+jigsaw2<-merge(jigsaw2, traits, by = "ID", all.x = TRUE)
+jigsaw2cut<-merge(jigsaw2cut, traits, by = "ID", all.x = TRUE)
+jigsaw3<-merge(jigsaw3, traits, by = "ID", all.x = TRUE)
+jigsaw3cut<-merge(jigsaw3cut, traits, by = "ID", all.x = TRUE)
+jigsaw4<-merge(jigsaw4, traits, by = "ID", all.x = TRUE)
+jigsaw5<-merge(jigsaw5, traits, by = "ID", all.x = TRUE)
+
+
+jigsaw1
+
+
 
 rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
 
@@ -2915,7 +2950,6 @@ write.csv(trial4, "data/dataframes/trial4.csv")
 trial5
 write.csv(trial5, "data/dataframes/trial5.csv")
 
-colnames(jigsaw1) == colnames(jigsaw2)
 datafull<-rbind(jigsaw1, jigsaw2, jigsaw3, jigsaw4, jigsaw5, jigsaw2cut, jigsaw3cut)
 write.csv(datafull, "data/dataframes/datafull.csv")
 
