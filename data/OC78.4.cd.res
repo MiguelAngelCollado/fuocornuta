@@ -71,7 +71,7 @@ Warnings:
 Answer.1=OC78.4
 Answer.2=Osmia cornuta
 Answer.3=Male
-Answer.4=Control
+Answer.4=Treatment
 Answer.5=Blue left
 Answer.6=2x
 #BEGIN RESULTS
