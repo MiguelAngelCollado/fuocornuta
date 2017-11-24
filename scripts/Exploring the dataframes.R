@@ -266,6 +266,8 @@ exploration3<-rename(exploration3, ID = trial5t.ID,
                      time.until.lid.exploring = trial5t.time.until.lid.exploring)
   
 exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
+head(exploration)
+#time to touch any in 2nd test?
 
 
 #Activity----
@@ -294,6 +296,9 @@ activitycor<-merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
 cor(activitycor[2:4])
 heatmap(data = activitycor, columns = 2:4)
 #They are not correlated :(
+#Check if activity depends on number of feeding events.
+
+
 
 #is inactivity time correlated?
 inactivity1<-data.frame(trial1t$ID, trial1t$inactivity.time)
@@ -309,6 +314,7 @@ inactivitycor<-merge(merge(inactivity1,inactivity4, by="ID"), inactivity5, by = 
 
 #is not correlated, but we have a lot of ceroes here, of bees who didn't rest
 cor(inactivitycor[2:4])
+cor(inactivitycor[2:4], method = "spearman")
 pairs(inactivitycor[2:4])
 
 #is times resting correlated between trials
