@@ -468,7 +468,6 @@ pairs(activityt2cut[2:6])
 
 pairs(activityt3cut[2:6])
 
-#################################AAAAAAAAAA
 cor(activityt1[2:6])
 cor(activityt2[2:6])
 cor(activityt3[2:6])
@@ -478,3 +477,45 @@ cor(activityt2cut[2:6])
 cor(activityt3cut[2:6])
 
 #Activity time and escape time are well correlated and makes sense
+
+#Dos activity decline with time?
+#We are using controls here too
+prop1<-data.frame(trial1$ID,trial1$activity.prop)
+colnames(prop1)<-c("ID","trial1")
+prop2<-data.frame(trial2$ID,trial2$activity.prop)
+colnames(prop2)<-c("ID","trial2")
+prop3<-data.frame(trial3$ID,trial3$activity.prop)
+colnames(prop3)<-c("ID","trial3")
+prop4<-data.frame(trial4$ID,trial4$activity.prop)
+colnames(prop4)<-c("ID","trial4")
+prop5<-data.frame(trial5$ID,trial5$activity.prop)
+colnames(prop5)<-c("ID","trial5")
+
+#We create a single dataframe with activity.prop for each individual in each test
+activity.decline<-(merge(merge(merge(merge(prop1,prop2, by = "ID"),prop3, by = "ID"), prop4, by = "ID"), prop5, by="ID"))
+row.names(activity.decline)<-activity.decline$ID
+activity.decline<-activity.decline[,2:6]
+
+#We plot each individual
+par(mfrow = c(5,6))
+for (n in 1:30) {
+  print(plot(t(activity.decline[n,]), ylim = c(0,1), xlab = "Trial", ylab = "activity.prop", main = row.names(activity.decline[n,])))
+  lines(t(activity.decline[n,]), ylim = c(0,1))
+}
+par(mfrow = c(1,1))
+par(mfrow = c(5,5))
+for (n in 31:55) {
+  print(plot(t(activity.decline[n,]), ylim = c(0,1), xlab = "Trial", ylab = "activity.prop", main = row.names(activity.decline[n,])))
+  lines(t(activity.decline[n,]), ylim = c(0,1))
+}
+par(mfrow = c(1,1))
+
+#If we sea the means, there is not a clear pattern, but the fifth trial is the one
+#with less activity
+boxplot(activity.decline)
+
+#Learning----
+
+#We can only consider correct.cue.time, if the bees has eaten in the previous trials
+trial4t$correct.cue.time
+trial4t$ID
