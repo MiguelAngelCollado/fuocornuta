@@ -296,7 +296,6 @@ activitycor<-merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
 cor(activitycor[2:4])
 heatmap(data = activitycor, columns = 2:4)
 #They are not correlated :(
-#Check if activity depends on number of feeding events.
 
 
 
@@ -520,8 +519,101 @@ par(mfrow = c(1,1))
 #with less activity
 boxplot(activity.decline)
 
+
+#Check if activity depends on number of feeding events.
+#Withing trials it doesn't seem so
+#Within trial 2, let's see
+acteat2<-data.frame(trial2$ID, trial2$activity.time, 
+                    trial2$eating.time, trial2$eating.times)
+colnames(acteat2)<-c("ID", "activity.time","eating.time","eating.times")
+cor(acteat2[2:4])
+#Can't see correlation, let's remove zeroes, because we have a lot of them
+acteat2[(acteat2==0)] = NA
+acteat2<-na.omit(acteat2)
+cor(acteat2[2:4])
+#eating time is surely negatively correlated with activity time because they exclude
+#each other in JWatcher
+
+#Within trial 3, let's see
+acteat3<-data.frame(trial3$ID, trial3$activity.time, 
+                    trial3$eating.time, trial3$eating.times)
+colnames(acteat3)<-c("ID", "activity.time","eating.time","eating.times")
+
+cor(acteat3[2:4])
+
+#Can't see correlation, let's remove zeroes, because we have a lot of them
+acteat3[(acteat3==0)] = NA
+acteat3<-na.omit(acteat3)
+cor(acteat3[2:4])
+
+#Now let's see between tests, let's check if having eating along the trials 
+#means more activity in later trials
+eatact2<-data.frame(trial2$ID, trial2$eating.time, trial2$eating.times)
+colnames(eatact2)<-c("ID","eating.time2","eating.times2")
+eatact3<-data.frame(trial3$ID, trial3$escape.time, trial3$eating.times)
+colnames(eatact3)<-c("ID","eating.time3","eating.times3")
+
+eatact4<-data.frame(trial4$ID, trial4$activity.time)
+colnames(eatact4)<-c("ID","activity.time4")
+
+eatact5<-data.frame(trial5$ID, trial5$activity.time)
+colnames(eatact5)<-c("ID","activity.time5")
+
+eatcatc<-merge(merge(merge(eatact2, eatact3, by="ID"),eatact4), eatact5)
+###por aqui-----
 #Learning----
 
 #We can only consider correct.cue.time, if the bees has eaten in the previous trials
-trial4t$correct.cue.time
-trial4t$ID
+habercomio1<-data.frame(trial4t$ID,trial4t$correct.cue.time)
+colnames(habercomio1)<-c("ID", "correct.cue.time")
+habercomio3<-data.frame(trial3t$ID,trial3t$eating.time)
+colnames(habercomio3)<-c("ID", "eating.time3")
+habercomio2<-data.frame(trial2t$ID,trial2t$eating.time)
+colnames(habercomio2)<-c("ID", "eating.time2")
+
+habercomio<-merge(merge(habercomio2, habercomio1, by= "ID", all.x = TRUE),habercomio3, by ="ID", all.x = TRUE)
+habercomio[is.na(habercomio)] <- 0
+n=60
+eliminar<-NULL
+for (n in 1:nrow(habercomio)) {
+  if (habercomio$eating.time2[n] == 0 & habercomio$eating.time3[n] == 0) {
+    eliminar[n] = "Yes"
+  }else{
+      eliminar[n]="No"}}
+habercomio<-cbind(habercomio, eliminar)
+corrcue1<-subset(habercomio, subset = (habercomio$eliminar == "No"))
+#These bois have eaten, so only they know which one is the "correct cue"
+corrcue<-(corrcue1[,c(1,3)])
+
+#The same individuals must be picked for time.until.correct.cue
+corrcuetime<-data.frame(trial4t$ID ,trial4t$time.until.correct.cue)
+colnames(corrcuetime)<-c("ID","time.until.correct.cue")
+
+
+corrtimes<-merge(corrcue,corrcuetime, by="ID")
+
+#And the time until succeding
+trial4t$success.time
+
+succtime<-data.frame(trial4t$ID, trial4t$success.time)
+colnames(succtime)<-c("ID","success.time")
+succtime<-na.omit(succtime)
+
+learning<-merge(corrtimes, succtime)
+
+pairs(learning[2:4])
+cor(learning[2:4])
+
+
+
+
+pcr.learning<-prcomp(learning[2:4], center = TRUE,
+                    scale. = TRUE, na.action = na.omit)
+pcr.learning
+summary(pcr.learning)
+plot(pcr.learning, type = "l")
+biplot(pcr.learning)
+
+#we pick success.time and correct cue time
+learning<-data.frame(trial4t$ID, trial4t$correct.cue.time, trial4t$success.time)
+colnames(learning)<-c("ID","correct.cue.time","success.time")
