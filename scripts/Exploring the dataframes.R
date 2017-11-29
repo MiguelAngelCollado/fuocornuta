@@ -1,5 +1,6 @@
-#Exploring the data
-#Import data----
+
+#Exploring the data----
+#Import data
 #We import first our data
 trial1 <- read.csv("data/dataframes/trial1.csv")
 trial2 <- read.csv("data/dataframes/trial2.csv")
@@ -76,7 +77,7 @@ innovation<-data.frame(
   trial5t$ID,
   trial5t$success.time)
 
-innovation<-rename(innovation, ID = trial5t.ID, success.time = trial5t.success.time)
+innovation<-rename(innovation, ID = trial5t.ID, success.time5 = trial5t.success.time)
 
 #Exploration----
 trial1t$ID 
@@ -160,8 +161,8 @@ lid.exploring.time= trial5t.lid.exploring.time, lid.exploring.times = trial5t.li
 colnames(trial5t)
 
 #Those who never left the refuge we can't use them to measure exploration
-which(merge1$refuge.exit == "No")
-merge1.1<-merge1[-c(3,18,30,34,40,44,47,53,76),]
+deletos<-which(merge1$refuge.exit == "No")
+merge1.1<-merge1[-deletos,]
 colnames(merge1)
 nrow(merge1.1)
 nrow(merge2)
@@ -236,7 +237,7 @@ ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 print(ggheatmap)}
 #It makes sense to select touch.4.cues, total.cue.time, 
 #and time.until.correct.cue from the second trial
-
+merge1.1
 heatmap(data = explora.merge.1, columns = 7:18)
 
 #From the fifth trial, we could extract one more variable to define exploration
@@ -267,6 +268,8 @@ exploration3<-rename(exploration3, ID = trial5t.ID,
   
 exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
 head(exploration)
+#We remove time.until.correct.cue because it doesn't make behavioral sense
+exploration<-exploration[,c(1,2,3,5)]
 #time to touch any in 2nd test?
 
 
@@ -412,6 +415,8 @@ activityt4<-rename(activityt4, ID = trial4t.ID, activity.time = trial4t.activity
 pairs(activityt4[2:6])
 cor(activityt4[2:6])
 
+#We can use activity5 for trying to explain innovation behavior, because activity
+#seem to be independent along trials
 
 activityt5<-data.frame(trial5t$ID,
                        trial5t$activity.time,
@@ -419,12 +424,18 @@ activityt5<-data.frame(trial5t$ID,
                        trial5t$times.resting,
                        trial5t$escape.time,
                        trial5t$escape.attemps)
+
 activityt5<-rename(activityt5, ID = trial5t.ID, activity.time = trial5t.activity.time,
                    inactivity.time = trial5t.inactivity.time, times.resting = trial5t.times.resting,
                    escape.time = trial5t.escape.time, escape.attemps = trial5t.escape.attemps)
 
 pairs(activityt5[2:6])
 cor(activityt5[2:6])
+heatmap(data = activityt5, columns = 2:6)
+#activity.time and times.resting seem to be interesting variables to define activity
+#for just the fifth trial
+activity.for.innovation<-data.frame(activityt5$ID, trial5t$activity.time, trial5t$times.resting)
+activity.for.innovation<-rename(activity.for.innovation, ID = activityt5.ID, activity.time5 = trial5t.activity.time, times.resting5 = trial5t.times.resting)
 
 activityt2cut<-data.frame(trial2cutt$ID,
                        trial2cutt$activity.time,
@@ -560,7 +571,19 @@ eatact5<-data.frame(trial5$ID, trial5$activity.time)
 colnames(eatact5)<-c("ID","activity.time5")
 
 eatcatc<-merge(merge(merge(eatact2, eatact3, by="ID"),eatact4), eatact5)
-###por aqui-----
+#Let's see if there is correlation between feeding events, or feeding time
+pairs(eatcatc[2:7])
+cor(eatcatc[2:7])
+#There is no correlation between feeding events and activity in later trials!
+#Let's remove zeroes, maybe we will find that, if you at least eat once, or more, your
+#activity will increase
+eatcatcnozero<-eatcatc
+eatcatcnozero[(eatcatcnozero==0)] = NA
+eatcatcnozero<-na.omit(eatcatcnozero)
+#This is even less correlated
+pairs(eatcatcnozero[2:7])
+cor(eatcatc[2:7])
+
 #Learning----
 
 #We can only consider correct.cue.time, if the bees has eaten in the previous trials
@@ -614,6 +637,45 @@ summary(pcr.learning)
 plot(pcr.learning, type = "l")
 biplot(pcr.learning)
 
-#we pick success.time and correct cue time
+#we pick success.time and correct cue time, to define learning
 learning<-data.frame(trial4t$ID, trial4t$correct.cue.time, trial4t$success.time)
-colnames(learning)<-c("ID","correct.cue.time","success.time")
+colnames(learning)<-c("ID","correct.cue.time","success.time4")
+
+
+#Explaining learning and innovation----
+
+#Innovation first
+
+#We check normality
+hist(innovation$success.time)
+shapiro.test(innovation$success.time)
+#The test shows normality, but I don't believe it because of the histogram and the
+#amount of NA values
+
+#We create a dataframe, including all the variables from other behaviors 
+#that may explain innovation (defined as success.time)
+
+######################  What should we do with the amount of NAs?
+
+innovation
+shyness
+exploration
+learning
+activity.for.innovation
+
+explain.innovation1<-innovation
+explain.innovation1<-merge(merge(merge(merge(explain.innovation1, shyness, by="ID"),
+                                       exploration, by="ID"),
+                                 learning, by="ID"),
+                           activity.for.innovation)
+colnames(explain.innovation1)
+#por aqui---------
+lm(formula = success.time5 ~ refuge.time + refuge.enter.times + touch.4.cues + total.cue.time + time.until.correct.cue + time.until.lid.exploring ,data = explain.innovation1)
+
+#We create a dataframe, including all the variables from other behaviors 
+#that may explain innovation (defined as success, just being successful in the last trial)
+innovation
+shyness
+exploration
+learning
+activity.for.innovation
