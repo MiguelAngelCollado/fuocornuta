@@ -655,7 +655,7 @@ shapiro.test(innovation$success.time)
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
 
-######################  What should we do with the amount of NAs?
+################  What should we do with the amount of NAs for innovation?
 
 innovation
 shyness
@@ -669,8 +669,20 @@ explain.innovation1<-merge(merge(merge(merge(explain.innovation1, shyness, by="I
                                  learning, by="ID"),
                            activity.for.innovation)
 colnames(explain.innovation1)
-#por aqui---------
-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + touch.4.cues + total.cue.time + time.until.correct.cue + time.until.lid.exploring ,data = explain.innovation1)
+explain.innovation1
+explain.innovation1
+#We are going to try to explain innovation defined as success.time5
+#Through refuge.time, refuge.enter.times, touch.4.cues, total.cue.time,
+#time.until.lid.exploring, 
+lminnovation1<-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + touch.4.cues + total.cue.time + time.until.lid.exploring + activity.time5 + times.resting5, data = explain.innovation1)
+
+#let's explore the model'
+
+
+
+
+
+
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success, just being successful in the last trial)
