@@ -669,17 +669,34 @@ explain.innovation1<-merge(merge(merge(merge(explain.innovation1, shyness, by="I
                                  learning, by="ID"),
                            activity.for.innovation)
 colnames(explain.innovation1)
-explain.innovation1
-explain.innovation1
+
+#Let's explore first the relationships between different behaviors
+explain.innovation1.1<-data.frame(explain.innovation1$ID, 
+                                  explain.innovation1$success.time5, #innovation 
+                                  explain.innovation1$refuge.time, explain.innovation1$refuge.enter.times, #shyness
+                                  explain.innovation1$touch.4.cues, explain.innovation1$total.cue.time, explain.innovation1$time.until.lid.exploring, #exploring
+                                  explain.innovation1$correct.cue.time ,explain.innovation1$success.time4, #learning
+                                  explain.innovation1$activity.time5, explain.innovation1$times.resting5) #activity
+colnames(explain.innovation1.1)<-c("ID","success.time5","refuge.time","refuge.enter.times","touch.4.cues","total.cue.time","time.until.lid.exploring","correct.cue.time","success.time4","activity.time5","times.resting5")
+head(explain.innovation1.1)
+
+is.na(explain.innovation1.1)
+pairs(explain.innovation1.1[2:11])
+
+#Lots of NAs, we cant explain success.time5, which is key for exploring innovation
+cor(explain.innovation1.1[2:11])
+
 #We are going to try to explain innovation defined as success.time5
-#Through refuge.time, refuge.enter.times, touch.4.cues, total.cue.time,
-#time.until.lid.exploring, 
+#using linear models
+#FAIL----
+#WE'VE GOT LOT OF NAs, maybe that's why the model is failing
 lminnovation1<-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + touch.4.cues + total.cue.time + time.until.lid.exploring + activity.time5 + times.resting5, data = explain.innovation1)
 
+#CANT GET RESIDUALS
+lminnovation1$residuals
+rstandard(lminnovation1)
+
 #let's explore the model'
-
-
-
 
 
 
