@@ -574,6 +574,8 @@ eatcatc<-merge(merge(merge(eatact2, eatact3, by="ID"),eatact4), eatact5)
 #Let's see if there is correlation between feeding events, or feeding time
 pairs(eatcatc[2:7])
 cor(eatcatc[2:7])
+scatter.smooth(eatcatc$eating.times2 + eatcatc$eating.times3 ~ eatcatc$activity.time5)
+scatter.smooth(eatcatc$eating.times2 + eatcatc$eating.times3 ~ eatcatc$activity.time4)
 #There is no correlation between feeding events and activity in later trials!
 #Let's remove zeroes, maybe we will find that, if you at least eat once, or more, your
 #activity will increase
@@ -618,20 +620,19 @@ corrtimes<-merge(corrcue,corrcuetime, by="ID")
 #And the time until succeding
 trial4t$success.time
 
-succtime<-data.frame(trial4t$ID, trial4t$success.time)
-colnames(succtime)<-c("ID","success.time")
-succtime<-na.omit(succtime)
+succtime<-data.frame(trial4t$ID, trial4t$success.time, trial4t$success)
+colnames(succtime)<-c("ID","success.time", "success")
+#succtime<-na.omit(succtime)
 
 learning<-merge(corrtimes, succtime)
 
-pairs(learning[2:4])
-cor(learning[2:4])
+head(learning)
+learning$success.time.no.capped <- ifelse(is.na(learning$success.time), max(learning$success.time, na.rm = T), learning$success.time) #change max for 15 minutes in miliseg
+pairs(learning[2:6])
+cor(learning[2:6])
 
-
-
-
-pcr.learning<-prcomp(learning[2:4], center = TRUE,
-                    scale. = TRUE, na.action = na.omit)
+pcr.learning<-prcomp(learning[,c(2,3,5,6)], center = TRUE,
+                    scale. = TRUE, na.action = na.omit) #check
 pcr.learning
 summary(pcr.learning)
 plot(pcr.learning, type = "l")
@@ -690,7 +691,23 @@ cor(explain.innovation1.1[2:11])
 #using linear models
 #FAIL----
 #WE'VE GOT LOT OF NAs, maybe that's why the model is failing
-lminnovation1<-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + touch.4.cues + total.cue.time + time.until.lid.exploring + activity.time5 + times.resting5, data = explain.innovation1)
+dim(explain.innovation1)
+lminnovation1<-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + 
+                    touch.4.cues + total.cue.time + time.until.lid.exploring + 
+                    activity.time5 + times.resting5, data = explain.innovation1, na.action = "na.omit")
+summary(lminnovation1)
+explain.innovation1$success.time <- ifelse(is.na(explain.innovation1$success.time5), 0, 1)
+m <- glm(formula = success.time ~ refuge.time + refuge.enter.times + 
+      touch.4.cues + total.cue.time + time.until.lid.exploring + 
+      activity.time5 + times.resting5, family = "binomial", 
+      data = explain.innovation1)
+summary(m)
+#usar survival models.
+
+#things: do activity, time in cartulina, etc... per minute.
+
+
+
 
 #CANT GET RESIDUALS
 lminnovation1$residuals
