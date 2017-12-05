@@ -608,6 +608,8 @@ for (n in 1:nrow(habercomio)) {
 habercomio<-cbind(habercomio, eliminar)
 corrcue1<-subset(habercomio, subset = (habercomio$eliminar == "No"))
 #These bois have eaten, so only they know which one is the "correct cue"
+#but be careful, some of them didn't make it until the trial4, so correct.cue.time
+#is going to be 0 for them
 corrcue<-(corrcue1[,c(1,3)])
 
 #The same individuals must be picked for time.until.correct.cue
@@ -627,9 +629,27 @@ colnames(succtime)<-c("ID","success.time", "success")
 learning<-merge(corrtimes, succtime)
 
 head(learning)
-learning$success.time.no.capped <- ifelse(is.na(learning$success.time), max(learning$success.time, na.rm = T), learning$success.time) #change max for 15 minutes in miliseg
+
+learning$success.virtual.time <- ifelse(is.na(learning$success.time), 900000, learning$success.time) #change max for 15 minutes in miliseg
 pairs(learning[2:6])
 cor(learning[2:6])
+
+#I see interesting the relationship between success and correct.cue.time
+cor(learning$correct.cue.time,learning$success)
+cs<-glm(success ~ correct.cue.time, family = "binomial", data = learning)
+summary(cs)
+
+anova(cs)
+library(survival)
+install.packages("rcompanion")
+
+install.packages("fmsb")
+library(fmsb)
+
+nagelkerke(cs)
+??NagelkerkeR2()
+
+bipartite()
 
 pcr.learning<-prcomp(learning[,c(2,3,5,6)], center = TRUE,
                     scale. = TRUE, na.action = na.omit) #check
