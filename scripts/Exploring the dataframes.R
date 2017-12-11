@@ -69,6 +69,8 @@ colnames(shyness)
 shyness<-rename(shyness, ID = trial1t.ID, refuge.time = trial1t.refuge.time, 
                 refuge.enter.times = trial1t.refuge.enter.times)
 
+cor(shyness$refuge.time, shyness$refuge.enter.times)
+
 #Innovation----
 trial5t$success #Is dicotomical
 trial5t$success.time 
@@ -270,7 +272,7 @@ exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exp
 head(exploration)
 #We remove time.until.correct.cue because it doesn't make behavioral sense
 exploration<-exploration[,c(1,2,3,5)]
-#time to touch any in 2nd test?
+#time to touch any in 2nd test?--por aqui-----
 
 
 #Activity----
