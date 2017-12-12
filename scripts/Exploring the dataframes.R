@@ -18,6 +18,7 @@ trial2cutt<-subset(trial2cut, subset = (trial2cut$experiment.type == "Treatment"
 trial3t<-subset(trial3, subset = (trial3$experiment.type == "Treatment"))
 trial3cutt<-subset(trial3cut, subset = (trial3cut$experiment.type == "Treatment"))
 trial4t<-subset(trial4, subset = (trial4$experiment.type == "Treatment"))
+trial4c<-subset(trial4, subset = (trial4$experiment.type == "Control"))
 trial5t<-subset(trial5, subset = (trial5$experiment.type == "Treatment"))
 
 
@@ -146,11 +147,13 @@ merge1<-rename(merge1, ID = trial1t.ID,
 colnames(merge1)
 merge2<-data.frame(trial2t$ID,
                    trial2t$time.until.correct.cue,
-                   trial2t$time.until.correct.quadrant
+                   trial2t$time.until.correct.quadrant,
+                   trial2t$time.until.any.cue
 )
 
 merge2<-rename(merge2, ID = trial2t.ID, time.until.correct.cue = trial2t.time.until.correct.cue,     
-               time.until.correct.quadrant = trial2t.time.until.correct.quadrant)
+               time.until.correct.quadrant = trial2t.time.until.correct.quadrant,
+               time.until.any.cue = trial2t.time.until.any.cue)
 
 merge3<-data.frame(trial5t$ID,
                    trial5t$time.until.lid.exploring,
@@ -172,9 +175,10 @@ colnames(merge2)
 explora.merge.1<-(merge(merge1.1,merge2, by = "ID"))
 explora.merge.2<-(merge(merge1.1, merge3, by = "ID"))
 
+length(explora.merge.1)
 colnames(explora.merge.1)
-pairs(explora.merge.1[,3:18])
-cor(na.omit(explora.merge.1[,3:18]))
+pairs(explora.merge.1[,3:length(explora.merge.1)])
+cor(na.omit(explora.merge.1[,3:length(explora.merge.1)]))
 
 #we do a function to do ggheatmaps, for easily visualization
 heatmap<-function(data, columns){
@@ -240,11 +244,12 @@ print(ggheatmap)}
 #It makes sense to select touch.4.cues, total.cue.time, 
 #and time.until.correct.cue from the second trial
 merge1.1
-heatmap(data = explora.merge.1, columns = 7:18)
+heatmap(data = explora.merge.1, columns = 7:length(explora.merge.1))
 
 #From the fifth trial, we could extract one more variable to define exploration
 colnames(explora.merge.2)
-heatmap(data = explora.merge.2, columns = (7:19))
+
+heatmap(data = explora.merge.2, columns = (7:length(explora.merge.2)))
 
 corlids<-cor(na.omit(explora.merge.2[7:19]))
 colnames(corlids)
@@ -252,15 +257,17 @@ corlids2<- abs(corlids[,11:13])
 #time.until.lid.exploring5 is the best candidate
 colMeans(corlids2)
 
-#So we define exploration as
+#So we define exploration as success.time in the first trial, total.cue.time in
+#the first trial, time.until.any.cue from the second trial and 
+#time.until.lid.exploring in the fifth trial
 exploration1<-data.frame(trial1t$ID,
-                         trial1t$touch.4.cues,
+                         trial1t$success.time,
                          trial1t$total.cue.time)
 
-exploration1<-rename(exploration1, touch.4.cues = trial1t.touch.4.cues, 
+exploration1<-rename(exploration1, success.time = trial1t.success.time, 
                      total.cue.time = trial1t.total.cue.time, ID = trial1t.ID)
-exploration2<-data.frame(trial2t$ID, trial2t$time.until.correct.cue)
-exploration2<-rename(exploration2, ID = trial2t.ID, time.until.correct.cue = trial2t.time.until.correct.cue)
+exploration2<-data.frame(trial2t$ID, trial2t$time.until.any.cue)
+exploration2<-rename(exploration2, ID = trial2t.ID, time.until.any.cue = trial2t.time.until.any.cue)
 
 exploration3<-data.frame(trial5t$ID,
                          trial5t$time.until.lid.exploring)
@@ -271,8 +278,8 @@ exploration3<-rename(exploration3, ID = trial5t.ID,
 exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
 head(exploration)
 #We remove time.until.correct.cue because it doesn't make behavioral sense
-exploration<-exploration[,c(1,2,3,5)]
-#time to touch any in 2nd test?--por aqui-----
+heatmap(exploration, 2:length(exploration))
+
 
 
 #Activity----
@@ -591,6 +598,7 @@ cor(eatcatc[2:7])
 #Learning----
 
 #We can only consider correct.cue.time, if the bees has eaten in the previous trials
+#this is only for checking and selection learning variables
 habercomio1<-data.frame(trial4t$ID,trial4t$correct.cue.time)
 colnames(habercomio1)<-c("ID", "correct.cue.time")
 habercomio3<-data.frame(trial3t$ID,trial3t$eating.time)
@@ -632,38 +640,57 @@ learning<-merge(corrtimes, succtime)
 
 head(learning)
 
-learning$success.virtual.time <- ifelse(is.na(learning$success.time), 900000, learning$success.time) #change max for 15 minutes in miliseg
+learning$success.virtual.time <- ifelse(is.na(learning$success.time), 900000, learning$success.time) 
 pairs(learning[2:6])
 cor(learning[2:6])
+
+#Bees seem to resolve trial 4 very fast! at least the ones that actually learnt##
+sort(trial4t$success.time, decreasing = TRUE)
+
+#How many passed the test?
+length(which(trial4t$success == TRUE))
+length(which(trial4t$success == FALSE))
+(length(which(trial4t$success == TRUE))/(length(which(trial4t$success == TRUE)) + length(which(trial4t$success == FALSE))))*100
+
+length(which(trial4$success))
+
+boxplot(trial4t$success.time, ylim=(c(0,900000)))
+
+(27/30)*100
+(214940/1000)/60
+214.94-180
+
+#We compare them with control
+length(which(trial4c$success == TRUE))
+length(which(trial4c$success == FALSE))
+(length(which(trial4c$success == TRUE))/(length(which(trial4c$success == TRUE)) + length(which(trial4c$success == FALSE))))*100
+
+boxplot(trial4c$success.time, ylim=(c(0,900000)))
+sort(trial4$success.time, decreasing = TRUE)
+
 
 #I see interesting the relationship between success and correct.cue.time
 cor(learning$correct.cue.time,learning$success)
 cs<-glm(success ~ correct.cue.time, family = "binomial", data = learning)
 summary(cs)
 
-anova(cs)
-library(survival)
-install.packages("rcompanion")
-
-install.packages("fmsb")
-library(fmsb)
-
-nagelkerke(cs)
-??NagelkerkeR2()
-
-bipartite()
 
 pcr.learning<-prcomp(learning[,c(2,3,5,6)], center = TRUE,
-                    scale. = TRUE, na.action = na.omit) #check
+                    scale. = TRUE) #check
 pcr.learning
 summary(pcr.learning)
 plot(pcr.learning, type = "l")
 biplot(pcr.learning)
 
 #we pick success.time and correct cue time, to define learning
-learning<-data.frame(trial4t$ID, trial4t$correct.cue.time, trial4t$success.time)
-colnames(learning)<-c("ID","correct.cue.time","success.time4")
+virtual.success.time<-trial4t$success.time
+virtual.success.time[is.na(virtual.success.time)] <- 900000
 
+
+learning<-data.frame(trial4t$ID, trial4t$success, trial4t$correct.cue.time, trial4t$success.time, virtual.success.time)
+
+
+learning<-rename(learning, ID= trial4t.ID, correct.cue.time = trial4t.correct.cue.time, success.time = trial4t.success.time, success = trial4t.success)
 
 #Explaining learning and innovation----
 
