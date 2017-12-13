@@ -75,12 +75,19 @@ cor(shyness$refuge.time, shyness$refuge.enter.times)
 #Innovation----
 trial5t$success #Is dicotomical
 trial5t$success.time 
+virtual.success.time5<-trial5t$success.time
+virtual.success.time5[is.na(virtual.success.time5)] <- 900000
 
 innovation<-data.frame(
   trial5t$ID,
-  trial5t$success.time)
+  trial5t$success,
+  trial5t$success.time,
+  virtual.success.time5)
 
-innovation<-rename(innovation, ID = trial5t.ID, success.time5 = trial5t.success.time)
+innovation<-rename(innovation, 
+                   ID = trial5t.ID, 
+                   success.time5 = trial5t.success.time,
+                   success5 = trial5t.success)
 
 #Exploration----
 trial1t$ID 
@@ -95,6 +102,8 @@ trial1t$touch.3.cues
 trial1t$touch.4.cues
 trial1t$success #Dicotomical
 trial1t$success.time
+virtual.success.time1 <- trial1t$success.time
+virtual.success.time1[is.na(virtual.success.time1)] <- 900000
 trial1t$first.cue.time
 trial1t$second.cue.time
 trial1t$third.cue.time
@@ -125,6 +134,7 @@ merge1<-data.frame(trial1t$ID,
                    trial1t$third.cue.time,
                    trial1t$fourth.cue.time,
                    trial1t$total.cue.time)
+
 library(dplyr)
 
 merge1<-rename(merge1, ID = trial1t.ID,
@@ -153,7 +163,7 @@ merge2<-data.frame(trial2t$ID,
 
 merge2<-rename(merge2, ID = trial2t.ID, time.until.correct.cue = trial2t.time.until.correct.cue,     
                time.until.correct.quadrant = trial2t.time.until.correct.quadrant,
-               time.until.any.cue = trial2t.time.until.any.cue)
+               time.until.any.cue2 = trial2t.time.until.any.cue)
 
 merge3<-data.frame(trial5t$ID,
                    trial5t$time.until.lid.exploring,
@@ -262,12 +272,13 @@ colMeans(corlids2)
 #time.until.lid.exploring in the fifth trial
 exploration1<-data.frame(trial1t$ID,
                          trial1t$success.time,
-                         trial1t$total.cue.time)
+                         trial1t$total.cue.time,
+                         virtual.success.time1)
 
-exploration1<-rename(exploration1, success.time = trial1t.success.time, 
-                     total.cue.time = trial1t.total.cue.time, ID = trial1t.ID)
+exploration1<-rename(exploration1, success.time1 = trial1t.success.time, 
+                     total.cue.time1 = trial1t.total.cue.time, ID = trial1t.ID)
 exploration2<-data.frame(trial2t$ID, trial2t$time.until.any.cue)
-exploration2<-rename(exploration2, ID = trial2t.ID, time.until.any.cue = trial2t.time.until.any.cue)
+exploration2<-rename(exploration2, ID = trial2t.ID, time.until.any.cue2 = trial2t.time.until.any.cue)
 
 exploration3<-data.frame(trial5t$ID,
                          trial5t$time.until.lid.exploring)
@@ -276,7 +287,7 @@ exploration3<-rename(exploration3, ID = trial5t.ID,
                      time.until.lid.exploring = trial5t.time.until.lid.exploring)
   
 exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
-head(exploration)
+  head(exploration)
 #We remove time.until.correct.cue because it doesn't make behavioral sense
 heatmap(exploration, 2:length(exploration))
 
@@ -424,6 +435,8 @@ activityt4<-rename(activityt4, ID = trial4t.ID, activity.time = trial4t.activity
 pairs(activityt4[2:6])
 cor(activityt4[2:6])
 
+heatmap(data = activityt4, columns = 2:6)
+
 #We can use activity5 for trying to explain innovation behavior, because activity
 #seem to be independent along trials
 
@@ -442,9 +455,41 @@ pairs(activityt5[2:6])
 cor(activityt5[2:6])
 heatmap(data = activityt5, columns = 2:6)
 #activity.time and times.resting seem to be interesting variables to define activity
-#for just the fifth trial
-activity.for.innovation<-data.frame(activityt5$ID, trial5t$activity.time, trial5t$times.resting)
-activity.for.innovation<-rename(activity.for.innovation, ID = activityt5.ID, activity.time5 = trial5t.activity.time, times.resting5 = trial5t.times.resting)
+#for just the fifth trial, add activity prop because we don't have the time for
+#the whole trial
+activity.for.innovation<-data.frame(trial5t$ID, 
+                                    trial5t$activity.time, 
+                                    trial5t$times.resting, 
+                                    trial5t$activity.prop)
+
+activity.for.innovation<-rename(activity.for.innovation, 
+                                ID = trial5t.ID, 
+                                activity.time5 = trial5t.activity.time, 
+                                times.resting5 = trial5t.times.resting, 
+                                activity.prop5 = trial5t.activity.prop)
+
+#activity.time and times.resting seem to be interesting variables to define activity
+#for just the fourth trial, but times.resting is more correlated than in the
+#trial5, we add activity prop, to use the same variables as activity.for.innovation
+#but this time we have the whole test so we can use activity.time4
+activity.for.learning<-data.frame(trial4t$ID,
+                                  trial4t$activity.time,
+                                  trial4t$times.resting, 
+                                  trial4t$activity.prop)
+
+activity.for.learning<-rename(activity.for.learning, 
+                                ID = trial4t.ID, 
+                                activity.time4 = trial4t.activity.time, 
+                                times.resting4 = trial4t.times.resting, 
+                                activity.prop4 = trial4t.activity.prop)
+
+
+
+
+
+
+
+
 
 activityt2cut<-data.frame(trial2cutt$ID,
                        trial2cutt$activity.time,
@@ -683,58 +728,72 @@ plot(pcr.learning, type = "l")
 biplot(pcr.learning)
 
 #we pick success.time and correct cue time, to define learning
-virtual.success.time<-trial4t$success.time
-virtual.success.time[is.na(virtual.success.time)] <- 900000
+virtual.success.time4<-trial4t$success.time
+virtual.success.time4[is.na(virtual.success.time4)] <- 900000
 
 
-learning<-data.frame(trial4t$ID, trial4t$success, trial4t$correct.cue.time, trial4t$success.time, virtual.success.time)
+#Add correct.cue.prop instead of correct.cue.time?-----
+trial4t$correct.cue.time/900000
+
+learning<-data.frame(trial4t$ID, 
+                     trial4t$success, 
+                     trial4t$correct.cue.time, 
+                     trial4t$success.time, 
+                     virtual.success.time4)
 
 
-learning<-rename(learning, ID= trial4t.ID, correct.cue.time = trial4t.correct.cue.time, success.time = trial4t.success.time, success = trial4t.success)
+
+learning<-rename(learning, 
+                 ID= trial4t.ID, 
+                 correct.cue.time4 = trial4t.correct.cue.time, 
+                 success.time4 = trial4t.success.time, 
+                 success4 = trial4t.success)
 
 #Explaining learning and innovation----
 
 #Innovation first
 
-#We check normality
-hist(innovation$success.time)
-shapiro.test(innovation$success.time)
-#The test shows normality, but I don't believe it because of the histogram and the
-#amount of NA values
-
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
 
-################  What should we do with the amount of NAs for innovation?
 
 innovation
 shyness
 exploration
 learning
 activity.for.innovation
+activity.for.learning
 
+#explain innovation through time until succeed in trial 5
 explain.innovation1<-innovation
 explain.innovation1<-merge(merge(merge(merge(explain.innovation1, shyness, by="ID"),
                                        exploration, by="ID"),
                                  learning, by="ID"),
                            activity.for.innovation)
 colnames(explain.innovation1)
+is.data.frame(explain.innovation1)
 
 #Let's explore first the relationships between different behaviors
-explain.innovation1.1<-data.frame(explain.innovation1$ID, 
-                                  explain.innovation1$success.time5, #innovation 
-                                  explain.innovation1$refuge.time, explain.innovation1$refuge.enter.times, #shyness
-                                  explain.innovation1$touch.4.cues, explain.innovation1$total.cue.time, explain.innovation1$time.until.lid.exploring, #exploring
-                                  explain.innovation1$correct.cue.time ,explain.innovation1$success.time4, #learning
-                                  explain.innovation1$activity.time5, explain.innovation1$times.resting5) #activity
-colnames(explain.innovation1.1)<-c("ID","success.time5","refuge.time","refuge.enter.times","touch.4.cues","total.cue.time","time.until.lid.exploring","correct.cue.time","success.time4","activity.time5","times.resting5")
-head(explain.innovation1.1)
-
-is.na(explain.innovation1.1)
-pairs(explain.innovation1.1[2:11])
+#this is crazy
+pairs(explain.innovation1[3:18])
 
 #Lots of NAs, we cant explain success.time5, which is key for exploring innovation
-cor(explain.innovation1.1[2:11])
+cor(explain.innovation1[2:11])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #We are going to try to explain innovation defined as success.time5
 #using linear models
