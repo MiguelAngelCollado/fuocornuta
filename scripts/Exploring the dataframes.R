@@ -806,7 +806,7 @@ innovation.refuge<-data.frame(explain.innovation1$ID,
 innovation.refuge<-na.omit(innovation.refuge)
 plot(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, ylim = c(0,900000), xlim = c(0,900000), xlab = "Refuge time", ylab = "Virtual success time")
 textxy(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, labs = innovation.refuge$explain.innovation1.ID)
-View(innovation.refuge)
+
 ##There is no bee that spent the whole trial 1 in the refugee and then passed
 #the innovation trial but, they were only 5 bees from 27 that spent the whole
 #time in the refuge and made it to the final test in treatment bees
@@ -825,17 +825,19 @@ summary(v.succ.refuge)
 v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
 summary(v.succ.refuge.only.successful)
 
+#success.time5 ~ refuge.enter.times
+explain.innovation1$virtual.success.time5
+explain.innovation1$refuge.enter.times
 
-#Lots of NAs, we cant explain success.time5, which is key for exploring innovation
-cor(explain.innovation1[2:11])
-
-
-
-
-
-
-
-
+innovation.enter.times<-data.frame(explain.innovation1$ID,
+                                   explain.innovation1$virtual.success.time5,
+                                   explain.innovation1$refuge.enter.times)
+innovation.enter.times<-na.omit(innovation.enter.times)
+#Here I don't see a pattern, I don't the behavioral sense of re-entering 
+#(because, there isn't too much re-entering neither) and I don't see any sense
+#In doing a model with this
+plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, xlab = "Refuge enter times", ylab = "Virtual success time")
+textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
 
 
