@@ -13,14 +13,19 @@ datafull <- read.csv("data/dataframes/datafull.csv")
 
 #We extract only the treatment trials, not control ones
 trial1t<-subset(trial1, subset = (trial1$experiment.type == "Treatment"))
+trial1c<-subset(trial1, subset = (trial1$experiment.type == "Control"))
 trial2t<-subset(trial2, subset = (trial2$experiment.type == "Treatment"))
+trial2c<-subset(trial2, subset = (trial2$experiment.type == "Control"))
 trial2cutt<-subset(trial2cut, subset = (trial2cut$experiment.type == "Treatment"))
+trial2cutc<-subset(trial2cut, subset = (trial2cut$experiment.type == "Control"))
 trial3t<-subset(trial3, subset = (trial3$experiment.type == "Treatment"))
+trial3c<-subset(trial3, subset = (trial3$experiment.type == "Control"))
 trial3cutt<-subset(trial3cut, subset = (trial3cut$experiment.type == "Treatment"))
+trial3cutc<-subset(trial3cut, subset = (trial3cut$experiment.type == "Control"))
 trial4t<-subset(trial4, subset = (trial4$experiment.type == "Treatment"))
 trial4c<-subset(trial4, subset = (trial4$experiment.type == "Control"))
 trial5t<-subset(trial5, subset = (trial5$experiment.type == "Treatment"))
-
+trial5c<-subset(trial5, subset = (trial5$experiment.type == "Control"))
 
 #Transforming data for PCA, 
 #principal component analysis should only be used with the raw data if all variables 
@@ -72,6 +77,10 @@ shyness<-rename(shyness, ID = trial1t.ID, refuge.time = trial1t.refuge.time,
 
 cor(shyness$refuge.time, shyness$refuge.enter.times)
 
+shynessc<-data.frame(trial1c$ID,
+                     trial1c$refuge.time,
+                     trial1c$refuge.enter.times
+)
 #Innovation----
 trial5t$success #Is dicotomical
 trial5t$success.time 
@@ -764,18 +773,58 @@ learning
 activity.for.innovation
 activity.for.learning
 
+
+########
+#########
+
 #explain innovation through time until succeed in trial 5
-explain.innovation1<-innovation
-explain.innovation1<-merge(merge(merge(merge(explain.innovation1, shyness, by="ID"),
-                                       exploration, by="ID"),
-                                 learning, by="ID"),
-                           activity.for.innovation)
-colnames(explain.innovation1)
+
+explain.innovation1<-merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
+                        exploration, by= "ID", all.x = TRUE), 
+                        learning, by= "ID", all.x = TRUE), 
+                        activity.for.innovation, by = "ID", all.x= TRUE)
+
 is.data.frame(explain.innovation1)
 
 #Let's explore first the relationships between different behaviors
 #this is crazy
 pairs(explain.innovation1[3:18])
+
+colnames(explain.innovation1)
+
+#I don't understand the model alone
+v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
+summary(v.succ.alone)
+
+#success.time5 ~ refuge time 
+install.packages("calibrate")
+library(calibrate)
+innovation.refuge<-data.frame(explain.innovation1$ID, 
+                              explain.innovation1$refuge.time, 
+                              explain.innovation1$virtual.success.time5)
+
+innovation.refuge<-na.omit(innovation.refuge)
+plot(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, ylim = c(0,900000), xlim = c(0,900000), xlab = "Refuge time", ylab = "Virtual success time")
+textxy(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, labs = innovation.refuge$explain.innovation1.ID)
+View(innovation.refuge)
+##There is no bee that spent the whole trial 1 in the refugee and then passed
+#the innovation trial but, they were only 5 bees from 27 that spent the whole
+#time in the refuge and made it to the final test in treatment bees
+length(which(trial1t$refuge.time == 900000))
+length(trial1t$refuge.time)
+
+#But only 9 bees from the 76 that started the experiment spent the whole time
+#within the refuge
+
+
+v.succ.refuge<-lm(data = explain.innovation1, formula = virtual.success.time5 ~ refuge.time) 
+#The refuge time is not significative
+summary(v.succ.refuge)
+
+#Let's remove those who didn't passed the innovation trial (trial 5)
+v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
+summary(v.succ.refuge.only.successful)
+
 
 #Lots of NAs, we cant explain success.time5, which is key for exploring innovation
 cor(explain.innovation1[2:11])
