@@ -1,5 +1,5 @@
 
-#Exploring the data----
+#DEFINING behaviors----
 #Import data
 #We import first our data
 trial1 <- read.csv("data/dataframes/trial1.csv")
@@ -31,7 +31,7 @@ trial5c<-subset(trial5, subset = (trial5$experiment.type == "Control"))
 #principal component analysis should only be used with the raw data if all variables 
 #have the same units of measure.
 
-#Shyness----
+#Defining Shyness----
 #We define shyness using these variables
 trial1t$refuge.time
 trial1t$getting.out.refuge.time
@@ -81,7 +81,7 @@ shynessc<-data.frame(trial1c$ID,
                      trial1c$refuge.time,
                      trial1c$refuge.enter.times
 )
-#Innovation----
+#Defining innovation----
 trial5t$success #Is dicotomical
 trial5t$success.time 
 virtual.success.time5<-trial5t$success.time
@@ -98,7 +98,7 @@ innovation<-rename(innovation,
                    success.time5 = trial5t.success.time,
                    success5 = trial5t.success)
 
-#Exploration----
+#Defining exploration----
 trial1t$ID 
 trial1t$refuge.exit
 trial1t$time.until.first.cue
@@ -302,7 +302,7 @@ heatmap(exploration, 2:length(exploration))
 
 
 
-#Activity----
+#Defining activity----
 
 #Different variables along the trials are not correlated!! Which one shall we choose?
 #is activity.time correlated
@@ -649,7 +649,7 @@ eatcatcnozero<-na.omit(eatcatcnozero)
 pairs(eatcatcnozero[2:7])
 cor(eatcatc[2:7])
 
-#Learning----
+#Defining learning----
 
 #We can only consider correct.cue.time, if the bees has eaten in the previous trials
 #this is only for checking and selection learning variables
@@ -741,8 +741,6 @@ virtual.success.time4<-trial4t$success.time
 virtual.success.time4[is.na(virtual.success.time4)] <- 900000
 
 
-#Add correct.cue.prop instead of correct.cue.time?-----
-trial4t$correct.cue.time/900000
 
 learning<-data.frame(trial4t$ID, 
                      trial4t$success, 
@@ -758,9 +756,9 @@ learning<-rename(learning,
                  success.time4 = trial4t.success.time, 
                  success4 = trial4t.success)
 
-#Explaining learning and innovation----
+#Explaining learning and innovation
 
-#Innovation first
+#Innovation MODELS---- 
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
@@ -774,8 +772,6 @@ activity.for.innovation
 activity.for.learning
 
 
-########
-#########
 
 #explain innovation through time until succeed in trial 5
 
@@ -796,7 +792,7 @@ colnames(explain.innovation1)
 v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
 summary(v.succ.alone)
 
-#success.time5 ~ refuge time 
+#success.time5 ~ refuge time----
 install.packages("calibrate")
 library(calibrate)
 innovation.refuge<-data.frame(explain.innovation1$ID, 
@@ -821,11 +817,24 @@ v.succ.refuge<-lm(data = explain.innovation1, formula = virtual.success.time5 ~ 
 #The refuge time is not significative
 summary(v.succ.refuge)
 
+ggplot(innovation.refuge, aes(x = innovation.refuge$explain.innovation1.refuge.time, y = innovation.refuge$explain.innovation1.virtual.success.time5)) +
+  geom_point()+
+  geom_smooth(method = "lm")
+
+#Plot the residuals - the red line should be close to being flat, 
+#like the dashed grey line, this is not the case
+plot(v.succ.refuge, which = 1)  
+## And in the qqplot too - point should ideally fall onto the diagonal dashed line,
+##and it doesn't
+plot(v.succ.refuge, which = 2)
+
+
 #Let's remove those who didn't passed the innovation trial (trial 5)
 v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
 summary(v.succ.refuge.only.successful)
 
-#success.time5 ~ refuge.enter.times
+
+#success.time5 ~ refuge.enter.times----
 explain.innovation1$virtual.success.time5
 explain.innovation1$refuge.enter.times
 
@@ -838,6 +847,45 @@ innovation.enter.times<-na.omit(innovation.enter.times)
 #In doing a model with this
 plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, xlab = "Refuge enter times", ylab = "Virtual success time")
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
+
+#success5 ~ refuge.time----
+
+succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                 data = explain.innovation1, family = "binomial")
+
+#Inversamente proporcional y marginalmente significativa la relación???
+summary(succ.refuge)
+plot(succ.refuge)
+###library(all.effects)
+install.packages("DHARMa")
+library("DHARMa")
+
+
+
+#I think we have overdispersion
+disp<-simulateResiduals(succ.refuge, n = 250, refit = TRUE, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#por aquí----
+##Si hay sobredispersión utilizaremos la pseudofamilia:
+family=quasibinomial(link="logit")
+#Si no hay buenos ajustes o alta sobredispersión utilizaremos la función de vínculo:
+  family = binomial(link ="cloglog")
+#cloglog trabaja mejor con distribuciones extremadamente sesgadas
+#por ejemplo: porporciones de un estado <0.1 o >0.9
+###
+###
+
+
+
+
+
+
+
+
+
+
+
 
 
 
