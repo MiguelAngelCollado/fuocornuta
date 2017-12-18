@@ -863,7 +863,7 @@ library("DHARMa")
 
 
 #I think we have overdispersion
-disp<-simulateResiduals(succ.refuge, n = 250, refit = TRUE, plot = T)
+disp<-simulateResiduals(succ.refuge, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #por aquí----
