@@ -849,7 +849,8 @@ plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.e
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
 #success5 ~ refuge.time----
-
+#por aquí----
+#Apply here paco's teachings
 succ.refuge<-glm(formula = success5 ~ refuge.time, 
                  data = explain.innovation1, family = "binomial")
 
@@ -866,7 +867,9 @@ library("DHARMa")
 disp<-simulateResiduals(succ.refuge, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
-#por aquí----
+#Shall we check quasibinomial?
+
+
 ##Si hay sobredispersión utilizaremos la pseudofamilia:
 family=quasibinomial(link="logit")
 #Si no hay buenos ajustes o alta sobredispersión utilizaremos la función de vínculo:
