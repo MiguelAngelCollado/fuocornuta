@@ -280,12 +280,14 @@ colMeans(corlids2)
 #the first trial, time.until.any.cue from the second trial and 
 #time.until.lid.exploring in the fifth trial
 exploration1<-data.frame(trial1t$ID,
+                         trial1t$success,
                          trial1t$success.time,
                          trial1t$total.cue.time,
                          virtual.success.time1)
 
 exploration1<-rename(exploration1, success.time1 = trial1t.success.time, 
-                     total.cue.time1 = trial1t.total.cue.time, ID = trial1t.ID)
+                     total.cue.time1 = trial1t.total.cue.time, ID = trial1t.ID,
+                     success1 = trial1t.success)
 exploration2<-data.frame(trial2t$ID, trial2t$time.until.any.cue)
 exploration2<-rename(exploration2, ID = trial2t.ID, time.until.any.cue2 = trial2t.time.until.any.cue)
 
@@ -296,7 +298,7 @@ exploration3<-rename(exploration3, ID = trial5t.ID,
                      time.until.lid.exploring = trial5t.time.until.lid.exploring)
   
 exploration<-merge(merge(exploration1, exploration2, by= "ID", all.x = TRUE),exploration3, by = "ID", all.x = TRUE)
-  head(exploration)
+head(exploration)
 #We remove time.until.correct.cue because it doesn't make behavioral sense
 heatmap(exploration, 2:length(exploration))
 
@@ -833,6 +835,7 @@ plot(v.succ.refuge, which = 2)
 v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
 summary(v.succ.refuge.only.successful)
 
+#Maybe we should try survival analysis
 
 #success.time5 ~ refuge.enter.times----
 explain.innovation1$virtual.success.time5
@@ -849,35 +852,89 @@ plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.e
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
 #success5 ~ refuge.time----
-#por aquí----
 #Apply here paco's teachings
+lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
+                 data = explain.innovation1)
+plot(lm.succ.refuge)
+
+#Residuals are not normal
+hist(lm.succ.refuge$residuals)
+
+#Those who spent a lot of time in the refuge didn't pass the test
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
+
+
+#So we use glm binomial family
 succ.refuge<-glm(formula = success5 ~ refuge.time, 
                  data = explain.innovation1, family = "binomial")
 
-#Inversamente proporcional y marginalmente significativa la relación???
+coef(succ.refuge)
+
+#Inversamente proporcional y marginalmente significativa la relación
 summary(succ.refuge)
 plot(succ.refuge)
-###library(all.effects)
-install.packages("DHARMa")
-library("DHARMa")
 
+install.packages("effects")
+library(effects)
+
+#It seems less probable to success if you spent more time in the refuge
+allEffects(succ.refuge)
 
 
 #I think we have overdispersion
+library(visreg)
+visreg(succ.refuge, scale = "response")
+library("DHARMa")
 disp<-simulateResiduals(succ.refuge, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
-#Shall we check quasibinomial?
+#Shall we check quasibinomial? It is used when we have overdispersion
+quasi.succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                 data = explain.innovation1, family = binomial)
 
 
-##Si hay sobredispersión utilizaremos la pseudofamilia:
-family=quasibinomial(link="logit")
-#Si no hay buenos ajustes o alta sobredispersión utilizaremos la función de vínculo:
-  family = binomial(link ="cloglog")
-#cloglog trabaja mejor con distribuciones extremadamente sesgadas
-#por ejemplo: porporciones de un estado <0.1 o >0.9
-###
-###
+summary(quasi.succ.refuge)
+plot(quasi.succ.refuge)
+
+#Mean estimates do not change using binomial or quasibinomial
+allEffects(succ.refuge)
+allEffects(quasi.succ.refuge)
+
+#But standard neither!
+par(mfrow = c(1,2))
+visreg(succ.refuge, scale = "response")
+visreg(quasi.succ.refuge, scale = "response")
+par(mfrow = c(1,1))
+
+#We try link cloglog, that is better with biased distributions
+clog.succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                       data = explain.innovation1, family = binomial(link ="cloglog"))
+#But it has less significancy
+summary(clog.succ.refuge)
+
+#success5 ~ success1----
+explain.innovation1$success5
+explain.innovation1$success1
+lm.succ5.succ1<- lm(success5 ~ success1, data=explain.innovation1)
+
+summary(lm.succ5.succ1)
+plot(lm.succ5.succ1)
+
+#It seems that having succed in the first trial help a bit to success in the fifth
+plot(factor(success5) ~ factor(success1), data=explain.innovation1, ylab = "Success5", xlab = "Success1")
+
+#Residuals are not normal
+hist(lm.succ5.succ1$residuals)
+
+#Those who spent a lot of time in the refuge didn't pass the test
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
+
+
+success
+
+
+#por aquí----
+
 
 
 
