@@ -302,7 +302,10 @@ head(exploration)
 #We remove time.until.correct.cue because it doesn't make behavioral sense
 heatmap(exploration, 2:length(exploration))
 
-
+#How many bees passed the first trial?
+nrow(subset(trial1t, subset = (trial1t$success == TRUE))) #This many passed the trial 1
+nrow(as.data.frame(trial1t$success)) #This many did
+nrow(subset(trial1t, subset = (trial1t$success == TRUE)))/nrow(as.data.frame(trial1t$success))
 
 #Defining activity----
 
@@ -852,7 +855,6 @@ plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.e
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
 #success5 ~ refuge.time----
-#Apply here paco's teachings
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
                  data = explain.innovation1)
 plot(lm.succ.refuge)
@@ -920,18 +922,61 @@ lm.succ5.succ1<- lm(success5 ~ success1, data=explain.innovation1)
 summary(lm.succ5.succ1)
 plot(lm.succ5.succ1)
 
-#It seems that having succed in the first trial help a bit to success in the fifth
+#Does having succeed in the first trial improves your probability to succeed in the fifth?
 plot(factor(success5) ~ factor(success1), data=explain.innovation1, ylab = "Success5", xlab = "Success1")
+nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "TRUE")))/
+  (nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "TRUE")))+
+     nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "FALSE"))))
+
+
+nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "TRUE")))/
+  (nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "TRUE")))
+   +nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "FALSE"))))
+
+
+length(which(succ1succ5formodels$success1 == TRUE))/length(succ1succ5formodels$success1)
+
+succ1succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success1), factor(explain.innovation1$success5)))
+succ1succ5formodels<-rename(succ1succ5formodels, ID = explain.innovation1.ID, 
+       success1 = factor.explain.innovation1.success1., 
+       success5 = factor.explain.innovation1.success5.)
+success1and5<-(succ1succ5formodels$success1 == TRUE)&(succ1succ5formodels$success5 == TRUE)
+fail1and5<-(succ1succ5formodels$success1 == FALSE)&(succ1succ5formodels$success5 == FALSE)
+
+length(which(success1and5 == TRUE))/length(success1and5)
+length(which(fail1and5))/length(success1and5)
 
 #Residuals are not normal
 hist(lm.succ5.succ1$residuals)
 
-#Those who spent a lot of time in the refuge didn't pass the test
-plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
+#Let's try a binomial glm
+succ5.succ1<- glm(success5 ~ success1, data=succ1succ5formodels , family = binomial)
 
+############UC########
 
-success
+coef(succ5.succ1)
 
+#There seem to be no relationship between succeess in trials 1 and 5
+summary(succ5.succ1)
+plot(succ5.succ1)
+
+library(effects)
+
+#Does this mean that you have more probabilty to pass the 5th trial if you passed
+#the first one??? a 0.07, so a 7% more probability, this is small and I don't think
+#we have significancy, or statistic power.
+eff<-allEffects(succ5.succ1)
+eff
+0.4117647 - 0.3333333
+
+#I think we have overdispersion
+library(visreg)
+visreg(succ5.succ1, scale = "response")
+library("DHARMa")
+disp<-simulateResiduals(succ.refuge, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+####################
 
 #por aquí----
 
