@@ -1,4 +1,8 @@
-
+library(effects)
+library(dplyr)
+library(calibrate)
+library(visreg)
+library(DHARMa)
 #DEFINING behaviors----
 #Import data
 #We import first our data
@@ -798,7 +802,7 @@ v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
 summary(v.succ.alone)
 
 #success.time5 ~ refuge time----
-install.packages("calibrate")
+
 library(calibrate)
 innovation.refuge<-data.frame(explain.innovation1$ID, 
                               explain.innovation1$refuge.time, 
@@ -952,15 +956,12 @@ hist(lm.succ5.succ1$residuals)
 #Let's try a binomial glm
 succ5.succ1<- glm(success5 ~ success1, data=succ1succ5formodels , family = binomial)
 
-############UC########
 
 coef(succ5.succ1)
 
 #There seem to be no relationship between succeess in trials 1 and 5
 summary(succ5.succ1)
 plot(succ5.succ1)
-
-library(effects)
 
 #Does this mean that you have more probabilty to pass the 5th trial if you passed
 #the first one??? a 0.07, so a 7% more probability, this is small and I don't think
@@ -969,14 +970,25 @@ eff<-allEffects(succ5.succ1)
 eff
 0.4117647 - 0.3333333
 
-#I think we have overdispersion
-library(visreg)
+#I don't know if this is overdispersion
 visreg(succ5.succ1, scale = "response")
-library("DHARMa")
-disp<-simulateResiduals(succ.refuge, plot = T)
+#Very beautiful residuals
+disp<-simulateResiduals(succ5.succ1, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
-####################
+#success5 ~ virtual.success.time1
+explain.innovation1
+lm.succ5.virtual<-lm(success5 ~ virtual.success.time1, data = explain.innovation1)
+
+plot(lm.succ5.virtual)
+
+#Residuals are not normal
+hist(lm.succ5.virtual$residuals)
+
+#Those who spent a lot of time in the refuge didn't pass the test
+plot(factor(success5) ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
+
+
 
 #por aquí----
 
@@ -1014,9 +1026,16 @@ m <- glm(formula = success.time ~ refuge.time + refuge.enter.times +
       activity.time5 + times.resting5, family = "binomial", 
       data = explain.innovation1)
 summary(m)
+
+
+
+
+
+
+
+
 #usar survival models.
 
-#things: do activity, time in cartulina, etc... per minute.
 
 
 
