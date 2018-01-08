@@ -15,6 +15,7 @@ trial4 <- read.csv("data/dataframes/trial4.csv")
 trial5 <- read.csv("data/dataframes/trial5.csv")
 datafull <- read.csv("data/dataframes/datafull.csv")
 
+nrow(trial1t) + nrow(trial1c)
 #We extract only the treatment trials, not control ones
 trial1t<-subset(trial1, subset = (trial1$experiment.type == "Treatment"))
 trial1c<-subset(trial1, subset = (trial1$experiment.type == "Control"))
