@@ -1076,13 +1076,19 @@ allEffects(succ5.cue1)
 #there is no clear relationship
 
 #success5~time.until.any.cue2----
+View(explain.innovation1)
 explain.innovation1$success5
 explain.innovation1$time.until.any.cue2
-#por aquí----
+
 #describe el plot
 plot(success5 ~ time.until.any.cue2, data = explain.innovation1, xlab="Time until touch any cue 2", ylab="Success 5", xlim=c(0,900000))
 
+#Which succesfull in the fifth trial spent more time until touching any cue?
+explain.innovation1$time.until.any.cue2[
+  which(explain.innovation1$success5 ==TRUE & 
+         explain.innovation1$time.until.any.cue>100000)]
 
+#por aquí----
 #success5~time.until.lid.exploring----
 
 
