@@ -792,6 +792,15 @@ explain.innovation1<-merge(merge(merge(merge(innovation, shyness, by = "ID", all
 
 is.data.frame(explain.innovation1)
 
+##it seems that some control bees have fallen into our data, let's remove then
+#this is due to some confusion during along the trials, but is everything under
+#control#
+explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
+
+
+
+
+
 #Let's explore first the relationships between different behaviors
 #this is crazy
 pairs(explain.innovation1[3:18])
@@ -818,11 +827,13 @@ textxy(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$expl
 ##There is no bee that spent the whole trial 1 in the refugee and then passed
 #the innovation trial but, they were only 5 bees from 27 that spent the whole
 #time in the refuge and made it to the final test in treatment bees
-length(which(trial1t$refuge.time == 900000))
+length(which(innovation.refuge$explain.innovation1.refuge.time == 900000))
+
 length(trial1t$refuge.time)
 
 #But only 9 bees from the 76 that started the experiment spent the whole time
 #within the refuge
+length(which(trial1t$refuge.time == 900000))
 
 
 v.succ.refuge<-lm(data = explain.innovation1, formula = virtual.success.time5 ~ refuge.time) 
@@ -870,9 +881,11 @@ plot(lm.succ.refuge)
 hist(lm.succ.refuge$residuals)
 
 #Those who spent a lot of time in the refuge didn't pass the test
+plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
 plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
-
-
+sort(explain.innovation1$refuge.time, decreasing = TRUE)
+nrow(subset(explain.innovation1,subset = (explain.innovation1$refuge.time > 600000)))
+nrow(explain.innovation1)
 #So we use glm binomial family
 succ.refuge<-glm(formula = success5 ~ refuge.time, 
                  data = explain.innovation1, family = "binomial")
@@ -922,7 +935,6 @@ clog.succ.refuge<-glm(formula = success5 ~ refuge.time,
 summary(clog.succ.refuge)
 
 #Innovation explained with exploration----
-
 
 #success5 ~ success1----
 explain.innovation1$success5
@@ -1062,8 +1074,6 @@ hist(lm.succ5cue1$residuals)
 succ5.cue1<-glm(success5~total.cue.time1, data = explain.innovation1, family = "binomial")
 summary(succ5.cue1)
 
-coef(succ5.cue1)
-
 #Inversamente proporcional y marginalmente significativa la relación
 summary(succ5.cue1)
 plot(succ5.cue1)
@@ -1078,31 +1088,53 @@ allEffects(succ5.cue1)
 #success5~time.until.any.cue2----
 explain.innovation1$success5
 explain.innovation1$time.until.any.cue2
-#por aquí----
-#describe el plot
+#Bees normally doesn't spent too much time until touching a cue in the second test
 plot(success5 ~ time.until.any.cue2, data = explain.innovation1, xlab="Time until touch any cue 2", ylab="Success 5", xlim=c(0,900000))
+plot(factor(success5) ~ time.until.any.cue2, data = explain.innovation1, xlab="Time until touch any cue 2", ylab="Success 5", xlim=c(0,900000))
 
+#Which succesfull bee in the fifth trial spent more time until touching any cue?
+explain.innovation1$time.until.any.cue2[
+  which(explain.innovation1$success5 ==TRUE & 
+         explain.innovation1$time.until.any.cue2>100000)]
+
+lm.succ5.touch2<-lm(success5 ~ time.until.any.cue2, data = explain.innovation1)
+summary(lm.succ5.touch2)
+
+#Residuals are not normal-distributed
+hist(lm.succ5.spent5$residuals)
+
+succ5.touch2<-glm(success5 ~ time.until.any.cue2, data = explain.innovation1, family = "binomial")
+summary(succ5.touch2)
+#I don't like these probabilities
+allEffects(succ5.touch2)
 
 #success5~time.until.lid.exploring----
 
+#We have lots of NA in lid.exploring, so we make a new variable with virtual results
+explain.innovation1$success5
+explain.innovation1$time.until.lid.exploring
+virtual.time.until.lid.exploring<-explain.innovation1$time.until.lid.exploring
+virtual.time.until.lid.exploring[is.na(virtual.time.until.lid.exploring)] <- 900000
+explain.innovation1$virtual.time.until.lid.exploring<-virtual.time.until.lid.exploring
 
+#This is interesting, it seems that there is an acummulation of points
+#for succeeding and explore the lid early
+plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
+plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 
+lm.succ5.lid<-lm(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
+#There is a significative negative correlation between success and lid exploring!
+summary(lm.succ5.lid)
+#Wow! the residuals are almost normal
+hist(lm.succ5.lid$residuals)
+shapiro.test(lm.succ5.lid$residuals)
 
+succ5.lid<-glm(success5 ~ virtual.time.until.lid.exploring, 
+               data = explain.innovation1, family = "binomial")
 
+summary(succ5.lid)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#por aquí-----
 
 
 #We are going to try to explain innovation defined as success.time5
