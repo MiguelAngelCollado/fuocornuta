@@ -766,9 +766,9 @@ learning<-rename(learning,
                  success.time4 = trial4t.success.time, 
                  success4 = trial4t.success)
 
-#Explaining learning and innovation
+#MODELS Explaining learning and innovation-----
 
-#Innovation MODELS---- 
+
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
@@ -801,6 +801,8 @@ colnames(explain.innovation1)
 #I don't understand the model alone
 v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
 summary(v.succ.alone)
+
+#Innovation explained with shyness-----
 
 #success.time5 ~ refuge time----
 
@@ -919,6 +921,9 @@ clog.succ.refuge<-glm(formula = success5 ~ refuge.time,
 #But it has less significancy
 summary(clog.succ.refuge)
 
+#Innovation explained with exploration----
+
+
 #success5 ~ success1----
 explain.innovation1$success5
 explain.innovation1$success1
@@ -929,17 +934,17 @@ plot(lm.succ5.succ1)
 
 #Does having succeed in the first trial improves your probability to succeed in the fifth?
 plot(factor(success5) ~ factor(success1), data=explain.innovation1, ylab = "Success5", xlab = "Success1")
+
+#Proportion of success in the fifth trial
 nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "TRUE")))/
   (nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "TRUE")))+
      nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == "FALSE"))))
 
-
+#Proportion of success in the first trial
 nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "TRUE")))/
   (nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "TRUE")))
    +nrow(subset(explain.innovation1, subset = (explain.innovation1$success1 == "FALSE"))))
 
-
-length(which(succ1succ5formodels$success1 == TRUE))/length(succ1succ5formodels$success1)
 
 succ1succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success1), factor(explain.innovation1$success5)))
 succ1succ5formodels<-rename(succ1succ5formodels, ID = explain.innovation1.ID, 
@@ -949,7 +954,7 @@ success1and5<-(succ1succ5formodels$success1 == TRUE)&(succ1succ5formodels$succes
 fail1and5<-(succ1succ5formodels$success1 == FALSE)&(succ1succ5formodels$success5 == FALSE)
 
 length(which(success1and5 == TRUE))/length(success1and5)
-length(which(fail1and5))/length(success1and5)
+length(which(fail1and5 == TRUE))/length(success1and5)
 
 #Residuals are not normal
 hist(lm.succ5.succ1$residuals)
@@ -977,21 +982,109 @@ visreg(succ5.succ1, scale = "response")
 disp<-simulateResiduals(succ5.succ1, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
-#success5 ~ virtual.success.time1
-explain.innovation1
-lm.succ5.virtual<-lm(success5 ~ virtual.success.time1, data = explain.innovation1)
+#success5 ~ virtual.success.time1----
+#This is curious, the bees that succeed trial 1 very fast, didn't pass the
+#fifth trial
+plot(success5 ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
 
-plot(lm.succ5.virtual)
+plot(factor(success5) ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
+explain.innovation1
+lm.succ5.virtual1<-lm(success5 ~ virtual.success.time1, data = explain.innovation1)
+summary(lm.succ5.virtual1)
+plot(lm.succ5.virtual1)
+
+#It is curious that, If you have passed the first trial faster than 
+sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7]
+((sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7])/1000)/60
+#You won't succed in the fifth trial!
+
 
 #Residuals are not normal
 hist(lm.succ5.virtual$residuals)
 
-#Those who spent a lot of time in the refuge didn't pass the test
-plot(factor(success5) ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
+#We do the glm binomial model
+
+colnames(explain.innovation1)
+
+succ5.virtual1<-glm(formula = success5 ~ virtual.success.time1, 
+                 data = explain.innovation1, family = "binomial")
+#No relationships
+summary(succ5.virtual1)
+coef(succ5.virtual1)
+
+plot(succ5.virtual1)
+
+library(effects)
+
+#Spending more time until pass the first test helps a bit to pass the fifth
+#but is not significative
+allEffects(succ5.virtual1)
+
+#What happens when we remove the virtual success of 900000 ms?
+
+#success5~success.time1----
+
+na.omit(explain.innovation1$success.time1)
+plot(success5 ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1", xlim=c(0,900000))
+plot(factor(success5) ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1")
+
+succ5.succtime1<-glm(formula = success5 ~ success.time1, 
+                    data = explain.innovation1, family = "binomial")
+
+#There is some significance here!
+summary(succ5.succtime1)
+#And effects
+allEffects(succ5.succtime1)
+#but with an N of only 17, is that enough?
 
 
 
+#success5~total.cue.time1-----
+explain.innovation1$total.cue.time1
+colnames(explain.innovation1)
+explain.innovation1$total.cue.time1
+
+#Nobody spent a lot of time inside the cues in the experiment 1,
+#having succed in test 5 or not
+plot(success5 ~ total.cue.time1, data = explain.innovation1, 
+     ylab = "success5", xlab = "Total cue time 1", xlim = c(0,900000))
+max(na.omit(explain.innovation1$total.cue.time1))
+
+#There is no clear pattern
+plot(factor(success5) ~ total.cue.time1, data=explain.innovation1, ylab = "Success 5", xlab = "Total cue time trial 1")
+
+
+lm.succ5cue1<-lm(success5 ~ total.cue.time1, data = explain.innovation1)
+summary(lm.succ5cue1)
+#Residuos no son normales
+hist(lm.succ5cue1$residuals)
+
+succ5.cue1<-glm(success5~total.cue.time1, data = explain.innovation1, family = "binomial")
+summary(succ5.cue1)
+
+coef(succ5.cue1)
+
+#Inversamente proporcional y marginalmente significativa la relación
+summary(succ5.cue1)
+plot(succ5.cue1)
+
+library(effects)
+
+allEffects(succ5.cue1)
+
+#I think we don't need to explore this model anymore, 
+#there is no clear relationship
+
+#success5~time.until.any.cue2----
+explain.innovation1$success5
+explain.innovation1$time.until.any.cue2
 #por aquí----
+#describe el plot
+plot(success5 ~ time.until.any.cue2, data = explain.innovation1, xlab="Time until touch any cue 2", ylab="Success 5", xlim=c(0,900000))
+
+
+#success5~time.until.lid.exploring----
+
 
 
 
