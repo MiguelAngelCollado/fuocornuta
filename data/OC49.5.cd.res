@@ -71,7 +71,7 @@ Warnings:
 Answer.1=OC49.5
 Answer.2=Osmia cornuta
 Answer.3=Female
-Answer.4=Treatment
+Answer.4=Control
 Answer.5=Yellow right
 Answer.6=2x
 #BEGIN RESULTS
