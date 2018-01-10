@@ -1137,6 +1137,22 @@ summary(succ5.lid)
 #por aquí-----
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #We are going to try to explain innovation defined as success.time5
 #using linear models
 #FAIL----
