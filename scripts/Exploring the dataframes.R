@@ -1122,7 +1122,12 @@ explain.innovation1$virtual.time.until.lid.exploring<-virtual.time.until.lid.exp
 plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 
+sort(explain.innovation1$virtual.time.until.lid.exploring, decreasing = TRUE)
+View(explain.innovation1)
 lm.succ5.lid<-lm(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
+nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == TRUE )))
+nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == FALSE )))
+
 #There is a significative negative correlation between success and lid exploring!
 summary(lm.succ5.lid)
 #Wow! the residuals are almost normal
@@ -1133,6 +1138,20 @@ succ5.lid<-glm(success5 ~ virtual.time.until.lid.exploring,
                data = explain.innovation1, family = "binomial")
 
 summary(succ5.lid)
+#I think residuals are not that bad but I'm not sure
+plot(succ5.lid)
+
+#There seem to decrease the probability of success with time until touch the
+#clue
+allEffects(succ5.lid)
+
+
+#I don't know if this is overdispersion
+visreg(succ5.lid, scale = "response")
+#Very beautiful residuals
+disp<-simulateResiduals(succ5.lid, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
 
 #por aquí-----
 
