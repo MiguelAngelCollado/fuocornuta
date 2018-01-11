@@ -766,7 +766,24 @@ learning<-rename(learning,
                  success.time4 = trial4t.success.time, 
                  success4 = trial4t.success)
 
+
+#A dataframe with IT distance and sex
+
+artifacts<-data.frame(trial1t$ID, 
+                      trial1t$sex,
+                      trial1t$IT,
+                      trial1t$brain.weight,
+                      trial1t$no.optic.lobes.weight
+                      )
+artifacts<-rename(artifacts, ID = trial1t.ID,
+                  sex = trial1t.sex,
+                  IT = trial1t.IT,
+                  brain.weight = trial1t.brain.weight,
+                  lobeless.weight =trial1t.no.optic.lobes.weight
+  )
+
 #MODELS Explaining learning and innovation-----
+
 
 
 
@@ -780,9 +797,9 @@ exploration
 learning
 activity.for.innovation
 activity.for.learning
+artifacts
 
-
-
+merge(explain.innovation1$ID, artifacts)
 #explain innovation through time until succeed in trial 5
 
 explain.innovation1<-merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
@@ -790,15 +807,24 @@ explain.innovation1<-merge(merge(merge(merge(innovation, shyness, by = "ID", all
                         learning, by= "ID", all.x = TRUE), 
                         activity.for.innovation, by = "ID", all.x= TRUE)
 
+################
+
+explain.innovation1<-merge(merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
+                                       exploration, by= "ID", all.x = TRUE), 
+                                 learning, by= "ID", all.x = TRUE), 
+                           activity.for.innovation, by = "ID", all.x= TRUE), artifacts, by= "ID", all.x = TRUE)
+
+
+
+################
 is.data.frame(explain.innovation1)
 
 ##it seems that some control bees have fallen into our data, let's remove then
-#this is due to some confusion during along the trials, but is everything under
+#this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
+#but is everything under
+
 #control#
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
-
-
-
 
 
 #Let's explore first the relationships between different behaviors
@@ -871,6 +897,54 @@ innovation.enter.times<-na.omit(innovation.enter.times)
 #In doing a model with this
 plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, xlab = "Refuge enter times", ylab = "Virtual success time")
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
+
+
+
+
+#For this block, we are analyzing one by one success5 (TRUE/FALSE, dicotomical)
+#with the proxies of the behaviors
+
+#We should check if differences in innovation is conditioned somehow by sex
+#or size
+#Artifacts----
+
+#For success5 ~ IT
+#I don't see a pattern
+plot(explain.innovation1$success5 ~ explain.innovation1$IT)
+plot(factor(explain.innovation1$success5) ~ explain.innovation1$IT)
+
+#No correlation, this is good
+lm.succ5.IT<-lm(success5 ~ IT, data = explain.innovation1)
+summary(lm.succ5.IT)
+#Non normality
+hist(lm.succ5.IT$residuals)
+
+#There is no relationship between IT and success5
+succ5.IT<-glm(success5 ~ IT, data = explain.innovation1, family = "binomial")
+summary(succ5.IT)
+
+#Success ~ Sex
+#We have little sample of males
+summary(explain.innovation1$sex)
+
+#They seem different, but their n is quite different
+plot(factor(success5) ~ factor (sex), data = explain.innovation1)
+summary(explain.innovation1$sex)
+
+#Let's randomly sample females
+#Males are alwys more successful
+temp<-rbind(sample_n(subset(explain.innovation1, subset = (explain.innovation1$sex == "Female")), size = 6),
+     subset(explain.innovation1, subset = (explain.innovation1$sex == "Male")))
+plot(factor(temp$success5) ~ factor (temp$sex), data = temp)
+
+
+
+#por aquí----
+#Corre el modelo por sexos
+#Compara los sexos para el success1 y el success4
+#Escribe en los resultados lo que haya salido, poniendo especial énfasis
+#en la significación del modelo y en la diferencia de n entre machos y hembras
+
 
 #success5 ~ refuge.time----
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
@@ -1068,6 +1142,7 @@ plot(factor(success5) ~ total.cue.time1, data=explain.innovation1, ylab = "Succe
 
 lm.succ5cue1<-lm(success5 ~ total.cue.time1, data = explain.innovation1)
 summary(lm.succ5cue1)
+
 #Residuos no son normales
 hist(lm.succ5cue1$residuals)
 
@@ -1123,7 +1198,6 @@ plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 
 sort(explain.innovation1$virtual.time.until.lid.exploring, decreasing = TRUE)
-View(explain.innovation1)
 lm.succ5.lid<-lm(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == TRUE )))
 nrow(subset(explain.innovation1, subset = (explain.innovation1$success5 == FALSE )))
@@ -1146,7 +1220,7 @@ plot(succ5.lid)
 allEffects(succ5.lid)
 
 
-#I don't know if this is overdispersion
+#I don't this is overdispersion
 visreg(succ5.lid, scale = "response")
 #Very beautiful residuals
 disp<-simulateResiduals(succ5.lid, plot = T)
