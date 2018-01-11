@@ -937,6 +937,15 @@ temp<-rbind(sample_n(subset(explain.innovation1, subset = (explain.innovation1$s
      subset(explain.innovation1, subset = (explain.innovation1$sex == "Male")))
 plot(factor(temp$success5) ~ factor (temp$sex), data = temp)
 
+#Now let's do the model, even if we have n=6 males only, is what we have, and we have to
+#work with that
+lm.succ5.sex<-lm(success5 ~ sex, data = explain.innovation1)
+summary(lm.succ5.sex)
+hist(lm.succ5.sex$residuals)
+
+succ5.sex<-glm(success5 ~ sex, data = explain.innovation1)
+summary(succ5.sex)
+allEffects(succ5.sex)
 
 
 #por aquí----
