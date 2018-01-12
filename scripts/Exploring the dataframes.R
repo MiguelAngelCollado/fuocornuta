@@ -3,7 +3,7 @@ library(dplyr)
 library(calibrate)
 library(visreg)
 library(DHARMa)
-#DEFINING behaviors----
+#DEFINING (behaviors)----
 #Import data
 #We import first our data
 trial1 <- read.csv("data/dataframes/trial1.csv")
@@ -782,7 +782,7 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
                   lobeless.weight =trial1t.no.optic.lobes.weight
   )
 
-#MODELS Explaining learning and innovation-----
+#MODELS-----
 
 
 
@@ -802,12 +802,6 @@ artifacts
 merge(explain.innovation1$ID, artifacts)
 #explain innovation through time until succeed in trial 5
 
-explain.innovation1<-merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
-                        exploration, by= "ID", all.x = TRUE), 
-                        learning, by= "ID", all.x = TRUE), 
-                        activity.for.innovation, by = "ID", all.x= TRUE)
-
-################
 
 explain.innovation1<-merge(merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
                                        exploration, by= "ID", all.x = TRUE), 
@@ -815,8 +809,6 @@ explain.innovation1<-merge(merge(merge(merge(merge(innovation, shyness, by = "ID
                            activity.for.innovation, by = "ID", all.x= TRUE), artifacts, by= "ID", all.x = TRUE)
 
 
-
-################
 is.data.frame(explain.innovation1)
 
 ##it seems that some control bees have fallen into our data, let's remove then
@@ -924,6 +916,9 @@ succ5.IT<-glm(success5 ~ IT, data = explain.innovation1, family = "binomial")
 summary(succ5.IT)
 
 #Success ~ Sex
+
+#Sucess5
+
 #We have little sample of males
 summary(explain.innovation1$sex)
 
@@ -943,14 +938,38 @@ lm.succ5.sex<-lm(success5 ~ sex, data = explain.innovation1)
 summary(lm.succ5.sex)
 hist(lm.succ5.sex$residuals)
 
-succ5.sex<-glm(success5 ~ sex, data = explain.innovation1)
+succ5.sex<-glm(success5 ~ sex, data = explain.innovation1, family = "binomial")
 summary(succ5.sex)
+coefficients(succ5.sex)
 allEffects(succ5.sex)
 
+#Maybe if we introduce also control bees we can have more sampling
+succ5.all<-data.frame(trial5$ID,
+trial5$sex,
+trial5$success,
+trial5$experiment.type)
+summary(trial5$sex)
+
+succ5.all<-rename(succ5.all, 
+       ID = trial5.ID, 
+       sex = trial5.sex, 
+       success5 = trial5.success,
+       experiment.type = trial5.experiment.type)
+
+#Adding the controls, it maintains some differences
+plot(factor(success5) ~ factor(sex), data = succ5.all)
+
+glm.succ5.all<-glm(success5 ~ sex, data = succ5.all, family = "binomial")
+
+
+summary(glm.succ5.all)
+allEffects(glm.succ5.all)
+
+coefficients(glm.succ5.all)
 
 #por aquí----
 #Corre el modelo por sexos
-#Compara los sexos para el success1 y el success4
+
 #Escribe en los resultados lo que haya salido, poniendo especial énfasis
 #en la significación del modelo y en la diferencia de n entre machos y hembras
 
@@ -1018,7 +1037,7 @@ clog.succ.refuge<-glm(formula = success5 ~ refuge.time,
 summary(clog.succ.refuge)
 
 #Innovation explained with exploration----
-
+exploration
 #success5 ~ success1----
 explain.innovation1$success5
 explain.innovation1$success1
@@ -1235,12 +1254,22 @@ visreg(succ5.lid, scale = "response")
 disp<-simulateResiduals(succ5.lid, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
+#Anyway, whe should try it without the virtual, normal time.until.lid.exploring
+
+explain.innovation1$success5
+explain.innovation1$time.until.lid.exploring
+
 
 #por aquí-----
 
-#Maybe check sex or size?
+#learning-----
 
 
+#success4 ~ sex
+trial4t
+
+#success1 ~ sex
+#Compara los sexos para el success1 y el success4, que tendrás más muestreo de machos
 
 
 
