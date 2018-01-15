@@ -968,11 +968,6 @@ allEffects(glm.succ5.all)
 coefficients(glm.succ5.all)
 
 #por aquí----
-#Corre el modelo por sexos
-
-#Escribe en los resultados lo que haya salido, poniendo especial énfasis
-#en la significación del modelo y en la diferencia de n entre machos y hembras
-
 
 #success5 ~ refuge.time----
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
@@ -1213,7 +1208,8 @@ allEffects(succ5.touch2)
 
 #success5~time.until.lid.exploring----
 
-#We have lots of NA in lid.exploring, so we make a new variable with virtual results
+#We have lots of NA in lid.exploring, so 
+#we make a new variable with virtual results
 explain.innovation1$success5
 explain.innovation1$time.until.lid.exploring
 virtual.time.until.lid.exploring<-explain.innovation1$time.until.lid.exploring
@@ -1248,7 +1244,7 @@ plot(succ5.lid)
 allEffects(succ5.lid)
 
 
-#I don't this is overdispersion
+#A plot
 visreg(succ5.lid, scale = "response")
 #Very beautiful residuals
 disp<-simulateResiduals(succ5.lid, plot = T)
@@ -1259,16 +1255,68 @@ testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 explain.innovation1$success5
 explain.innovation1$time.until.lid.exploring
 
+#We obviously see the same acumulation of early lid explorers succeding in the 
+#fifth trial
+plot(explain.innovation1$success5 ~ explain.innovation1$time.until.lid.exploring)
+plot(factor(explain.innovation1$success5) ~ explain.innovation1$time.until.lid.exploring)
+
+
+lm.succ5.lidtrue<-lm(success5 ~ time.until.lid.exploring, data = explain.innovation1)
+summary(lm.succ5.lidtrue)
+hist(lm.succ5.lidtrue$residuals)
+
+succ5.lidtrue<-glm(success5 ~ time.until.lid.exploring, data = explain.innovation1, family = "binomial")
+summary(lm.succ5.lidtrue)
+
+
+
+
+#Innovation explained with activity----
+
+#We can only use activity from the fifth trial
+#success5~activity.prop5
+
+#More activity may mean more success probability
+plot(explain.innovation1$success5~explain.innovation1$activity.prop5)
+plot(factor(explain.innovation1$success5)~explain.innovation1$activity.prop5)
+which(explain.innovation1$activity.prop5 > 0.6 & explain.innovation1$activity.prop5 < 0.7)
+
+#Individuals under this value of activity didn't passed the fifth trial
+explain.innovation1$activity.prop5[which(explain.innovation1$activity.prop5 > 0.6 & explain.innovation1$activity.prop5 < 0.7)]
+
+lm.succ5.act<-lm(success5 ~ activity.prop5, data = explain.innovation1)
+summary(lm.succ5.act)
+
+#Weird residuals, normality for a lm, but very low R-squared
+hist(lm.succ5.act$residuals)
+shapiro.test(lm.succ5.act$residuals)
+#Better try glm binomial
+succ5.act<-glm(success5 ~ activity.prop5, data = explain.innovation1, family = "binomial")
+summary(succ5.act)
+allEffects(succ5.act)
+
+#Beautiful
+visreg(succ5.act, scale = "response")
+#Very beautiful residuals
+disp<-simulateResiduals(succ5.act, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#success5~times.resting----
+
+
 
 #por aquí-----
 
-#learning-----
 
+#Learning-----
 
 #success4 ~ sex
 trial4t
 
 #success1 ~ sex
+
+
+
 #Compara los sexos para el success1 y el success4, que tendrás más muestreo de machos
 
 
