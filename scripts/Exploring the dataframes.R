@@ -1273,8 +1273,10 @@ summary(lm.succ5.lidtrue)
 
 #Innovation explained with activity----
 
-#We can only use activity from the fifth trial
-#success5~activity.prop5
+#We can only use activity from the fifth trial, the rest of activity values
+#are not correlated between them, activity is not 
+
+#success5~activity.prop5----
 
 #More activity may mean more success probability
 plot(explain.innovation1$success5~explain.innovation1$activity.prop5)
@@ -1302,13 +1304,102 @@ disp<-simulateResiduals(succ5.act, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #success5~times.resting----
+plot(explain.innovation1$times.resting5,explain.innovation1$success5)
+
+#How many rested 2 times
+length(which(explain.innovation1$times.resting5 == 2))
+
+lm.succ5.rest<-lm(success5 ~ times.resting5, data = explain.innovation1)
+summary(lm.succ5.rest)
+#It seems that our residuals have normality in a lm
+hist(lm.succ5.rest$residuals)
+shapiro.test(lm.succ5.rest$residuals)
+
+succ5.rest<-glm(success5 ~ times.resting5, data = explain.innovation1, 
+                family = "binomial")
+summary(succ5.rest)
+allEffects(succ5.rest)
+visreg(succ5.rest, scale = "response")
+
+#This must be overdispersion
+disp<-simulateResiduals(succ5.rest, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+simulateResiduals(succ5.rest, plot = TRUE)
+simres <- simulateResiduals(succ5.rest, refit = TRUE)
+testOverdispersion(simres)
+
+
+#Because we have overdispersion, let's try a quasibinomial family
+quasi.succ5.rest <- glm(success5 ~ times.resting5,
+                    data = explain.innovation1, family = quasibinomial)
+
+
+summary(quasi.succ5.rest)
+#Mean estimates do not change after accounting for overdispersion
+allEffects(quasi.succ5.rest)
+
+#The dispersion is reduced a bit
+visreg(quasi.succ5.rest, scale = "response")
+visreg(succ5.rest, scale = "response")
+
+
+
+
+
+#Innovation explain with learning-----
+
+#success5 ~ success4----
+
+#the models are not good with TRUE/FALSE as response, I don't know why, so we create'
+#a new data.frame for this model
+#It seems graphically that passing the fourth trial helps passing the fifth
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
+
+
+
+###############
+View(explain.innovation1)
+explain.innovation1$success4
+
+succ4succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success1), factor(explain.innovation1$success5)))
+succ1succ5formodels<-rename(succ1succ5formodels, ID = explain.innovation1.ID, 
+                            success1 = factor.explain.innovation1.success1., 
+                            success5 = factor.explain.innovation1.success5.)
+success1and5<-(succ1succ5formodels$success1 == TRUE)&(succ1succ5formodels$success5 == TRUE)
+fail1and5<-(succ1succ5formodels$success1 == FALSE)&(succ1succ5formodels$success5 == FALSE)
+
+length(which(success1and5 == TRUE))/length(success1and5)
+length(which(fail1and5 == TRUE))/length(success1and5)
+
+###############
+
+
+
+
+lm.succ5.succ4<-lm(success5~success4, data = explain.innovation1)
+summary(lm.succ5.succ4)
+succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
+summary(succ5.succ4)
+allEffects(succ5.succ4)
+
+#success5 ~ correct.cue.time4----
+
+#success5 ~ virtual.success.time4----
+
+#success5 ~ success.time4----
+View(explain.innovation1)
+
+colnames(explain.innovation1)
+
+success4
+correct.cue.time4
+virtual.succes.time4
+success.time4
 
 
 
 #por aquí-----
-
-
-#Learning-----
 
 #success4 ~ sex
 trial4t
