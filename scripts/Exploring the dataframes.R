@@ -1345,47 +1345,58 @@ visreg(succ5.rest, scale = "response")
 
 
 
-
-
 #Innovation explain with learning-----
 
 #success5 ~ success4----
 
-#the models are not good with TRUE/FALSE as response, I don't know why, so we create'
-#a new data.frame for this model
 #It seems graphically that passing the fourth trial helps passing the fifth
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
 
+#the models are not good with TRUE/FALSE as response, I don't know why, so we create'
+#a new data.frame for this model
 
+#OC20.4 fails is missing, I can't run JWatcher on MAC to solve it
 
-###############
 View(explain.innovation1)
 explain.innovation1$success4
 
-succ4succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success1), factor(explain.innovation1$success5)))
-succ1succ5formodels<-rename(succ1succ5formodels, ID = explain.innovation1.ID, 
-                            success1 = factor.explain.innovation1.success1., 
+succ4succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success4), factor(explain.innovation1$success5)))
+succ4succ5formodels<-rename(succ4succ5formodels, ID = explain.innovation1.ID, 
+                            success4 = factor.explain.innovation1.success4., 
                             success5 = factor.explain.innovation1.success5.)
-success1and5<-(succ1succ5formodels$success1 == TRUE)&(succ1succ5formodels$success5 == TRUE)
-fail1and5<-(succ1succ5formodels$success1 == FALSE)&(succ1succ5formodels$success5 == FALSE)
+str(succ4succ5formodels)
+success4and5<-(succ4succ5formodels$success4 == TRUE)&(succ4succ5formodels$success5 == TRUE)
+fail4and5<-(succ4succ5formodels$success4 == FALSE)&(succ4succ5formodels$success5 == FALSE)
 
-length(which(success1and5 == TRUE))/length(success1and5)
-length(which(fail1and5 == TRUE))/length(success1and5)
-
-###############
-
-
+#How many passed trial 4 and 5?
+length(which(success4and5 == TRUE))/length(success4and5)
+#How many failed trial 4 and 5?
+length(which(fail4and5 == TRUE))/length(success4and5)
 
 
-lm.succ5.succ4<-lm(success5~success4, data = explain.innovation1)
+succ4succ5formodels
+
+
+
 summary(lm.succ5.succ4)
-succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
+succ5.succ4<-glm(success5~success4, data = succ4succ5formodels, family = binomial)
 summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 #success5 ~ correct.cue.time4----
+explain.innovation1$success5
+explain.innovation1$correct.cue.time4
+
+#This isn't promising
+plot(explain.innovation1$success5~ explain.innovation1$correct.cue.time4, xlab= "Correct cue time 4", ylab= "Success 5", xlim=c(0,900000))
+lm.succ5corr4<-lm(success5 ~ correct.cue.time4, data = explain.innovation1)
+summary(lm.succ5corr4)
+succ5corr4<-glm(success5 ~ correct.cue.time4, data = explain.innovation1)
+summary(succ5corr4)
 
 #success5 ~ virtual.success.time4----
+nrow(trial4t)
+
 
 #success5 ~ success.time4----
 View(explain.innovation1)
