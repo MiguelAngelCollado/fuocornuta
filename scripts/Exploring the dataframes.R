@@ -1395,13 +1395,33 @@ succ5corr4<-glm(success5 ~ correct.cue.time4, data = explain.innovation1)
 summary(succ5corr4)
 
 #success5 ~ virtual.success.time4----
+explain.innovation1$success5
+explain.innovation1$virtual.success.time4
 nrow(trial4t)
+succ5.time4formodels<-data.frame(explain.innovation1$ID, 
+           explain.innovation1$success5, 
+           explain.innovation1$virtual.success.time4)
+succ5.time4formodels<-rename(succ5.time4formodels, ID = explain.innovation1.ID,
+       success5 = explain.innovation1.success5,
+       virtual.success.time4 = explain.innovation1.virtual.success.time4)
+succ5.time4formodels<-na.omit(succ5.time4formodels)
+View(succ5.time4formodels)
+plot(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4, ylab= "Success 5", xlab="Virtual success time 4")
+
+#Most succeders, did the test 4 in little time
 
 
 #success5 ~ success.time4----
 View(explain.innovation1)
 
 colnames(explain.innovation1)
+
+
+
+
+
+
+
 
 success4
 correct.cue.time4
