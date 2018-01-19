@@ -1397,7 +1397,6 @@ summary(succ5corr4)
 #success5 ~ virtual.success.time4----
 explain.innovation1$success5
 explain.innovation1$virtual.success.time4
-nrow(trial4t)
 succ5.time4formodels<-data.frame(explain.innovation1$ID, 
            explain.innovation1$success5, 
            explain.innovation1$virtual.success.time4)
@@ -1405,21 +1404,51 @@ succ5.time4formodels<-rename(succ5.time4formodels, ID = explain.innovation1.ID,
        success5 = explain.innovation1.success5,
        virtual.success.time4 = explain.innovation1.virtual.success.time4)
 succ5.time4formodels<-na.omit(succ5.time4formodels)
-View(succ5.time4formodels)
-plot(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4, ylab= "Success 5", xlab="Virtual success time 4")
 
 #Most succeders, did the test 4 in little time
+plot(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4, ylab= "Success 5", xlab="Virtual success time 4")
+#How many passed the test
+length(which(succ5.time4formodels$success5 == TRUE))
+#Did they took long?
+sort((subset(succ5.time4formodels, subset = (succ5.time4formodels$success5 == TRUE)))$virtual.success.time4)
+
+lm.succ5time4<-lm(success5 ~ virtual.success.time4, succ5.time4formodels)
+
+#There is significative, mostly due to the amount of failers at the end
+#of virtual.success.time4 that inflate
+summary(lm.succ5time4)
+
+hist(lm.succ5time4$residuals)
+shapiro.test(lm.succ5time4$residuals)
 
 
-#success5 ~ success.time4----
-View(explain.innovation1)
+succ5time4<-glm(success5 ~ virtual.success.time4, data = succ5.time4formodels,
+                family = binomial)
+
+
+summary(succ5time4)
+visreg(succ5time4, scale = "response")
+allEffects(succ5time4)
+#if we remove the virtual 9000000 results for failing
+#success5 ~ success.time4
+
+
+plot(explain.innovation1$success5~ explain.innovation1$success.time4)
+plot(factor(explain.innovation1$success5)~ explain.innovation1$success.time4)
+lm.succ5time4n<-lm(success5 ~ success.time4, explain.innovation1)
+summary(lm.succ5time4n)
+
+succ5time4n<-glm(success5 ~ success.time4, explain.innovation1, family = binomial)
+summary(succ5time4n)
+allEffects(succ5time4n)
 
 colnames(explain.innovation1)
 
 
 
+#success5 ~ success4 + success1
 
-
+#success5 ~ success4.time + success1.time
 
 
 
