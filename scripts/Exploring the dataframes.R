@@ -892,6 +892,8 @@ textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation
 
 
 
+#SUCCESS 5----
+
 
 #For this block, we are analyzing one by one success5 (TRUE/FALSE, dicotomical)
 #with the proxies of the behaviors
@@ -915,19 +917,19 @@ hist(lm.succ5.IT$residuals)
 succ5.IT<-glm(success5 ~ IT, data = explain.innovation1, family = "binomial")
 summary(succ5.IT)
 
+
+
 #Success ~ Sex
 
-#Sucess5
 
 #We have little sample of males
 summary(explain.innovation1$sex)
 
 #They seem different, but their n is quite different
 plot(factor(success5) ~ factor (sex), data = explain.innovation1)
-summary(explain.innovation1$sex)
 
 #Let's randomly sample females
-#Males are alwys more successful
+#Males are always more successful
 temp<-rbind(sample_n(subset(explain.innovation1, subset = (explain.innovation1$sex == "Female")), size = 6),
      subset(explain.innovation1, subset = (explain.innovation1$sex == "Male")))
 plot(factor(temp$success5) ~ factor (temp$sex), data = temp)
@@ -967,11 +969,12 @@ allEffects(glm.succ5.all)
 
 coefficients(glm.succ5.all)
 
-#por aquí----
+
 
 #success5 ~ refuge.time----
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
                  data = explain.innovation1)
+summary(lm.succ.refuge)
 plot(lm.succ.refuge)
 
 #Residuals are not normal
@@ -1034,8 +1037,6 @@ summary(clog.succ.refuge)
 #Innovation explained with exploration----
 exploration
 #success5 ~ success1----
-explain.innovation1$success5
-explain.innovation1$success1
 lm.succ5.succ1<- lm(success5 ~ success1, data=explain.innovation1)
 
 summary(lm.succ5.succ1)
@@ -1097,7 +1098,6 @@ testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 plot(success5 ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
 
 plot(factor(success5) ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
-explain.innovation1
 lm.succ5.virtual1<-lm(success5 ~ virtual.success.time1, data = explain.innovation1)
 summary(lm.succ5.virtual1)
 plot(lm.succ5.virtual1)
@@ -1149,9 +1149,6 @@ allEffects(succ5.succtime1)
 
 
 #success5~total.cue.time1-----
-explain.innovation1$total.cue.time1
-colnames(explain.innovation1)
-explain.innovation1$total.cue.time1
 
 #Nobody spent a lot of time inside the cues in the experiment 1,
 #having succed in test 5 or not
@@ -1203,7 +1200,7 @@ hist(lm.succ5.spent5$residuals)
 
 succ5.touch2<-glm(success5 ~ time.until.any.cue2, data = explain.innovation1, family = "binomial")
 summary(succ5.touch2)
-#I don't like these probabilities
+#I don't believe these probabilities
 allEffects(succ5.touch2)
 
 #success5~time.until.lid.exploring----
@@ -1252,8 +1249,6 @@ testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #Anyway, whe should try it without the virtual, normal time.until.lid.exploring
 
-explain.innovation1$success5
-explain.innovation1$time.until.lid.exploring
 
 #We obviously see the same acumulation of early lid explorers succeding in the 
 #fifth trial
@@ -1266,7 +1261,7 @@ summary(lm.succ5.lidtrue)
 hist(lm.succ5.lidtrue$residuals)
 
 succ5.lidtrue<-glm(success5 ~ time.until.lid.exploring, data = explain.innovation1, family = "binomial")
-summary(lm.succ5.lidtrue)
+summary(succ5.lidtrue)
 
 
 
@@ -1357,7 +1352,6 @@ plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4)
 
 #OC20.4 fails is missing, I can't run JWatcher on MAC to solve it
 
-View(explain.innovation1)
 explain.innovation1$success4
 
 succ4succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success4), factor(explain.innovation1$success5)))
@@ -1384,8 +1378,6 @@ summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 #success5 ~ correct.cue.time4----
-explain.innovation1$success5
-explain.innovation1$correct.cue.time4
 
 #This isn't promising
 plot(explain.innovation1$success5~ explain.innovation1$correct.cue.time4, xlab= "Correct cue time 4", ylab= "Success 5", xlim=c(0,900000))
@@ -1395,8 +1387,6 @@ succ5corr4<-glm(success5 ~ correct.cue.time4, data = explain.innovation1)
 summary(succ5corr4)
 
 #success5 ~ virtual.success.time4----
-explain.innovation1$success5
-explain.innovation1$virtual.success.time4
 succ5.time4formodels<-data.frame(explain.innovation1$ID, 
            explain.innovation1$success5, 
            explain.innovation1$virtual.success.time4)
@@ -1429,6 +1419,7 @@ succ5time4<-glm(success5 ~ virtual.success.time4, data = succ5.time4formodels,
 summary(succ5time4)
 visreg(succ5time4, scale = "response")
 allEffects(succ5time4)
+
 #if we remove the virtual 9000000 results for failing
 #success5 ~ success.time4
 
@@ -1447,15 +1438,105 @@ colnames(explain.innovation1)
 
 
 #success5 ~ success4 + success1
+#Non related
+summary(succ5.succ4)
+summary(succ5.succ1)
+succ541<-glm(success5 ~ success1 + success4, data = explain.innovation1, family = binomial)
+summary(succ541)
 
 #success5 ~ success4.time + success1.time
 
+lm.succ5vtime5<-lm(success5 ~ virtual.success.time4 + virtual.success.time1, 
+                  data = explain.innovation1)
+
+summary(lm.succ5vtime5)
+
+succ5vtime5<-glm(success5 ~ virtual.success.time4 + virtual.success.time1, 
+                data = explain.innovation1, family = binomial)
+summary(succ5vtime5)
 
 
-success4
-correct.cue.time4
-virtual.succes.time4
-success.time4
+#MULTIVARIATE MODELS----
+#Success5----
+colnames(explain.innovation1)
+
+lm.model.success5<-lm(success5 ~ refuge.time + 
+                      virtual.success.time1 + 
+                      virtual.time.until.lid.exploring +
+                      activity.prop5 +
+                      times.resting5 +
+                      virtual.success.time4 +
+                      sex, data = explain.innovation1)
+
+summary(lm.model.success5)
+hist(lm.model.success5$residuals)
+
+#We do a model with every variable that resulted significative for individual
+#models
+
+whole.model.success5<-glm(success5 ~ refuge.time + 
+                      virtual.success.time1 + 
+                      virtual.time.until.lid.exploring +
+                      activity.prop5 +
+                      times.resting5 +
+                      virtual.success.time4 +
+                      sex, data = explain.innovation1, family = binomial)
+
+#And it is a mess
+summary(whole.model.success5)
+
+#Virtual.time.until.lid.exploring has the lowest significance, and very low effect
+model.success5.1<-glm(success5 ~ refuge.time + 
+                      virtual.success.time1 + 
+                      
+                      activity.prop5 +
+                      times.resting5 +
+                      virtual.success.time4 +
+                      sex, data = explain.innovation1, family = binomial)
+
+summary(model.success5.1)
+
+#for sex, we don't have enough males and the significance is low
+
+model.success5.2<-glm(success5 ~ refuge.time + 
+                        virtual.success.time1 + 
+                        
+                        activity.prop5 +
+                        times.resting5 +
+                        virtual.success.time4,
+                        
+                        data = explain.innovation1, family = binomial)
+
+summary(model.success5.2)
+
+#Virtual.success.time4 has very little effect, and no significance
+model.success5.3<-glm(success5 ~ refuge.time + 
+                        virtual.success.time1 + 
+                        
+                        activity.prop5 +
+                        times.resting5,
+                        
+                      
+                      data = explain.innovation1, family = binomial)
+
+summary(model.success5.3)
+
+#times.resting5 has no significance at all
+
+model.success5.4<-glm(success5 ~ refuge.time + 
+                        virtual.success.time1 + 
+                        activity.prop5,
+                        data = explain.innovation1, family = binomial)
+
+#This model is something
+summary(model.success5.4)
+
+#virtual.success.time1 has little effect
+model.success5.5<-glm(success5 ~ refuge.time + 
+                        activity.prop5,
+                      data = explain.innovation1, family = binomial)
+
+summary(model.success5.5)
 
 
 
