@@ -784,7 +784,7 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
 
 #MODELS-----
 
-
+#SUCCESS5
 
 
 #We create a dataframe, including all the variables from other behaviors 
@@ -813,9 +813,7 @@ is.data.frame(explain.innovation1)
 
 ##it seems that some control bees have fallen into our data, let's remove then
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
-#but is everything under
-
-#control#
+#but is everything under control#
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 
 
@@ -832,6 +830,31 @@ summary(v.succ.alone)
 #Innovation explained with shyness-----
 
 #success.time5 ~ refuge time----
+#Por aquí-------
+##UC#####
+colnames(explain.innovation1)
+is.numeric(explain.innovation1$virtual.success.time5)
+explain.innovation1$refuge.time
+
+
+dat.surv1 <- survfit(Surv(virtual.success.time5) ~ success5, na.action = na.exclude, data = explain.innovation1) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+legend(10000, .4, c("No", "Yes"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes") 
+
+
+
+
+dat.surv1 <- survfit(Surv(time_e, status_e) ~ Habitat2, na.action = na.exclude, data = dat) 
+plot(dat.surv1, lty = 1:2, xlab="Time to solve thetask (msec)", ylab="% individuals that has no solved the task") 
+legend(1000000, .5, c("Downtown", "Edge"), lty = 1:2) 
+title("Kaplan-Meier Curves\nfor Innovation") 
+
+
+
+explain.innovation1
+
+#######
 
 library(calibrate)
 innovation.refuge<-data.frame(explain.innovation1$ID, 
@@ -944,6 +967,13 @@ succ5.sex<-glm(success5 ~ sex, data = explain.innovation1, family = "binomial")
 summary(succ5.sex)
 coefficients(succ5.sex)
 allEffects(succ5.sex)
+
+#We can see Kaplan-Meier curves for sexes
+dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+legend(10000, .4, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes") 
+
 
 #Maybe if we introduce also control bees we can have more sampling
 succ5.all<-data.frame(trial5$ID,
