@@ -816,6 +816,97 @@ is.data.frame(explain.innovation1)
 #but is everything under control#
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 
+#Let's build the same dataframe but for control individuals
+
+
+colnames(innovation)
+virtual.success.time5c<-trial5c$success.time
+virtual.success.time5c[is.na(virtual.success.time5c)] <- 900000
+innovationc<-data.frame(trial5c$ID, 
+                        trial5c$success, 
+                        trial5c$success.time, 
+                        virtual.success.time5c)
+colnames(innovationc)
+colnames(innovation)
+
+innovationc<-rename(innovationc, ID = trial5c.ID, 
+                            success5 = trial5c.success,
+                            success.time5 = trial5c.success.time,
+                            virtual.success.time5 = virtual.success.time5c)
+                            
+
+
+colnames(shyness)
+colnames(shynessc)
+
+shynessc<-data.frame(trial1c$ID, 
+                     trial1c$refuge.time, 
+                     trial1c$refuge.enter.times)
+shynessc<-rename(shynessc, ID = trial1c.ID, 
+                 refuge.time = trial1c.refuge.time,
+                 refuge.enter.times = trial1c.refuge.enter.times)
+
+
+
+colnames(exploration)
+
+virtual.success.time1c<-trial1c$success.time
+colnames(exploration1c)
+ 
+exploration1c<-data.frame(trial1c$ID,
+                         trial1c$success,
+                         trial1c$success.time,
+                         trial1c$total.cue.time,
+                         virtual.success.time1c)
+
+exploration1c<-rename(exploration1c, ID = trial1c.ID, success1 = trial1c.success, 
+                           success.time1 = trial1c.success.time, total.cue.time1 = trial1c.total.cue.time,
+                           virtual.success.time1 = virtual.success.time1c)
+
+exploration2c<-data.frame(trial2c$ID, trial2c$time.until.any.cue)
+colnames(exploration2c)
+
+exploration2c<-rename(exploration2c, 
+                     ID = trial2c.ID, 
+                     time.until.any.cue2 = trial2c.time.until.any.cue)
+
+exploration3c<-data.frame(trial5c$ID,
+                         trial5c$time.until.lid.exploring)
+colnames(exploration3c)
+exploration3c<-rename(exploration3c, ID = trial5c.ID, 
+                     time.until.lid.exploring = trial5c.time.until.lid.exploring)
+
+explorationc<-merge(merge(exploration1c, exploration2c, by= "ID", all.x = TRUE),exploration3c, by = "ID", all.x = TRUE)
+colnames(explorationc)
+
+
+
+
+
+
+
+virtual.success.time4c<-trial4c$success.time
+virtual.success.time4c[is.na(virtual.success.time4c)] <- 900000
+
+colnames(learningc)
+learningc<-data.frame(trial4c$ID, 
+                      trial4c$success, 
+                      trial4c$correct.cue.time,
+                      trial4c$success.time,
+                      virtual.success.time4c)
+colnames(learning)
+learningc<-rename(learningc, ID = trial4c.ID, success4 = trial4c.success,
+                  correct.cue.time4 = trial4c.correct.cue.time, 
+                  success.time4 = trial4c.success.time, 
+                  virtual.success.time4 = virtual.success.time4c)
+
+activity.for.innovation
+
+activity.for.learning
+
+
+#por aquí-----
+
 
 #Let's explore first the relationships between different behaviors
 #this is crazy
@@ -832,15 +923,25 @@ summary(v.succ.alone)
 #success.time5 ~ refuge time----
 #Por aquí-------
 ##UC#####
+
+
+
+
+trial1$ID
+trial1$refuge.time
+trial1$experiment.type
+trial5$ID
+trial5$success.time
+
 colnames(explain.innovation1)
 is.numeric(explain.innovation1$virtual.success.time5)
 explain.innovation1$refuge.time
 
 
-dat.surv1 <- survfit(Surv(virtual.success.time5) ~ success5, na.action = na.exclude, data = explain.innovation1) 
+dat.surv1 <- survfit(Surv(explain.innovation1$virtual.success.time5) ~ explain.innovation1$refuge.time, na.action = na.exclude) 
 plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .4, c("No", "Yes"), lty = 1:2) 
-title("Kaplan-Meier Curves comparing sexes") 
+title("Kaplan-Meier Curves") 
 
 
 
@@ -1570,7 +1671,7 @@ summary(model.success5.5)
 
 
 
-#por aquí-----
+
 
 #success4 ~ sex
 trial4t
