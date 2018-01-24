@@ -899,10 +899,10 @@ learningc<-rename(learningc, ID = trial4c.ID, success4 = trial4c.success,
                   correct.cue.time4 = trial4c.correct.cue.time, 
                   success.time4 = trial4c.success.time, 
                   virtual.success.time4 = virtual.success.time4c)
+#construye estos data.frames
+activity.for.innovationc
 
-activity.for.innovation
-
-activity.for.learning
+activity.for.learningc
 
 
 #por aquí-----
