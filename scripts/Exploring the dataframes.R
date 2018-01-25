@@ -819,15 +819,12 @@ explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$s
 #Let's build the same dataframe but for control individuals
 
 
-colnames(innovation)
 virtual.success.time5c<-trial5c$success.time
 virtual.success.time5c[is.na(virtual.success.time5c)] <- 900000
 innovationc<-data.frame(trial5c$ID, 
                         trial5c$success, 
                         trial5c$success.time, 
                         virtual.success.time5c)
-colnames(innovationc)
-colnames(innovation)
 
 innovationc<-rename(innovationc, ID = trial5c.ID, 
                             success5 = trial5c.success,
@@ -845,8 +842,6 @@ shynessc<-data.frame(trial1c$ID,
 shynessc<-rename(shynessc, ID = trial1c.ID, 
                  refuge.time = trial1c.refuge.time,
                  refuge.enter.times = trial1c.refuge.enter.times)
-
-
 
 colnames(exploration)
 
@@ -879,31 +874,75 @@ exploration3c<-rename(exploration3c, ID = trial5c.ID,
 explorationc<-merge(merge(exploration1c, exploration2c, by= "ID", all.x = TRUE),exploration3c, by = "ID", all.x = TRUE)
 colnames(explorationc)
 
-
-
-
-
-
-
 virtual.success.time4c<-trial4c$success.time
 virtual.success.time4c[is.na(virtual.success.time4c)] <- 900000
 
-colnames(learningc)
 learningc<-data.frame(trial4c$ID, 
                       trial4c$success, 
                       trial4c$correct.cue.time,
                       trial4c$success.time,
                       virtual.success.time4c)
-colnames(learning)
 learningc<-rename(learningc, ID = trial4c.ID, success4 = trial4c.success,
                   correct.cue.time4 = trial4c.correct.cue.time, 
                   success.time4 = trial4c.success.time, 
                   virtual.success.time4 = virtual.success.time4c)
 #construye estos data.frames
+activity.for.innovationc<-data.frame(trial5c$ID, trial5c$activity.time,
+                                     trial5c$times.resting, trial5c$activity.prop)
+
+activity.for.innovationc<-rename(activity.for.innovationc, ID = trial5c.ID, 
+                                 activity.time5 = trial5c.activity.time,
+                                 times.resting5 = trial5c.times.resting,
+                                 activity.prop5 = trial5c.activity.prop)
+
+
+activity.for.learningc<-data.frame(trial4c$ID, trial4c$activity.time,
+                                   trial4c$times.resting, trial4c$activity.prop)
+
+activity.for.learningc<-rename(activity.for.learningc, ID = trial4c.ID,
+                               activity.time4 = trial4c.activity.time, 
+                               times.resting4 = trial4c.times.resting,
+                               activity.prop4 = trial4c.activity.prop)
+
+
+
+artifactsc<-data.frame(trial1c$ID, trial1c$sex, trial1c$IT, trial1c$brain.weight,
+                       trial1c$no.optic.lobes.weight)
+colnames(artifacts)
+colnames(artifactsc)
+artifactsc<-rename(artifactsc, ID = trial1c.ID, sex = trial1c.sex, IT = trial1c.IT,
+                   brain.weight = trial1c.brain.weight, 
+                   lobeless.weight = trial1c.no.optic.lobes.weight)
+
+
+innovationc
+shynessc
+explorationc
+learningc
 activity.for.innovationc
-
 activity.for.learningc
+artifactsc
 
+
+
+
+
+explain.innovation1c<-merge(merge(merge(merge(merge(innovationc, shynessc, by = "ID", all.x = TRUE), 
+                                             explorationc, by= "ID", all.x = TRUE), 
+                                       learningc, by= "ID", all.x = TRUE), 
+                                 activity.for.innovationc, by = "ID", all.x= TRUE), artifactsc, by= "ID", all.x = TRUE)
+
+#Bees that have time, or NA in refuge time, should be removed because they are
+#not control bees
+explain.innovation1c<-subset(explain.innovation1c, subset = (explain.innovation1c$refuge.time == 0))
+
+#Are both working dataframes equal and ready for a future rbind? yes
+colnames(explain.innovation1)==colnames(explain.innovation1c)
+explain.innovation1c$experiment.type<-rep("Control",nrow(explain.innovation1c))
+explain.innovation1$experiment.type<-rep("Treatment",nrow(explain.innovation1))
+colnames(explain.innovation1)
+colnames(explain.innovation1c)
+explain.innovation1.full<-rbind(explain.innovation1, explain.innovation1c)
 
 #por aquí-----
 
