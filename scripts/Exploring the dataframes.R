@@ -3,6 +3,7 @@ library(dplyr)
 library(calibrate)
 library(visreg)
 library(DHARMa)
+library(survival)
 #DEFINING (behaviors)----
 #Import data
 #We import first our data
@@ -944,7 +945,6 @@ colnames(explain.innovation1)
 colnames(explain.innovation1c)
 explain.innovation1.full<-rbind(explain.innovation1, explain.innovation1c)
 
-#por aquí-----
 
 
 #Let's explore first the relationships between different behaviors
@@ -964,25 +964,27 @@ summary(v.succ.alone)
 ##UC#####
 
 
-
-
-trial1$ID
-trial1$refuge.time
-trial1$experiment.type
-trial5$ID
-trial5$success.time
-
-colnames(explain.innovation1)
-is.numeric(explain.innovation1$virtual.success.time5)
+View(dat)
+View(explain.innovation1.full)
+str(dat)
+str(explain.innovation1.full)
+colnames(explain.innovation1.full)
 explain.innovation1$refuge.time
 
-
-dat.surv1 <- survfit(Surv(explain.innovation1$virtual.success.time5) ~ explain.innovation1$refuge.time, na.action = na.exclude) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
-legend(10000, .4, c("No", "Yes"), lty = 1:2) 
-title("Kaplan-Meier Curves") 
+explain.innovation1.full$virtual.success.time5
+explain.innovation1.full$refuge.time
+explain.innovation1.full$experiment.type
 
 
+dat.surv1 <- survfit(Surv(virtual.success.time5, success1) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 1") 
+legend(10000, .2, c("Control", "Treatment"), lty = 1:2) 
+title("Kaplan-Meier Curves\nfor Innovation") 
+
+dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
+legend(10000, .2, c("Control", "Treatment"), lty = 1:2) 
+title("Kaplan-Meier Curves\nfor Innovation") 
 
 
 dat.surv1 <- survfit(Surv(time_e, status_e) ~ Habitat2, na.action = na.exclude, data = dat) 
