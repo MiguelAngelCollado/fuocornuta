@@ -785,8 +785,7 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
 
 #MODELS-----
 
-#SUCCESS5
-
+#Innovation----
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
@@ -819,7 +818,6 @@ explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$s
 
 #Let's build the same dataframe but for control individuals
 
-
 virtual.success.time5c<-trial5c$success.time
 virtual.success.time5c[is.na(virtual.success.time5c)] <- 900000
 innovationc<-data.frame(trial5c$ID, 
@@ -832,8 +830,6 @@ innovationc<-rename(innovationc, ID = trial5c.ID,
                             success.time5 = trial5c.success.time,
                             virtual.success.time5 = virtual.success.time5c)
                             
-
-
 colnames(shyness)
 colnames(shynessc)
 
@@ -887,7 +883,7 @@ learningc<-rename(learningc, ID = trial4c.ID, success4 = trial4c.success,
                   correct.cue.time4 = trial4c.correct.cue.time, 
                   success.time4 = trial4c.success.time, 
                   virtual.success.time4 = virtual.success.time4c)
-#construye estos data.frames
+
 activity.for.innovationc<-data.frame(trial5c$ID, trial5c$activity.time,
                                      trial5c$times.resting, trial5c$activity.prop)
 
@@ -905,8 +901,6 @@ activity.for.learningc<-rename(activity.for.learningc, ID = trial4c.ID,
                                times.resting4 = trial4c.times.resting,
                                activity.prop4 = trial4c.activity.prop)
 
-
-
 artifactsc<-data.frame(trial1c$ID, trial1c$sex, trial1c$IT, trial1c$brain.weight,
                        trial1c$no.optic.lobes.weight)
 colnames(artifacts)
@@ -915,7 +909,6 @@ artifactsc<-rename(artifactsc, ID = trial1c.ID, sex = trial1c.sex, IT = trial1c.
                    brain.weight = trial1c.brain.weight, 
                    lobeless.weight = trial1c.no.optic.lobes.weight)
 
-
 innovationc
 shynessc
 explorationc
@@ -923,10 +916,6 @@ learningc
 activity.for.innovationc
 activity.for.learningc
 artifactsc
-
-
-
-
 
 explain.innovation1c<-merge(merge(merge(merge(merge(innovationc, shynessc, by = "ID", all.x = TRUE), 
                                              explorationc, by= "ID", all.x = TRUE), 
@@ -944,9 +933,7 @@ explain.innovation1$experiment.type<-rep("Treatment",nrow(explain.innovation1))
 colnames(explain.innovation1)
 colnames(explain.innovation1c)
 explain.innovation1.full<-rbind(explain.innovation1, explain.innovation1c)
-
-
-
+explain.innovation1.full$experiment.type<-as.factor(explain.innovation1.full$experiment.type)
 #Let's explore first the relationships between different behaviors
 #this is crazy
 pairs(explain.innovation1[3:18])
@@ -957,10 +944,46 @@ colnames(explain.innovation1)
 v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
 summary(v.succ.alone)
 
+#Innovation
+
+#We can compare Treatment and control for innovation
+plot(explain.innovation1c$virtual.success.time5, explain.innovation1c$success5, xlim = c(0,900000), xlab="Virtual success time 5", ylab="Success 5", main = "Control")
+plot(explain.innovation1$virtual.success.time5, explain.innovation1$success5, xlim = c(0,900000), xlab="Virtual success time 5", ylab="Success 5", main = "Treatment")
+#Proportion of treatment bees that succeed in the fifth test
+length(which(explain.innovation1$success5 == TRUE))/length(explain.innovation1$success5)
+#Proportion of control bees that succeed in the fifth test
+length(which(explain.innovation1c$success5 == TRUE))/length(explain.innovation1c$success5)
+
+#The boxplot shows something strange, for the virtual success time, control
+#has the data more concentrated in longer times (except for 4 bees)
+boxplot(virtual.success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Virtual success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
+#The n are similar for both control and treatment
+summary(explain.innovation1.full$experiment.type)
+
+#But when you remove the virtual data, the boxes changes and the situation is
+#reversed
+boxplot(success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
+
+#Anyway, the n is quite small for both control and treatment
+length(which(explain.innovation1c$success5 == TRUE))
+length(which(explain.innovation1$success5 == TRUE))
+
+#por aqui----------
+
+dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
+legend(10000, .4, c("Treatment", "Control"), lty = 1:2) 
+title("Kaplan-Meier Curves\nfor Innovation") 
+
+#There is difference between Treatment and Control
+test.s.treat.contr  <- survdiff (Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full)
+test.s.treat.contr
+
+
 #Innovation explained with shyness-----
 
 #success.time5 ~ refuge time----
-#Por aquí-------
+
 ##UC#####
 
 
@@ -976,15 +999,8 @@ explain.innovation1.full$refuge.time
 explain.innovation1.full$experiment.type
 
 
-dat.surv1 <- survfit(Surv(virtual.success.time5, success1) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 1") 
-legend(10000, .2, c("Control", "Treatment"), lty = 1:2) 
-title("Kaplan-Meier Curves\nfor Innovation") 
 
-dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
-legend(10000, .2, c("Control", "Treatment"), lty = 1:2) 
-title("Kaplan-Meier Curves\nfor Innovation") 
+View(explain.innovation1.full)
 
 
 dat.surv1 <- survfit(Surv(time_e, status_e) ~ Habitat2, na.action = na.exclude, data = dat) 
@@ -1111,8 +1127,8 @@ coefficients(succ5.sex)
 allEffects(succ5.sex)
 
 #We can see Kaplan-Meier curves for sexes
-dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+sex.surv <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
+plot(sex.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
 
@@ -1140,6 +1156,11 @@ summary(glm.succ5.all)
 allEffects(glm.succ5.all)
 
 coefficients(glm.succ5.all)
+
+sex.surv.full <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
+plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+legend(10000, .4, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes") 
 
 
 
