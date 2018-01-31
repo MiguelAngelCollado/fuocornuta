@@ -937,7 +937,6 @@ explain.innovation1.full$experiment.type<-as.factor(explain.innovation1.full$exp
 #Let's explore first the relationships between different behaviors
 #this is crazy
 pairs(explain.innovation1[3:18])
-
 colnames(explain.innovation1)
 
 #I don't understand the model alone
@@ -963,17 +962,15 @@ summary(explain.innovation1.full$experiment.type)
 #But when you remove the virtual data, the boxes changes and the situation is
 #reversed
 boxplot(success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
-
 #Anyway, the n is quite small for both control and treatment
 length(which(explain.innovation1c$success5 == TRUE))
 length(which(explain.innovation1$success5 == TRUE))
 
 #por aqui----------
 
-dat.surv1 <- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
-legend(10000, .4, c("Treatment", "Control"), lty = 1:2) 
-title("Kaplan-Meier Curves\nfor Innovation") 
+innovation.curve<- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
+plot(innovation.curve, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5", main= "Kapdddlan-Meier Curves\nfor innovation") 
+legend(10000, .4, c("Control","Treatment"), lty = 1:2) 
 
 #There is difference between Treatment and Control
 test.s.treat.contr  <- survdiff (Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full)
@@ -984,35 +981,6 @@ test.s.treat.contr
 
 #success.time5 ~ refuge time----
 
-##UC#####
-
-
-View(dat)
-View(explain.innovation1.full)
-str(dat)
-str(explain.innovation1.full)
-colnames(explain.innovation1.full)
-explain.innovation1$refuge.time
-
-explain.innovation1.full$virtual.success.time5
-explain.innovation1.full$refuge.time
-explain.innovation1.full$experiment.type
-
-
-
-View(explain.innovation1.full)
-
-
-dat.surv1 <- survfit(Surv(time_e, status_e) ~ Habitat2, na.action = na.exclude, data = dat) 
-plot(dat.surv1, lty = 1:2, xlab="Time to solve thetask (msec)", ylab="% individuals that has no solved the task") 
-legend(1000000, .5, c("Downtown", "Edge"), lty = 1:2) 
-title("Kaplan-Meier Curves\nfor Innovation") 
-
-
-
-explain.innovation1
-
-#######
 
 library(calibrate)
 innovation.refuge<-data.frame(explain.innovation1$ID, 
@@ -1055,7 +1023,14 @@ plot(v.succ.refuge, which = 2)
 v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
 summary(v.succ.refuge.only.successful)
 
-#Maybe we should try survival analysis
+#Maybe we try Cox proportional hazards regression model.
+
+cox.refuge <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.action = na.exclude, data = explain.innovation1.full) 
+#It seems it doesn't have effect
+cox.refuge
+
+
+
 
 #success.time5 ~ refuge.enter.times----
 explain.innovation1$virtual.success.time5
@@ -1173,9 +1148,10 @@ plot(lm.succ.refuge)
 #Residuals are not normal
 hist(lm.succ.refuge$residuals)
 
-#Those who spent a lot of time in the refuge didn't pass the test
-plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
-plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success", xlab = "Time spent in the refuge")
+#Those who spent a lot of time in the refuge didn't pass the test 5
+#
+plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
 sort(explain.innovation1$refuge.time, decreasing = TRUE)
 nrow(subset(explain.innovation1,subset = (explain.innovation1$refuge.time > 600000)))
 nrow(explain.innovation1)
