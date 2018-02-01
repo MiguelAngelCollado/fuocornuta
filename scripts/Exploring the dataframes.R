@@ -1029,9 +1029,6 @@ cox.refuge <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.acti
 #It seems it doesn't have effect
 cox.refuge
 
-
-
-
 #success.time5 ~ refuge.enter.times----
 explain.innovation1$virtual.success.time5
 explain.innovation1$refuge.enter.times
@@ -1046,6 +1043,13 @@ innovation.enter.times<-na.omit(innovation.enter.times)
 plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, xlab = "Refuge enter times", ylab = "Virtual success time")
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
+
+surv.refuge.enter <- survfit(Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1) 
+plot(surv.refuge.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
+legend(10000, .7, c("0", "1","2","5"), lty = 1:4) 
+
+#Son iguales? 
+survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1)
 
 
 #SUCCESS 5----
