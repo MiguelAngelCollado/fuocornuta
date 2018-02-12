@@ -799,7 +799,6 @@ activity.for.innovation
 activity.for.learning
 artifacts
 
-merge(explain.innovation1$ID, artifacts)
 #explain innovation through time until succeed in trial 5
 
 
@@ -830,9 +829,6 @@ innovationc<-rename(innovationc, ID = trial5c.ID,
                             success.time5 = trial5c.success.time,
                             virtual.success.time5 = virtual.success.time5c)
                             
-colnames(shyness)
-colnames(shynessc)
-
 shynessc<-data.frame(trial1c$ID, 
                      trial1c$refuge.time, 
                      trial1c$refuge.enter.times)
@@ -843,8 +839,7 @@ shynessc<-rename(shynessc, ID = trial1c.ID,
 colnames(exploration)
 
 virtual.success.time1c<-trial1c$success.time
-colnames(exploration1c)
- 
+
 exploration1c<-data.frame(trial1c$ID,
                          trial1c$success,
                          trial1c$success.time,
@@ -856,7 +851,6 @@ exploration1c<-rename(exploration1c, ID = trial1c.ID, success1 = trial1c.success
                            virtual.success.time1 = virtual.success.time1c)
 
 exploration2c<-data.frame(trial2c$ID, trial2c$time.until.any.cue)
-colnames(exploration2c)
 
 exploration2c<-rename(exploration2c, 
                      ID = trial2c.ID, 
@@ -864,7 +858,6 @@ exploration2c<-rename(exploration2c,
 
 exploration3c<-data.frame(trial5c$ID,
                          trial5c$time.until.lid.exploring)
-colnames(exploration3c)
 exploration3c<-rename(exploration3c, ID = trial5c.ID, 
                      time.until.lid.exploring = trial5c.time.until.lid.exploring)
 
@@ -937,11 +930,6 @@ explain.innovation1.full$experiment.type<-as.factor(explain.innovation1.full$exp
 #Let's explore first the relationships between different behaviors
 #this is crazy
 pairs(explain.innovation1[3:18])
-colnames(explain.innovation1)
-
-#I don't understand the model alone
-v.succ.alone<-lm(data = explain.innovation1, formula = virtual.success.time5 ~.)
-summary(v.succ.alone)
 
 #Innovation
 
@@ -958,29 +946,29 @@ length(which(explain.innovation1c$success5 == TRUE))/length(explain.innovation1c
 boxplot(virtual.success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Virtual success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
 #The n are similar for both control and treatment
 summary(explain.innovation1.full$experiment.type)
+sort(explain.innovation1$virtual.success.time5)
 
 #But when you remove the virtual data, the boxes changes and the situation is
 #reversed
 boxplot(success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
-#Anyway, the n is quite small for both control and treatment
+explain.innovation1.full$success.time5
+
+#Anyway, the n is quite small for both control and treatment, for both
+#virtual.success5 and success5 and the differences are too small to be commented   
 length(which(explain.innovation1c$success5 == TRUE))
 length(which(explain.innovation1$success5 == TRUE))
-
-#por aqui----------
 
 innovation.curve<- survfit(Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full) 
 plot(innovation.curve, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5", main= "Kapdddlan-Meier Curves\nfor innovation") 
 legend(10000, .4, c("Control","Treatment"), lty = 1:2) 
 
-#There is difference between Treatment and Control
+#Is there difference between Treatment and Control?
 test.s.treat.contr  <- survdiff (Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full)
 test.s.treat.contr
-
 
 #Innovation explained with shyness-----
 
 #success.time5 ~ refuge time----
-
 
 library(calibrate)
 innovation.refuge<-data.frame(explain.innovation1$ID, 
@@ -988,18 +976,17 @@ innovation.refuge<-data.frame(explain.innovation1$ID,
                               explain.innovation1$virtual.success.time5)
 
 innovation.refuge<-na.omit(innovation.refuge)
-plot(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, ylim = c(0,900000), xlim = c(0,900000), xlab = "Refuge time", ylab = "Virtual success time")
+plot(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, ylim = c(0,900000), xlim = c(0,900000), xlab = "Refuge time", ylab = "Virtual success time 5")
 textxy(innovation.refuge$explain.innovation1.refuge.time, innovation.refuge$explain.innovation1.virtual.success.time5, labs = innovation.refuge$explain.innovation1.ID)
 
 ##There is no bee that spent the whole trial 1 in the refugee and then passed
-#the innovation trial but, they were only 5 bees from 27 that spent the whole
-#time in the refuge and made it to the final test in treatment bees
+#the innovation trial (n=5)
 length(which(innovation.refuge$explain.innovation1.refuge.time == 900000))
 
 length(trial1t$refuge.time)
 
 #But only 9 bees from the 76 that started the experiment spent the whole time
-#within the refuge
+#within the refuge, so maybe the above result isn't that exciting
 length(which(trial1t$refuge.time == 900000))
 
 
@@ -1043,7 +1030,6 @@ innovation.enter.times<-na.omit(innovation.enter.times)
 plot(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, xlab = "Refuge enter times", ylab = "Virtual success time")
 textxy(innovation.enter.times$explain.innovation1.refuge.enter.times, innovation.enter.times$explain.innovation1.virtual.success.time5, labs = innovation.enter.times$explain.innovation1.ID)
 
-
 surv.refuge.enter <- survfit(Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.refuge.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
 legend(10000, .7, c("0", "1","2","5"), lty = 1:4) 
@@ -1051,6 +1037,101 @@ legend(10000, .7, c("0", "1","2","5"), lty = 1:4)
 #Son iguales? 
 survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1)
 
+#Let's compare re-enter vs no re-enter
+explain.innovation1$refuge.enter.times
+re.enter<-NULL
+for (n in 1:length(explain.innovation1$refuge.enter.times)){
+  if (explain.innovation1$refuge.enter.times[n] > 0) {
+    re.enter[n]<-"Yes"
+  }else{
+    re.enter[n]<-"No"
+  }
+}
+re.enter.data<-data.frame(explain.innovation1$ID,
+                          explain.innovation1$virtual.success.time5,
+                          explain.innovation1$success5,
+                          re.enter)
+colnames(re.enter.data)
+re.enter.data<-rename(re.enter.data, ID = explain.innovation1.ID, 
+       virtual.success.time5 = explain.innovation1.virtual.success.time5,
+       success5 = explain.innovation1.success5)
+
+surv.re.enter <- survfit(Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data) 
+sort(re.enter.data$virtual.success.time5)
+plot(surv.re.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5", main= "Re enter in the refuge curves") 
+legend(10000, .4, c("No", "Yes"), lty = 1:2)
+#The chisq test says that they are independent, so it seems that if you re-enter
+#the refuge in the first trial, you'll have more probabilities of succeed in the
+#innovation test
+survdiff (Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data)
+
+#success5 ~ re.enter----
+#We see the same pattern as above, if you re-enter the refuge, you'll more
+#probabily succed in the fifth trial
+plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Re enter", ylab="Success 5", main= "Re enter ~ Success 5")
+succ5.renter<-glm(success5 ~ re.enter, data = re.enter.data, family = binomial)
+#There is some significance in the difference
+summary(succ5.renter)
+#And in the reverse logit effect
+allEffects(succ5.renter)
+
+#success5 ~ refuge.time----
+lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
+                   data = explain.innovation1)
+summary(lm.succ.refuge)
+plot(lm.succ.refuge)
+
+#Residuals are not normal
+hist(lm.succ.refuge$residuals)
+
+#Those who spent a lot of time in the refuge didn't pass the test 5
+
+plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
+sort(explain.innovation1$refuge.time, decreasing = TRUE)
+nrow(subset(explain.innovation1,subset = (explain.innovation1$refuge.time > 600000)))
+nrow(explain.innovation1)
+#So we use glm binomial family
+succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                 data = explain.innovation1, family = "binomial")
+
+coef(succ.refuge)
+
+#Inversamente proporcional y marginalmente significativa la relación
+summary(succ.refuge)
+plot(succ.refuge)
+
+#It seems less probable to success if you spent more time in the refuge
+allEffects(succ.refuge)
+
+#I think we have overdispersion
+visreg(succ.refuge, scale = "response")
+disp<-simulateResiduals(succ.refuge, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#Shall we check quasibinomial? It is used when we have overdispersion
+quasi.succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                       data = explain.innovation1, family = binomial)
+
+
+summary(quasi.succ.refuge)
+plot(quasi.succ.refuge)
+
+#Mean estimates do not change using binomial or quasibinomial
+allEffects(succ.refuge)
+allEffects(quasi.succ.refuge)
+
+#But standard neither!
+par(mfrow = c(1,2))
+visreg(succ.refuge, scale = "response")
+visreg(quasi.succ.refuge, scale = "response")
+par(mfrow = c(1,1))
+
+#We try link cloglog, that is better with biased distributions
+clog.succ.refuge<-glm(formula = success5 ~ refuge.time, 
+                      data = explain.innovation1, family = binomial(link ="cloglog"))
+#But it has less significancy
+summary(clog.succ.refuge)
 
 #SUCCESS 5----
 
@@ -1060,7 +1141,13 @@ survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action 
 
 #We should check if differences in innovation is conditioned somehow by sex
 #or size
+
 #Artifacts----
+
+#success.time5~IT
+plot(explain.innovation1$success.time5, explain.innovation1$IT)
+
+#por aquí-----
 
 #For success5 ~ IT
 #I don't see a pattern
@@ -1079,7 +1166,7 @@ summary(succ5.IT)
 
 
 
-#Success ~ Sex
+#Success5 ~ Sex
 
 
 #We have little sample of males
@@ -1141,71 +1228,8 @@ plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals th
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
 
-
-
-#success5 ~ refuge.time----
-lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
-                 data = explain.innovation1)
-summary(lm.succ.refuge)
-plot(lm.succ.refuge)
-
-#Residuals are not normal
-hist(lm.succ.refuge$residuals)
-
-#Those who spent a lot of time in the refuge didn't pass the test 5
 #
-plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
-plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge")
-sort(explain.innovation1$refuge.time, decreasing = TRUE)
-nrow(subset(explain.innovation1,subset = (explain.innovation1$refuge.time > 600000)))
-nrow(explain.innovation1)
-#So we use glm binomial family
-succ.refuge<-glm(formula = success5 ~ refuge.time, 
-                 data = explain.innovation1, family = "binomial")
 
-coef(succ.refuge)
-
-#Inversamente proporcional y marginalmente significativa la relación
-summary(succ.refuge)
-plot(succ.refuge)
-
-install.packages("effects")
-library(effects)
-
-#It seems less probable to success if you spent more time in the refuge
-allEffects(succ.refuge)
-
-
-#I think we have overdispersion
-library(visreg)
-visreg(succ.refuge, scale = "response")
-library("DHARMa")
-disp<-simulateResiduals(succ.refuge, plot = T)
-testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
-
-#Shall we check quasibinomial? It is used when we have overdispersion
-quasi.succ.refuge<-glm(formula = success5 ~ refuge.time, 
-                 data = explain.innovation1, family = binomial)
-
-
-summary(quasi.succ.refuge)
-plot(quasi.succ.refuge)
-
-#Mean estimates do not change using binomial or quasibinomial
-allEffects(succ.refuge)
-allEffects(quasi.succ.refuge)
-
-#But standard neither!
-par(mfrow = c(1,2))
-visreg(succ.refuge, scale = "response")
-visreg(quasi.succ.refuge, scale = "response")
-par(mfrow = c(1,1))
-
-#We try link cloglog, that is better with biased distributions
-clog.succ.refuge<-glm(formula = success5 ~ refuge.time, 
-                       data = explain.innovation1, family = binomial(link ="cloglog"))
-#But it has less significancy
-summary(clog.succ.refuge)
 
 #Innovation explained with exploration----
 exploration
