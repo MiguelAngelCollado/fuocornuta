@@ -1144,12 +1144,24 @@ summary(clog.succ.refuge)
 
 #Artifacts----
 
-#success.time5~IT
-plot(explain.innovation1$success.time5, explain.innovation1$IT)
+#success.time5~IT (NO CORRELATION)
+#Just treatment data
+plot(explain.innovation1$success.time5, explain.innovation1$IT, xlab= "Success time 5", ylab = "IT")
+plot(explain.innovation1$virtual.success.time5, explain.innovation1$IT, xlab= "Virtual success time 5", ylab = "IT")
+#Using treatment and control
+plot(explain.innovation1.full$success.time5, explain.innovation1.full$IT)
+plot(explain.innovation1.full$virtual.success.time5, explain.innovation1.full$IT)
+
+#No correlation for just treatment, or even adding control bees
+lm.succ5IT<-lm(success.time5 ~ IT, data = explain.innovation1)
+summary(lm.succ5IT)
+lm.succ5ITfull<-lm(success.time5 ~ IT, data = explain.innovation1.full)
+summary(lm.succ5ITfull)
+
 
 #por aquí-----
 
-#For success5 ~ IT
+#For success5 ~ IT (NO CORRELATION)
 #I don't see a pattern
 plot(explain.innovation1$success5 ~ explain.innovation1$IT)
 plot(factor(explain.innovation1$success5) ~ explain.innovation1$IT)
@@ -1166,8 +1178,7 @@ summary(succ5.IT)
 
 
 
-#Success5 ~ Sex
-
+#Success5 ~ Sex (SOME DIFFERENCES, HOWEVER NOT ENOUGH n FOR MALES)
 
 #We have little sample of males
 summary(explain.innovation1$sex)
@@ -1198,6 +1209,12 @@ plot(sex.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals tha
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
 
+#The curves are dependent for just the treatment? 
+survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
+#And independent for the whole sampling? (Treatment + Control)
+survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
+
+#a--------------
 
 #Maybe if we introduce also control bees we can have more sampling
 succ5.all<-data.frame(trial5$ID,
@@ -1224,7 +1241,7 @@ allEffects(glm.succ5.all)
 coefficients(glm.succ5.all)
 
 sex.surv.full <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
-plot(dat.surv1, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+plot(sex.surv.full, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
 
