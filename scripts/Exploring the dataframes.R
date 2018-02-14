@@ -1200,6 +1200,8 @@ hist(lm.succ5.sex$residuals)
 
 succ5.sex<-glm(success5 ~ sex, data = explain.innovation1, family = "binomial")
 summary(succ5.sex)
+tidy(succ5.sex)
+
 coefficients(succ5.sex)
 allEffects(succ5.sex)
 
@@ -1208,29 +1210,21 @@ sex.surv <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.
 plot(sex.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
-
-#The curves are dependent for just the treatment? 
-survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
-#And independent for the whole sampling? (Treatment + Control)
-survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
-
-#a--------------
-
 #Maybe if we introduce also control bees we can have more sampling
 succ5.all<-data.frame(trial5$ID,
-trial5$sex,
-trial5$success,
-trial5$experiment.type)
+                      trial5$sex,
+                      trial5$success,
+                      trial5$experiment.type)
 summary(trial5$sex)
 
 succ5.all<-rename(succ5.all, 
-       ID = trial5.ID, 
-       sex = trial5.sex, 
-       success5 = trial5.success,
-       experiment.type = trial5.experiment.type)
+                  ID = trial5.ID, 
+                  sex = trial5.sex, 
+                  success5 = trial5.success,
+                  experiment.type = trial5.experiment.type)
 
 #Adding the controls, it maintains some differences
-plot(factor(success5) ~ factor(sex), data = succ5.all)
+plot(factor(success5) ~ factor(sex), data = succ5.all, xlab="Sex", ylab="Success 5")
 
 glm.succ5.all<-glm(success5 ~ sex, data = succ5.all, family = "binomial")
 
@@ -1245,7 +1239,12 @@ plot(sex.surv.full, lty = 1:2, xlab="Virtual success time 5", ylab="% individual
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes") 
 
-#
+
+#The curves are dependent for just the treatment? 
+survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
+#And independent for the whole sampling? (Treatment + Control)
+survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
+
 
 
 #Innovation explained with exploration----
@@ -1286,7 +1285,6 @@ hist(lm.succ5.succ1$residuals)
 #Let's try a binomial glm
 succ5.succ1<- glm(success5 ~ success1, data=succ1succ5formodels , family = binomial)
 
-
 coef(succ5.succ1)
 
 #There seem to be no relationship between succeess in trials 1 and 5
@@ -1298,6 +1296,7 @@ plot(succ5.succ1)
 #we have significancy, or statistic power.
 eff<-allEffects(succ5.succ1)
 eff
+#minimum effect
 0.4117647 - 0.3333333
 
 #I don't know if this is overdispersion
@@ -1305,6 +1304,16 @@ visreg(succ5.succ1, scale = "response")
 #Very beautiful residuals
 disp<-simulateResiduals(succ5.succ1, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#Survival curves
+#A---------
+succ1.surv <- survfit(Surv(virtual.success.time5, success5) ~ success1, na.action = na.exclude, data = explain.innovation1) 
+plot(succ1.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task", main="Success 1") 
+legend(10000, .2, c("False", "True"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes") 
+
+#They are independent?
+survdiff (Surv(virtual.success.time5, success5) ~ success1, na.action = na.exclude, data = explain.innovation1)
 
 #success5 ~ virtual.success.time1----
 #This is curious, the bees that succeed trial 1 very fast, didn't pass the
