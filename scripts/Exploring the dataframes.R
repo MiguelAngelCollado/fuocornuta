@@ -962,9 +962,8 @@ innovation.curve<- survfit(Surv(virtual.success.time5, success5) ~ experiment.ty
 plot(innovation.curve, lty = 1:2, xlab="Virtual success time 5", ylab="% of no success in trial 5", main= "Kapdddlan-Meier Curves\nfor innovation") 
 legend(10000, .4, c("Control","Treatment"), lty = 1:2) 
 
-#Is there difference between Treatment and Control?
-test.s.treat.contr  <- survdiff (Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full)
-test.s.treat.contr
+#There is no difference in Treatment vs Control curves
+survdiff (Surv(virtual.success.time5, success5) ~ experiment.type, na.action = na.exclude, data = explain.innovation1.full)
 
 #Innovation explained with shyness-----
 
@@ -1017,6 +1016,7 @@ cox.refuge <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.acti
 cox.refuge
 
 #success.time5 ~ refuge.enter.times----
+#(HAY SIGNIFICANCIA)
 explain.innovation1$virtual.success.time5
 explain.innovation1$refuge.enter.times
 
@@ -1034,7 +1034,7 @@ surv.refuge.enter <- survfit(Surv(virtual.success.time5, success5) ~ refuge.ente
 plot(surv.refuge.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
 legend(10000, .7, c("0", "1","2","5"), lty = 1:4) 
 
-#Son iguales? 
+#Son diferentes 
 survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1)
 
 #Let's compare re-enter vs no re-enter
@@ -1059,7 +1059,7 @@ re.enter.data<-rename(re.enter.data, ID = explain.innovation1.ID,
 surv.re.enter <- survfit(Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data) 
 sort(re.enter.data$virtual.success.time5)
 plot(surv.re.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5", main= "Re enter in the refuge curves") 
-legend(10000, .4, c("No", "Yes"), lty = 1:2)
+legend(10000, .2, c("No", "Yes"), lty = 1:2)
 #The chisq test says that they are independent, so it seems that if you re-enter
 #the refuge in the first trial, you'll have more probabilities of succeed in the
 #innovation test
@@ -1159,8 +1159,6 @@ lm.succ5ITfull<-lm(success.time5 ~ IT, data = explain.innovation1.full)
 summary(lm.succ5ITfull)
 
 
-#por aquí-----
-
 #For success5 ~ IT (NO CORRELATION)
 #I don't see a pattern
 plot(explain.innovation1$success5 ~ explain.innovation1$IT)
@@ -1209,7 +1207,7 @@ allEffects(succ5.sex)
 sex.surv <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
 plot(sex.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .4, c("Female", "Male"), lty = 1:2) 
-title("Kaplan-Meier Curves comparing sexes") 
+title("Kaplan-Meier Curves comparing sexes \n(treatment bees only)") 
 #Maybe if we introduce also control bees we can have more sampling
 succ5.all<-data.frame(trial5$ID,
                       trial5$sex,
@@ -1236,20 +1234,20 @@ coefficients(glm.succ5.all)
 
 sex.surv.full <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
 plot(sex.surv.full, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
-legend(10000, .4, c("Female", "Male"), lty = 1:2) 
-title("Kaplan-Meier Curves comparing sexes") 
+legend(10000, .3, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes\n(treatment and control bees)") 
 
 
-#The curves are dependent for just the treatment? 
+#The curves are different for just treatment bees 
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
-#And independent for the whole sampling? (Treatment + Control)
+#But dependent for Treatment + Control
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
-
 
 
 #Innovation explained with exploration----
 exploration
 #success5 ~ success1----
+#(No effect)
 lm.succ5.succ1<- lm(success5 ~ success1, data=explain.innovation1)
 
 summary(lm.succ5.succ1)
@@ -1306,19 +1304,20 @@ disp<-simulateResiduals(succ5.succ1, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #Survival curves
-#A---------
 succ1.surv <- survfit(Surv(virtual.success.time5, success5) ~ success1, na.action = na.exclude, data = explain.innovation1) 
-plot(succ1.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task", main="Success 1") 
-legend(10000, .2, c("False", "True"), lty = 1:2) 
-title("Kaplan-Meier Curves comparing sexes") 
+plot(succ1.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task", main="Success 1 survival curves") 
+legend(10000, .2, c("No success 1", "Sucess 1"), lty = 1:2) 
 
-#They are independent?
+#They are independent? They are not, they are very similar
 survdiff (Surv(virtual.success.time5, success5) ~ success1, na.action = na.exclude, data = explain.innovation1)
 
 #success5 ~ virtual.success.time1----
+#(Curious results)
+
 #This is curious, the bees that succeed trial 1 very fast, didn't pass the
 #fifth trial
 plot(success5 ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
+sort(explain.innovation1$virtual.success.time1)
 
 plot(factor(success5) ~ virtual.success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Virtual success time 1")
 lm.succ5.virtual1<-lm(success5 ~ virtual.success.time1, data = explain.innovation1)
@@ -1326,37 +1325,35 @@ summary(lm.succ5.virtual1)
 plot(lm.succ5.virtual1)
 
 #It is curious that, If you have passed the first trial faster than 
-sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7]
-((sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7])/1000)/60
+sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7] 
+#miliseconds or
+((sort(explain.innovation1$virtual.success.time1, decreasing = FALSE)[7])/1000)/60 
+#minutes
 #You won't succed in the fifth trial!
 
 
 #Residuals are not normal
-hist(lm.succ5.virtual$residuals)
+hist(lm.succ5.virtual1$residuals)
 
 #We do the glm binomial model
-
-colnames(explain.innovation1)
-
 succ5.virtual1<-glm(formula = success5 ~ virtual.success.time1, 
                  data = explain.innovation1, family = "binomial")
+
 #No relationships
 summary(succ5.virtual1)
 coef(succ5.virtual1)
 
 plot(succ5.virtual1)
 
-library(effects)
-
 #Spending more time until pass the first test helps a bit to pass the fifth
 #but is not significative
 allEffects(succ5.virtual1)
 
 #What happens when we remove the virtual success of 900000 ms?
+#(So now we are only using successful bees for the trial 1 )
 
 #success5~success.time1----
-
-na.omit(explain.innovation1$success.time1)
+#(Correlation)
 plot(success5 ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1", xlim=c(0,900000))
 plot(factor(success5) ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1")
 
@@ -1369,7 +1366,11 @@ summary(succ5.succtime1)
 allEffects(succ5.succtime1)
 #but with an N of only 17, is that enough?
 
-
+#Survival curves, relating virtual.success.time with innovation
+cox.explore <- coxph(Surv(virtual.success.time5, success5) ~ virtual.success.time1, na.action = na.exclude, data = explain.innovation1.full) 
+#Nothing
+cox.explore
+#a-----
 
 #success5~total.cue.time1-----
 
@@ -1381,7 +1382,6 @@ max(na.omit(explain.innovation1$total.cue.time1))
 
 #There is no clear pattern
 plot(factor(success5) ~ total.cue.time1, data=explain.innovation1, ylab = "Success 5", xlab = "Total cue time trial 1")
-
 
 lm.succ5cue1<-lm(success5 ~ total.cue.time1, data = explain.innovation1)
 summary(lm.succ5cue1)
@@ -1396,14 +1396,19 @@ summary(succ5.cue1)
 summary(succ5.cue1)
 plot(succ5.cue1)
 
-library(effects)
-
 allEffects(succ5.cue1)
+
+#Survival curves
+cox.cue.time<- coxph(Surv(virtual.success.time5, success5) ~ total.cue.time1, na.action = na.exclude, data = explain.innovation1.full) 
+#Nothing
+cox.cue.time
 
 #I think we don't need to explore this model anymore, 
 #there is no clear relationship
 
+  
 #success5~time.until.any.cue2----
+#(No correlation)
 explain.innovation1$success5
 explain.innovation1$time.until.any.cue2
 #Bees normally doesn't spent too much time until touching a cue in the second test
@@ -1426,8 +1431,12 @@ summary(succ5.touch2)
 #I don't believe these probabilities
 allEffects(succ5.touch2)
 
-#success5~time.until.lid.exploring----
+#Survival curves
+cox.any.cue<- coxph(Surv(virtual.success.time5, success5) ~ time.until.any.cue2, na.action = na.exclude, data = explain.innovation1.full) 
+cox.any.cue
 
+#success5~time.until.lid.exploring----
+#Por aquí----
 #We have lots of NA in lid.exploring, so 
 #we make a new variable with virtual results
 explain.innovation1$success5
