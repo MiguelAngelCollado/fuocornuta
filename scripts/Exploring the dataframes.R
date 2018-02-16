@@ -933,6 +933,10 @@ pairs(explain.innovation1[3:18])
 
 #Innovation
 
+#Resolving the innovation test is well distributed along time
+plot(explain.innovation1$success5 ~ explain.innovation1$virtual.success.time5, main="Resolving innovation test \ntreatment bees")
+plot(explain.innovation1.full$success5 ~ explain.innovation1.full$virtual.success.time5, main="Resolving innovation test \ntreatment and control bees")
+
 #We can compare Treatment and control for innovation
 plot(explain.innovation1c$virtual.success.time5, explain.innovation1c$success5, xlim = c(0,900000), xlab="Virtual success time 5", ylab="Success 5", main = "Control")
 plot(explain.innovation1$virtual.success.time5, explain.innovation1$success5, xlim = c(0,900000), xlab="Virtual success time 5", ylab="Success 5", main = "Treatment")
@@ -1370,7 +1374,6 @@ allEffects(succ5.succtime1)
 cox.explore <- coxph(Surv(virtual.success.time5, success5) ~ virtual.success.time1, na.action = na.exclude, data = explain.innovation1.full) 
 #Nothing
 cox.explore
-#a-----
 
 #success5~total.cue.time1-----
 
@@ -1436,7 +1439,8 @@ cox.any.cue<- coxph(Surv(virtual.success.time5, success5) ~ time.until.any.cue2,
 cox.any.cue
 
 #success5~time.until.lid.exploring----
-#Por aquí----
+#(Correlation)
+
 #We have lots of NA in lid.exploring, so 
 #we make a new variable with virtual results
 explain.innovation1$success5
@@ -1445,9 +1449,10 @@ virtual.time.until.lid.exploring<-explain.innovation1$time.until.lid.exploring
 virtual.time.until.lid.exploring[is.na(virtual.time.until.lid.exploring)] <- 900000
 explain.innovation1$virtual.time.until.lid.exploring<-virtual.time.until.lid.exploring
 
-#This is interesting, it seems that there is an acummulation of points
+#This is interesting, and logical, it seems that there is an acummulation of points
 #for succeeding and explore the lid early
 plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1)
+#That is even clearer in this plot
 plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1)
 
 sort(explain.innovation1$virtual.time.until.lid.exploring, decreasing = TRUE)
@@ -1461,6 +1466,8 @@ summary(lm.succ5.lid)
 hist(lm.succ5.lid$residuals)
 shapiro.test(lm.succ5.lid$residuals)
 
+#We have significance, but we can not forget that censored data this time
+#implies not succeeding
 succ5.lid<-glm(success5 ~ virtual.time.until.lid.exploring, 
                data = explain.innovation1, family = "binomial")
 
@@ -1472,18 +1479,15 @@ plot(succ5.lid)
 #clue
 allEffects(succ5.lid)
 
-
 #A plot
-visreg(succ5.lid, scale = "response")
+visreg(succ5.lid, scale = "response", xlab="Virtual time until lid exploring", ylab="Success 5", main= "")
 #Very beautiful residuals
 disp<-simulateResiduals(succ5.lid, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #Anyway, whe should try it without the virtual, normal time.until.lid.exploring
-
-
 #We obviously see the same acumulation of early lid explorers succeding in the 
-#fifth trial
+#fifth trial, but now we don't have the bois that didn't explore the lid
 plot(explain.innovation1$success5 ~ explain.innovation1$time.until.lid.exploring)
 plot(factor(explain.innovation1$success5) ~ explain.innovation1$time.until.lid.exploring)
 
@@ -1492,11 +1496,60 @@ lm.succ5.lidtrue<-lm(success5 ~ time.until.lid.exploring, data = explain.innovat
 summary(lm.succ5.lidtrue)
 hist(lm.succ5.lidtrue$residuals)
 
+#Now the significance disappears, but this can make sense, if most of the non
+#succeeders weren't exploring the lid, we will lost the correlation
 succ5.lidtrue<-glm(success5 ~ time.until.lid.exploring, data = explain.innovation1, family = "binomial")
 summary(succ5.lidtrue)
 
+#Maybe we can add the control bees to have more data for this comparison
+#We create first the virtual.time.until.lid.exploring variable for the full
+#(treatment + control) dataframe
+
+colnames(explain.innovation1)
+colnames(explain.innovation1.full)
+
+explain.innovation1.full$time.until.lid.exploring
+virtual.time.until.lid.exploring<-explain.innovation1.full$time.until.lid.exploring
+virtual.time.until.lid.exploring[is.na(virtual.time.until.lid.exploring)] <- 900000
+explain.innovation1.full$virtual.time.until.lid.exploring<-virtual.time.until.lid.exploring
+
+#We add even more succeeders in the first seconds of the experiment, as occurs
+#for just the treatment bees
+plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1.full)
+#That is even clearer in this plot
+plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1.full)
 
 
+
+####
+cox.lid.exploring <- coxph(Surv(virtual.success.time5, success5) ~ time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1) 
+cox.lid.exploring2 <- coxph(Surv(virtual.success.time5, success5) ~ time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1.full) 
+
+which(explain.innovation1.full$success5)
+summary(explain.innovation1.full$success5)
+sort(subset(explain.innovation1.full, subset = (explain.innovation1.full$success5 ==TRUE))$virtual.time.until.lid.exploring)
+#Only
+length(which(subset(explain.innovation1.full, subset = (explain.innovation1.full$success5 ==TRUE))$virtual.time.until.lid.exploring>100000))
+#of
+length(subset(explain.innovation1.full, subset = (explain.innovation1.full$success5 ==TRUE))$virtual.time.until.lid.exploring)
+#needed more than 100000ms (100s) to do the lid exploring to succeed the test
+
+lm.succ5.lid.full<-lm(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1.full)
+summary(lm.succ5.lid.full)
+hist(explain.innovation1.full$virtual.time.until.lid.exploring)
+#Model has great significance, with negative correlationship
+succ5.lid.full<-glm(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1.full)
+summary(succ5.lid.full)
+allEffects(succ5.lid.full)
+
+#We also lost the significance when we remove the censored data
+plot(success5 ~ time.until.lid.exploring, data = explain.innovation1.full)
+succ5.lid.full.nv<-glm(success5 ~ time.until.lid.exploring, data = explain.innovation1.full)
+summary(succ5.lid.full.nv)
+allEffects(succ5.lid.full.nv)
+
+
+#por aqui------
 
 #Innovation explained with activity----
 
