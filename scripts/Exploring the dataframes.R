@@ -1552,6 +1552,8 @@ allEffects(succ5.lid.full.nv)
 #por aqui------
 
 #Innovation explained with activity----
+colnames(activity.for.innovation)
+
 
 #We can only use activity from the fifth trial, the rest of activity values
 #are not correlated between them, activity is not 
