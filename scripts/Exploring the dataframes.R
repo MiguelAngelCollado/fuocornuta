@@ -1549,7 +1549,6 @@ summary(succ5.lid.full.nv)
 allEffects(succ5.lid.full.nv)
 
 
-#por aqui------
 
 #Innovation explained with activity----
 colnames(activity.for.innovation)
@@ -1584,6 +1583,13 @@ visreg(succ5.act, scale = "response")
 #Very beautiful residuals
 disp<-simulateResiduals(succ5.act, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#We do the survival curves
+cox.activity.prop <- coxph(Surv(virtual.success.time5, success5) ~ activity.prop5, na.action = na.exclude, data = explain.innovation1) 
+#Big effect, there are big differences in survival curves for activity prop 
+cox.activity.prop
+
+#por aquí##------------
 
 #success5~times.resting----
 plot(explain.innovation1$times.resting5,explain.innovation1$success5)
