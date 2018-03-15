@@ -1589,8 +1589,6 @@ cox.activity.prop <- coxph(Surv(virtual.success.time5, success5) ~ activity.prop
 #Big effect, there are big differences in survival curves for activity prop 
 cox.activity.prop
 
-#por aquí##------------
-
 #success5~times.resting----
 plot(explain.innovation1$times.resting5,explain.innovation1$success5)
 
@@ -1599,7 +1597,7 @@ length(which(explain.innovation1$times.resting5 == 2))
 
 lm.succ5.rest<-lm(success5 ~ times.resting5, data = explain.innovation1)
 summary(lm.succ5.rest)
-#It seems that our residuals have normality in a lm
+#It seems that our residuals have normality in a lm (but with these low n...)
 hist(lm.succ5.rest$residuals)
 shapiro.test(lm.succ5.rest$residuals)
 
@@ -1631,7 +1629,15 @@ allEffects(quasi.succ5.rest)
 visreg(quasi.succ5.rest, scale = "response")
 visreg(succ5.rest, scale = "response")
 
+#Survival curves
 
+data.frame(explain.innovation1$times.resting5,explain.innovation1$success5)
+
+succ5.rest5 <- survfit(Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na.exclude, data = explain.innovation1) 
+plot(succ5.rest5, lty = 1:3, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Times resting survival curves") 
+legend(10000, .3, c("No resting", "Resting 1 time","Resting 2 times"), lty = 1:3) 
+
+survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na.exclude, data = explain.innovation1)
 
 #Innovation explain with learning-----
 
@@ -1666,9 +1672,20 @@ succ4succ5formodels
 
 
 summary(lm.succ5.succ4)
-succ5.succ4<-glm(success5~success4, data = succ4succ5formodels, family = binomial)
+
+#This plot is promising
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
+#But this table is not
+table(explain.innovation1$success5, explain.innovation1$success4)
+
+succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
+#Why we don't have significance here?? The difference is clear graphicaly
 summary(succ5.succ4)
 allEffects(succ5.succ4)
+
+#por aquí, metele curva de superviviencia a esto----
+
+
 
 #success5 ~ correct.cue.time4----
 
