@@ -785,7 +785,7 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
 
 #MODELS-----
 
-#Innovation----
+#SUCCESS 5 (innovation)----
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
@@ -1137,7 +1137,6 @@ clog.succ.refuge<-glm(formula = success5 ~ refuge.time,
 #But it has less significancy
 summary(clog.succ.refuge)
 
-#SUCCESS 5----
 
 
 #For this block, we are analyzing one by one success5 (TRUE/FALSE, dicotomical)
@@ -1683,7 +1682,17 @@ succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomia
 summary(succ5.succ4)
 allEffects(succ5.succ4)
 
+
+
 #por aquí, metele curva de superviviencia a esto----
+surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
+plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
+legend(10000, .2, c("Individuals that didn't succeed learning test", "Individuals that succeed learning test"), lty = 1:2) 
+
+#There are no differences neither for the survival curves, so we suppose
+#no relationship between learning and innovation!
+table(explain.innovation1$success5, explain.innovation1$success4)
+survdiff (Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1)
 
 
 
@@ -1745,7 +1754,10 @@ allEffects(succ5time4n)
 
 colnames(explain.innovation1)
 
+#SUCCESS 4 (learning)----
 
+
+#MULTIVARIATE MODELS----
 
 #success5 ~ success4 + success1
 #Non related
@@ -1766,7 +1778,6 @@ succ5vtime5<-glm(success5 ~ virtual.success.time4 + virtual.success.time1,
 summary(succ5vtime5)
 
 
-#MULTIVARIATE MODELS----
 #Success5----
 colnames(explain.innovation1)
 
