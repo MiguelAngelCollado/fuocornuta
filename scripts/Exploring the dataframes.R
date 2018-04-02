@@ -803,10 +803,28 @@ artifacts
 
 
 explain.innovation1<-merge(merge(merge(merge(merge(innovation, shyness, by = "ID", all.x = TRUE), 
-                                       exploration, by= "ID", all.x = TRUE), 
-                                 learning, by= "ID", all.x = TRUE), 
-                           activity.for.innovation, by = "ID", all.x= TRUE), artifacts, by= "ID", all.x = TRUE)
+                            exploration, by= "ID", all.x = TRUE), 
+                            learning, by= "ID", all.x = TRUE), 
+                            activity.for.innovation, by = "ID", all.x= TRUE), 
+                            artifacts, by= "ID", all.x = TRUE)
 
+explain.learning1<-merge(merge(merge(merge(learning, shyness, by = "ID", all.x = TRUE), 
+                              exploration, by = "ID", all.x = TRUE), 
+                              activity.for.learning, by = "ID", all.x = TRUE),
+                              artifacts, by="ID", all.x = TRUE)
+
+View(explain.learning1)
+
+#Somehow R didn't get some sex labels, let's correct them "manually"
+explain.learning1[which(explain.learning1$ID == "OC9"),which(colnames(explain.learning1) == "sex")]<-"Male"
+explain.learning1[which(explain.learning1$ID == "OC37"),which(colnames(explain.learning1) == "sex")]<-"Female"
+explain.learning1[which(explain.learning1$ID == "OC56"),which(colnames(explain.learning1) == "sex")]<-"Male"
+explain.learning1[which(explain.learning1$ID == "OC57"),which(colnames(explain.learning1) == "sex")]<-"Female"
+explain.learning1[which(explain.learning1$ID == "OC78"),which(colnames(explain.learning1) == "sex")]<-"Male"
+
+
+explain.learning1
+explain.learning1$sex
 
 is.data.frame(explain.innovation1)
 
@@ -1683,8 +1701,6 @@ summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 
-
-#por aquí, metele curva de superviviencia a esto----
 surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
 legend(10000, .2, c("Individuals that didn't succeed learning test", "Individuals that succeed learning test"), lty = 1:2) 
@@ -1752,11 +1768,35 @@ succ5time4n<-glm(success5 ~ success.time4, explain.innovation1, family = binomia
 summary(succ5time4n)
 allEffects(succ5time4n)
 
-colnames(explain.innovation1)
 
 #SUCCESS 4 (learning)----
 
-###por aquí
+explain.learning1
+
+#Learning explained with shyness----
+
+
+
+shyness
+lm.succ4.reft<-lm(success4 ~ refuge.time, data = explain.learning1)
+summary(lm.succ4.reft)
+plot(lm.succ4.reft)
+
+explain.innovation1$success4
+
+
+#Residuals are not normal
+hist(lm.succ4.reft$residuals)
+View(explain.innovation1)
+
+plot(success4 ~ refuge.time, data=explain.learning1, ylab = "Success 4", xlab = "Time spent in the refuge")
+plot(factor(success4) ~ refuge.time, data=explain.learning1, ylab = "Success 5", xlab = "Time spent in the refuge")
+nrow(subset(explain.innovation1, subset = (success4 == "TRUE")))
+nrow(subset(explain.innovation1, subset = (success4 == "FALSE")))
+
+
+
+###por aquí-----
 
 #MULTIVARIATE MODELS----
 
