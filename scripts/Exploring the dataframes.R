@@ -1264,6 +1264,13 @@ survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, d
 #But dependent for Treatment + Control
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
 
+#Brain weight (NOPE)
+colnames(explain.innovation1)
+
+plot(success5 ~ brain.weight, data= explain.innovation1, main= "Is brain weight correlated with innovation?")
+plot(success5 ~ lobeless.weight, data= explain.innovation1, main= "What if we remove optical lobes?")
+plot(success.time5 ~ brain.weight, data= explain.innovation1, main= "Is brain weight correlated with innovation?")
+plot(virtual.success.time5 ~ brain.weight, data= explain.innovation1, main= "Is brain weight correlated with innovation?")
 
 #Innovation explained with exploration----
 exploration
@@ -1770,9 +1777,47 @@ allEffects(succ5time4n)
 
 
 #SUCCESS 4 (learning)----
-
+#This is the data we are using
 explain.learning1
 
+
+#Artifacts----
+
+#IT, sex, brain weight
+
+#IT (No correlation)
+
+plot(success4 ~ IT, data = explain.learning1)
+plot(factor(success4) ~ IT, data = explain.learning1)
+
+#Maybe the variances are different, or the means?
+library(car)
+leveneTest(IT ~ success4, data = explain.learning1)
+aov(IT ~ success4, data = explain.learning1)
+summary(aov(IT ~ success4, data = explain.learning1))
+#No, they are not, that's good for us
+
+lm.succ4.IT<-lm(success4 ~ IT, data = explain.learning1)
+summary(lm.succ4.IT)
+hist(lm.succ4.IT$residuals)
+
+succ4.IT<-glm(success4 ~ IT, data = explain.learning1)
+summary(succ4.IT)
+
+#Sex
+
+#Again, male seem to learn better
+plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
+#but there are triple n of females
+summary(explain.learning1$sex)
+table(explain.learning1$sex, explain.learning1$success4)
+chisq.test(explain.learning1$sex, explain.learning1$success4, correct=FALSE)
+chisq.test(explain.learning1$sex, explain.learning1$success4, correct=TRUE)
+
+succ4.sex<-glm(success4 ~ sex, data = explain.learning1)
+summary(succ4.sex)
+
+allEffects(succ4.sex)
 #Learning explained with shyness----
 
 
@@ -1787,6 +1832,9 @@ explain.innovation1$success4
 
 #Residuals are not normal
 hist(lm.succ4.reft$residuals)
+
+summary(explain.learning1$success4)
+
 View(explain.innovation1)
 
 plot(success4 ~ refuge.time, data=explain.learning1, ylab = "Success 4", xlab = "Time spent in the refuge")
@@ -1795,8 +1843,6 @@ nrow(subset(explain.innovation1, subset = (success4 == "TRUE")))
 nrow(subset(explain.innovation1, subset = (success4 == "FALSE")))
 
 
-
-###por aquí-----
 
 #MULTIVARIATE MODELS----
 
