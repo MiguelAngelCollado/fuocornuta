@@ -933,6 +933,12 @@ explain.innovation1c<-merge(merge(merge(merge(merge(innovationc, shynessc, by = 
                                        learningc, by= "ID", all.x = TRUE), 
                                  activity.for.innovationc, by = "ID", all.x= TRUE), artifactsc, by= "ID", all.x = TRUE)
 
+explain.learning1c<-merge(merge(merge(merge(learningc, shynessc, by = "ID", all.x = TRUE), 
+                                      explorationc, by = "ID", all.x = TRUE), 
+                                activity.for.learningc, by = "ID", all.x = TRUE),
+                          artifactsc, by="ID", all.x = TRUE)
+
+
 #Bees that have time, or NA in refuge time, should be removed because they are
 #not control bees
 explain.innovation1c<-subset(explain.innovation1c, subset = (explain.innovation1c$refuge.time == 0))
@@ -1806,7 +1812,7 @@ summary(succ4.IT)
 
 #Sex
 
-#Again, male seem to learn better
+#As seen in innovation, males seem to learn better
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
 #but there are triple n of females
 summary(explain.learning1$sex)
@@ -1814,10 +1820,43 @@ table(explain.learning1$sex, explain.learning1$success4)
 chisq.test(explain.learning1$sex, explain.learning1$success4, correct=FALSE)
 chisq.test(explain.learning1$sex, explain.learning1$success4, correct=TRUE)
 
-succ4.sex<-glm(success4 ~ sex, data = explain.learning1)
+succ4.sex<-glm(success4 ~ sex, data = explain.learning1, family = binomial)
 summary(succ4.sex)
-
+visreg(succ4.sex)
 allEffects(succ4.sex)
+
+#Let's add the control bees, the ratio is the same, a bit different results
+explain.learning1.full<-rbind(explain.learning1,explain.learning1c)
+par(mfrow=c(1,2))
+plot(factor(success4) ~ factor(sex), explain.learning1.full, main= "Success in learning grouped by sex \nTreatment + Control", ylab= "Learning test success", xlab = "Sex")
+plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
+par(mfrow=c(1,1))
+
+summary(explain.learning1.full$sex)
+table(explain.learning1.full$sex, explain.learning1.full$success4)
+
+#BUT, chi-squared tests now tell us that they are not different (?)
+chisq.test(explain.learning1.full$sex, explain.learning1.full$success4, correct=FALSE)
+chisq.test(explain.learning1.full$sex, explain.learning1.full$success4, correct=TRUE)
+
+#GLM model is significative
+succ4.sex.full<-glm(success4 ~ sex, data = explain.learning1.full, family = binomial())
+summary(succ4.sex.full)
+plot(succ4.sex.full)
+visreg(succ4.sex.full)
+visreg(succ4.sex.full, scale = "response")
+allEffects(succ4.sex.full)
+#We don't have overdispersion
+simulationOutput <- simulateResiduals(fittedModel = succ4.sex.full)
+plotSimulatedResiduals(simulationOutput = simulationOutput)
+testUniformity(simulationOutput = simulationOutput)
+
+disp<-simulateResiduals(succ4.sex.full, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+
+#por aqui----
+
 #Learning explained with shyness----
 
 
