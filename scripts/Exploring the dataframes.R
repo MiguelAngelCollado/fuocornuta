@@ -785,6 +785,87 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
 
 #MODELS-----
 
+#Does males have bigger brains?----
+trial1$brain.weight
+trial1$sex
+
+#We create a dataframe for working in this question
+corrected.brain.weight<-brain.weight.sex$brain.weight/brain.weight.sex$IT
+brain.weight.sex<-data.frame(trial1$ID, trial1$sex, trial1$brain.weight, trial1$IT, corrected.brain.weight)
+brain.weight.sex<-rename(brain.weight.sex, ID = trial1.ID, sex = trial1.sex, 
+       brain.weight = trial1.brain.weight, IT = trial1.IT)
+brain.weight.sex<-na.omit(brain.weight.sex)
+
+#Done
+brain.weight.sex
+
+#They seem differet by sex
+summary(brain.weight.sex$sex)
+
+boxplot(brain.weight ~ sex, 
+        data = brain.weight.sex, notch = TRUE, xlab="Sex", 
+        ylab="Brain Weight", main= "Braing weight \ngrouped by sex" ) 
+
+aggregate(trial1$brain.weight ~ trial1$sex, FUN=mean, brain.weight.sex)
+aggregate(trial1$brain.weight ~ trial1$sex, FUN=sd, brain.weight.sex)
+
+hist(brain.weight.sex$brain.weight)
+
+summary(aov(brain.weight ~ sex, data = brain.weight.sex))
+
+wilcox.test(brain.weight ~ sex, data=brain.weight.sex)
+
+#Let's correct by size
+hist(brain.weight.sex$IT)
+hist(brain.weight.sex$brain.weight)
+
+lm.brain.IT<-lm(brain.weight ~ IT, brain.weight.sex)
+summary(lm.brain.IT)
+hist(lm.brain.IT$residuals)
+shapiro.test(lm.brain.IT$residuals)
+
+
+visreg(lm.brain.IT)
+
+boxplot(corrected.brain.weight ~ sex, 
+        data = brain.weight.sex, xlab="Sex", 
+        ylab="Brain Weight / IT", main= "Braing weight corrected \ngrouped by sex" ) 
+
+boxplot(corrected.brain.weight ~ sex, 
+        data = brain.weight.sex, notch = TRUE, xlab="Sex", 
+        ylab="Brain Weight / IT", main= "Braing weight corrected \ngrouped by sex" ) 
+
+#Transformación logarítmica
+lm.brain.IT.log<-lm(log(brain.weight) ~ log(IT), brain.weight.sex)
+plot(brain.weight~IT, data = brain.weight.sex)
+summary(lm.brain.IT.log)
+hist(lm.brain.IT.log$residuals)
+shapiro.test(lm.brain.IT.log$residuals)
+#Comprobar a qué modelo se ajusta
+
+#Usar residuos del modelo frente al sexo, no las variables en si mismas
+
+##por aqui----
+
+
+
+brain.weight.sex.central<-data.frame(trial1$ID, trial1$sex, trial1$no.optic.lobes.weight)
+brain.weight.sex.central<-rename(brain.weight.sex.central, ID = trial1.ID, 
+                                 sex = trial1.sex, central.weight = trial1.no.optic.lobes.weight)
+
+
+
+
+
+boxplot(central.weight ~ sex, data = brain.weight.sex.central, notch = TRUE, ylab="No optic lobes weight", xlab="Sex", main= "Brain weight without optic lobes \ngrouped by sex ")
+
+
+
+#We correct by body size (IT)
+brain.weight.corrected<-data.frame(trial1$ID, trial1$sex, trial1$brain.weight)
+
+
+
 #SUCCESS 5 (innovation)----
 
 #We create a dataframe, including all the variables from other behaviors 
