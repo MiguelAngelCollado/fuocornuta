@@ -785,16 +785,18 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
 
 #MODELS-----
 
-#Does males have bigger brains?----
+#Does males have bigger brains? IT DOESN'T SEEM SO----
 trial1$brain.weight
 trial1$sex
 
 #We create a dataframe for working in this question
-corrected.brain.weight<-brain.weight.sex$brain.weight/brain.weight.sex$IT
-brain.weight.sex<-data.frame(trial1$ID, trial1$sex, trial1$brain.weight, trial1$IT, corrected.brain.weight)
+brain.weight.sex<-data.frame(trial1$ID, trial1$sex, trial1$brain.weight, trial1$IT)
 brain.weight.sex<-rename(brain.weight.sex, ID = trial1.ID, sex = trial1.sex, 
-       brain.weight = trial1.brain.weight, IT = trial1.IT)
+                         brain.weight = trial1.brain.weight, IT = trial1.IT)
 brain.weight.sex<-na.omit(brain.weight.sex)
+corrected.brain.weight<-brain.weight.sex$brain.weight/brain.weight.sex$IT
+
+brain.weight.sex$corrected.brain.weight<-corrected.brain.weight
 
 #Done
 brain.weight.sex
@@ -806,6 +808,7 @@ boxplot(brain.weight ~ sex,
         data = brain.weight.sex, notch = TRUE, xlab="Sex", 
         ylab="Brain Weight", main= "Braing weight \ngrouped by sex" ) 
 
+#We see differences in all this tests
 aggregate(trial1$brain.weight ~ trial1$sex, FUN=mean, brain.weight.sex)
 aggregate(trial1$brain.weight ~ trial1$sex, FUN=sd, brain.weight.sex)
 
@@ -815,10 +818,11 @@ summary(aov(brain.weight ~ sex, data = brain.weight.sex))
 
 wilcox.test(brain.weight ~ sex, data=brain.weight.sex)
 
-#Let's correct by size
+#But we need to correct by size
 hist(brain.weight.sex$IT)
 hist(brain.weight.sex$brain.weight)
 
+#Are IT and brain size well related?
 lm.brain.IT<-lm(brain.weight ~ IT, brain.weight.sex)
 summary(lm.brain.IT)
 hist(lm.brain.IT$residuals)
@@ -844,26 +848,9 @@ shapiro.test(lm.brain.IT.log$residuals)
 #Comprobar a qué modelo se ajusta
 
 #Usar residuos del modelo frente al sexo, no las variables en si mismas
-
-##por aqui----
-
-
-
-brain.weight.sex.central<-data.frame(trial1$ID, trial1$sex, trial1$no.optic.lobes.weight)
-brain.weight.sex.central<-rename(brain.weight.sex.central, ID = trial1.ID, 
-                                 sex = trial1.sex, central.weight = trial1.no.optic.lobes.weight)
-
-
-
-
-
-boxplot(central.weight ~ sex, data = brain.weight.sex.central, notch = TRUE, ylab="No optic lobes weight", xlab="Sex", main= "Brain weight without optic lobes \ngrouped by sex ")
-
-
-
-#We correct by body size (IT)
-brain.weight.corrected<-data.frame(trial1$ID, trial1$sex, trial1$brain.weight)
-
+lm.brain.IT$residuals
+brain.weight.sex$sex
+plot(lm.brain.IT$residuals ~ brain.weight.sex$sex)
 
 
 #SUCCESS 5 (innovation)----
@@ -1939,7 +1926,6 @@ testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 #por aqui----
 
 #Learning explained with shyness----
-
 
 
 shyness
