@@ -853,7 +853,7 @@ brain.weight.sex$sex
 plot(lm.brain.IT$residuals ~ brain.weight.sex$sex)
 
 
-#SUCCESS 5 (innovation)----
+#INNOVATION (success 5)----
 
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
@@ -1850,10 +1850,12 @@ summary(succ5time4n)
 allEffects(succ5time4n)
 
 
-#SUCCESS 4 (learning)----
+# LEARNING (success 4)----
 #This is the data we are using
 explain.learning1
 
+#How many passed and not passed the test
+summary(explain.learning1$success4)
 
 #Artifacts----
 
@@ -1926,29 +1928,68 @@ testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 #por aqui----
 
 #Learning explained with shyness----
-
+#success4 ~ refuge.time---- 
+#(No correlation)
 
 shyness
+plot(success4 ~ refuge.time, data = explain.learning1)
+subset(explain.learning1, su)
 lm.succ4.reft<-lm(success4 ~ refuge.time, data = explain.learning1)
 summary(lm.succ4.reft)
-plot(lm.succ4.reft)
-
-explain.innovation1$success4
-
-
-#Residuals are not normal
+hist(explain.learning1$refuge.time)
 hist(lm.succ4.reft$residuals)
 
-summary(explain.learning1$success4)
 
-View(explain.innovation1)
-
-plot(success4 ~ refuge.time, data=explain.learning1, ylab = "Success 4", xlab = "Time spent in the refuge")
-plot(factor(success4) ~ refuge.time, data=explain.learning1, ylab = "Success 5", xlab = "Time spent in the refuge")
-nrow(subset(explain.innovation1, subset = (success4 == "TRUE")))
-nrow(subset(explain.innovation1, subset = (success4 == "FALSE")))
+succ4reft<-glm(success4 ~ refuge.time, data = explain.learning1, family = binomial)
+summary(succ4reft)
+plot(lm.succ4.reft)
 
 
+#success4 ~ refuge.enter.times----
+colnames(explain.learning1)
+plot(success4 ~ refuge.enter.times, data = explain.learning1)
+plot(factor(success4) ~ refuge.enter.times, data = explain.learning1)
+
+hist(refuge.enter.times)
+lm.succ4.ret<-lm(success4 ~ refuge.enter.times, data = explain.learning1)
+#This significance doesn't mean anything to me
+summary(lm.succ4.ret)
+
+#It seems that re.entering has something to do with success in learning
+summary(explain.learning1$success4 ~ explain.learning1$refuge.enter.times)
+retfl<-as.factor(explain.learning1$refuge.enter.times)
+table(explain.learning1$success4, retfl)
+plot(table(retfl, explain.learning1$success4))
+
+succ4.ret<-glm(success4 ~ refuge.enter.times, data = explain.learning1, family = binomial)
+summary(succ4.ret)
+
+#There is no overdispersion
+disp<-simulateResiduals(succ4.ret, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+#Nice allefects
+allEffects(succ4.ret)
+
+
+surv.refuge.enter <- survfit(Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1) 
+plot(surv.refuge.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
+legend(10000, .7, c("0", "1","2","5"), lty = 1:4) 
+
+#They are different 
+survdiff (Surv(virtual.success.time4, success4) ~ refuge.enter.times, na.action = na.exclude, data = explain.learning1)
+
+surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.enter.times, na.action = na.exclude, data = explain.learning1) 
+plot(surv.refuge.enter, lty = 1:6, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
+legend(500000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, ncol = 3) 
+
+#Son diferentes 
+survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1)
+
+
+#re-enter vs no re-enter
+
+###por aquí----
 
 #MULTIVARIATE MODELS----
 
