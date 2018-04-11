@@ -1968,9 +1968,8 @@ summary(succ4.ret)
 disp<-simulateResiduals(succ4.ret, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
-#Nice allefects
+#Nice allEfects
 allEffects(succ4.ret)
-
 
 surv.refuge.enter <- survfit(Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.refuge.enter, lty = 1:4, xlab="Virtual success time 5", ylab="% of no success in trial 5") 
@@ -1983,11 +1982,73 @@ surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.ente
 plot(surv.refuge.enter, lty = 1:6, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
 legend(500000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, ncol = 3) 
 
-#Son diferentes 
-survdiff (Surv(virtual.success.time5, success5) ~ refuge.enter.times, na.action = na.exclude, data = explain.innovation1)
-
-
 #re-enter vs no re-enter
+#We need to create some data
+refuge.renter<-data.frame(ID, refuge.re.enter)
+refuge.renter.learn<-data.frame(explain.learning1$ID, explain.learning1$refuge.enter.times)
+
+refuge.renter.learn<-rename(refuge.renter.learn, ID = explain.learning1.ID, refuge.enter.times = explain.learning1.refuge.enter.times)
+merge(explain.learning1, refuge.renter)
+
+refuge.renter.correct<-merge(refuge.renter.learn,refuge.renter)
+refuge.renter.correct<-na.omit(refuge.renter.correct)
+
+refuge.renter.corrected<-data.frame(refuge.renter.correct$ID, refuge.renter.correct$refuge.re.enter)
+refuge.renter.corrected<-rename(refuge.renter.corrected, ID = refuge.renter.correct.ID, refuge.re.enter = refuge.renter.correct.refuge.re.enter)
+
+succ4rent<-data.frame(explain.learning1$ID, explain.learning1$success4, explain.learning1$virtual.success.time4)
+succ4rent<-rename(succ4rent, ID = explain.learning1.ID, success4 = explain.learning1.success4,
+                  virtual.success.time4 = explain.learning1.virtual.success.time4)
+#Done
+succ4ref<-merge(succ4rent, refuge.renter.corrected)
+
+#There seem some strong differences
+plot(factor(success4) ~ factor(refuge.re.enter), data = succ4ref, main= "Relationship between \nlearning success and re-entering the refuge", 
+     ylab= "Learning test success", xlab= "Refuge re-enter")
+table(succ4ref$success4, succ4ref$refuge.re.enter)
+
+#Good significance 
+succ4ref$success4<-as.factor(succ4ref$success4)
+succ4ref$refuge.re.enter<-as.factor(succ4ref$refuge.re.enter)
+
+succ4rre<-glm(success4 ~ refuge.re.enter, data = succ4ref, family = binomial)
+summary(succ4rre)
+#No hay sobredispersión
+disp<-simulateResiduals(succ4rre, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+str(succ4ref)
+allEffects(succ4rre)
+
+#Son curvas diferentes, bien
+survdiff (Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref)
+
+surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
+plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
+legend(250000, .99999999, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
+
+#Learning explained with exploration------
+#success4 ~ success 1----
+#(No correlation)
+
+#No difference
+plot(factor(success4) ~ factor(success1), data = explain.learning1)
+table(explain.learning1$success4, explain.learning1$success1)
+succ4succ1<-glm(success4 ~ success1, data = explain.learning1, family = binomial)
+summary(succ4succ1)
+
+#No difference for the curves
+survdiff (Surv(virtual.success.time4, success4) ~ success1, na.action = na.exclude, data = explain.learning1)
+surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ success1, na.action = na.exclude, data = explain.learning1) 
+plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for success in exploration test") 
+legend(100000, .99999999, c("Bees that didn't succeed in exploration test","Bees that succeed in exploration test"), lty = 1:6, horiz = FALSE, ncol = 1) 
+
+#success4 ~ virtual.success.time1----
+plot(explain.learning1$success4 ~ explain.learning1$virtual.success.time1)
+
+plot(factor(explain.learning1$success4) ~ explain.learning1$virtual.success.time1)
+
+
+
 
 ###por aquí----
 
