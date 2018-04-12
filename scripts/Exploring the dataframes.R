@@ -1924,8 +1924,71 @@ testUniformity(simulationOutput = simulationOutput)
 disp<-simulateResiduals(succ4.sex.full, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
+#Brain weight correlations
+#We create dataframes
+explain.learning1$success4
+explain.learning1$brain.weight
 
-#por aqui----
+brain.succ4.v<-data.frame(explain.learning1$ID, explain.learning1$success4, 
+           explain.learning1$brain.weight, 
+           explain.learning1$virtual.success.time4,
+           explain.learning1$IT)
+
+brain.succ4.v<-rename(brain.succ4.v, ID = explain.learning1.ID, 
+       success4 = explain.learning1.success4, 
+       brain.weight = explain.learning1.brain.weight, 
+       virtual.success.time4 = explain.learning1.virtual.success.time4,
+       IT = explain.learning1.IT)
+
+colnames(brain.succ4)
+
+brain.succ4<-data.frame(explain.learning1$ID, explain.learning1$success4, 
+           explain.learning1$brain.weight, explain.learning1$success.time4,
+           explain.learning1$virtual.success.time4,
+           explain.learning1$IT)
+
+brain.succ4<-rename(brain.succ4, ID = explain.learning1.ID, 
+       success4 = explain.learning1.success4, 
+       brain.weight = explain.learning1.brain.weight, 
+       virtual.success.time4 = explain.learning1.virtual.success.time4,
+       success.time4 = explain.learning1.success.time4,
+       IT = explain.learning1.IT)
+
+brain.succ4.v
+brain.succ4
+
+brain.succ4.v$brain.weight.corrected<-(brain.succ4.v$brain.weight/brain.succ4.v$IT)
+na.omit(brain.succ4.v)
+brain.succ4$brain.weight.corrected<-(brain.succ4$brain.weight/brain.succ4$IT)
+na.omit(brain.succ4)
+
+#Done
+brain.succ4.v$brain.weight.corrected
+
+
+plot(brain.succ4.v$success4 ~ brain.succ4.v$brain.weight, main="Learning success related to brain", ylab="Success in trial 4", xlab="Brain weight")
+plot(brain.succ4.v$success4 ~ brain.succ4.v$brain.weight.corrected, main="Learning success related to brain corrected", ylab="Success in trial 4", xlab = "Brain weight corrected by IT")
+plot(factor(brain.succ4.v$success4) ~ brain.succ4.v$brain.weight, main="Learning success related to brain", ylab="Success in trial 4", xlab="Brain weight")
+plot(factor(brain.succ4.v$success4) ~ brain.succ4.v$brain.weight.corrected, main="Learning success related to brain corrected", ylab="Success in trial 4", xlab = "Brain weight corrected by IT")
+lm.succ4brain<-lm(success4 ~ brain.weight, data= brain.succ4.v)
+lm.succ4brain.c<-lm(success4 ~ brain.weight.corrected, data= brain.succ4.v)
+summary(lm.succ4brain)
+summary(lm.succ4brain.c)
+
+
+
+
+#Saquemos unos residuos de las IT y pesos cerebrales
+lm.ITbrain<-lm(IT ~ brain.weight, data= brain.succ4.v)
+summary(lm.ITbrain)
+brainresiduals<-data.frame(names(lm.ITbrain$residuals), lm.ITbrain$residuals)
+brainresiduals<-rename(brainresiduals, IDrow = names.lm.ITbrain.residuals., brain.residuals = lm.ITbrain.residuals)
+brain.succ4$IDrow<-row.names(brain.succ4)
+brain.succ4<-merge(brain.succ4, brainresiduals, by="IDrow", all.x = TRUE)
+
+plot(brain.succ4$success4 ~ brain.succ4$brain.residuals, main= "Learning and brain weight correlation", ylab= "Learning test success", xlab="Residuals lm(brain.weight ~ IT)")
+
+#por aquí----
 
 #Learning explained with shyness----
 #success4 ~ refuge.time---- 
