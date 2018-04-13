@@ -1976,8 +1976,6 @@ summary(lm.succ4brain)
 summary(lm.succ4brain.c)
 
 
-
-
 #Saquemos unos residuos de las IT y pesos cerebrales
 lm.ITbrain<-lm(IT ~ brain.weight, data= brain.succ4.v)
 summary(lm.ITbrain)
@@ -1988,7 +1986,6 @@ brain.succ4<-merge(brain.succ4, brainresiduals, by="IDrow", all.x = TRUE)
 
 plot(brain.succ4$success4 ~ brain.succ4$brain.residuals, main= "Learning and brain weight correlation", ylab= "Learning test success", xlab="Residuals lm(brain.weight ~ IT)")
 
-#por aquí----
 
 #Learning explained with shyness----
 #success4 ~ refuge.time---- 
@@ -2090,6 +2087,11 @@ plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no 
 legend(250000, .99999999, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
 
 #Learning explained with exploration------
+nrow(explain.learning1)
+summary(explain.learning1$success4)
+
+nrow(subset(explain.learning1, subset = ((explain.learning1$success4 == TRUE)&(explain.learning1$success1 == TRUE))))/nrow(subset(explain.learning1, subset = ((explain.learning1$success4 == TRUE))))
+
 #success4 ~ success 1----
 #(No correlation)
 
@@ -2106,14 +2108,59 @@ plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no 
 legend(100000, .99999999, c("Bees that didn't succeed in exploration test","Bees that succeed in exploration test"), lty = 1:6, horiz = FALSE, ncol = 1) 
 
 #success4 ~ virtual.success.time1----
+#(No correlation)
 plot(explain.learning1$success4 ~ explain.learning1$virtual.success.time1)
-
 plot(factor(explain.learning1$success4) ~ explain.learning1$virtual.success.time1)
 
+#Nothing
+lm.succ4.virtual<-lm(success4 ~ virtual.success.time1, data = explain.learning1)
+summary(lm.succ4.virtual)
 
+cox.succ4.time1 <- coxph(Surv(virtual.success.time4, success4) ~ virtual.success.time1, na.action = na.exclude, data = explain.learning1) 
+#It seems it doesn't have effect
+cox.succ4.time1
+
+#success4 ~ success.time1----
+#(NO CORRELATION)
+
+plot(explain.learning1$success4 ~ explain.learning1$success.time1)
+lm.succ4.time1<-lm(explain.learning1$success4 ~ explain.learning1$success.time1)
+summary(lm.succ4.time1)
+
+succ4.time1<-glm(success4 ~ success.time1, family = binomial, data = explain.learning1)
+summary(succ4.time1)
+
+cox.time1 <- coxph(Surv(virtual.success.time4, success4) ~ success1, na.action = na.exclude, data = explain.learning1) 
+#It seems it doesn't have effect
+cox.time1
+
+#success4 ~ total.cue.time
+colnames(explain.learning1)
+plot(success4 ~ total.cue.time1, data = explain.learning1)
+par(mfrow=c(1,5))
 
 
 ###por aquí----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #MULTIVARIATE MODELS----
 
@@ -2135,6 +2182,22 @@ succ5vtime5<-glm(success5 ~ virtual.success.time4 + virtual.success.time1,
                 data = explain.innovation1, family = binomial)
 summary(succ5vtime5)
 
+
+
+#OTHER THINGS----
+#Histograms of time spent in the cues
+par(mfrow=c(1,5))
+hist(trial1$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 1", xlab="Time spent in cues")
+hist(trial2$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 2", xlab="Time spent in cues")
+hist(trial3$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 3", xlab="Time spent in cues")
+hist(trial4$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 4", xlab="Time spent in cues")
+hist(trial5$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 5", xlab="Time spent in cues")
+par(mfrow=c(1,1))
+
+0.5*100000 #ms
+(0.5*100000)/1000
+#You can see almost no time spent at first, then when there is food more time, and then a bit less when you remove
+#it, 
 
 #Success5----
 colnames(explain.innovation1)
