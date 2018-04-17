@@ -891,8 +891,21 @@ explain.learning1[which(explain.learning1$ID == "OC57"),which(colnames(explain.l
 explain.learning1[which(explain.learning1$ID == "OC78"),which(colnames(explain.learning1) == "sex")]<-"Male"
 
 
-explain.learning1
+colnames(explain.learning1)
 explain.learning1$sex
+trial4$time.until.correct.cue
+trial4$ID
+time.until.correct.cue4<-data.frame(trial4$ID, trial4$time.until.correct.cue)
+colnames(time.until.correct.cue4)
+time.until.correct.cue4<-rename(time.until.correct.cue4, ID = trial4.ID, trial.until.correct.cue4 = trial4.time.until.correct.cue)
+colnames(explain.learning1)
+colnames(time.until.correct.cue4)
+
+nrow(explain.learning1)
+merge(explain.learning1, time.until.correct.cue4, by= "ID")
+nrow(merge(explain.learning1, time.until.correct.cue4, by= "ID"))
+
+#METER TIME UNTIL CORRECT CUE.4^
 
 is.data.frame(explain.innovation1)
 
@@ -2134,12 +2147,28 @@ cox.time1 <- coxph(Surv(virtual.success.time4, success4) ~ success1, na.action =
 #It seems it doesn't have effect
 cox.time1
 
-#success4 ~ total.cue.time
+#success4 ~ total.cue.time----
+#(NO CORRELATION)
 colnames(explain.learning1)
 plot(success4 ~ total.cue.time1, data = explain.learning1)
-par(mfrow=c(1,5))
+par(mfrow=c(1,1))
+lm.succ4cuetime<-lm(success4 ~ total.cue.time1, data = explain.learning1)
+summary(lm.succ4cuetime)
+succ4cuetime<-glm(success4 ~ total.cue.time1, data = explain.learning1, 
+                  family = binomial)
+summary(succ4cuetime)
 
+#success4 ~ time.until.any.cue2----
+#(NO CORRELATION)
+explain.learning1$time.until.any.cue2
+plot(success4 ~ time.until.any.cue2, data = explain.learning1)
+summary(lm(success4 ~ time.until.any.cue2, data = explain.learning1))
+summary(glm(success4 ~ time.until.any.cue2, data = explain.learning1, 
+            family = binomial))
 
+#success4 ~ time.until.correct.cue
+trial4$time.until.correct.cue
+explain.learning1
 ###por aquí----
 
 
