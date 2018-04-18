@@ -897,15 +897,13 @@ trial4$time.until.correct.cue
 trial4$ID
 time.until.correct.cue4<-data.frame(trial4$ID, trial4$time.until.correct.cue)
 colnames(time.until.correct.cue4)
-time.until.correct.cue4<-rename(time.until.correct.cue4, ID = trial4.ID, trial.until.correct.cue4 = trial4.time.until.correct.cue)
+time.until.correct.cue4<-rename(time.until.correct.cue4, ID = trial4.ID, time.until.correct.cue4 = trial4.time.until.correct.cue)
 colnames(explain.learning1)
 colnames(time.until.correct.cue4)
 
 nrow(explain.learning1)
 merge(explain.learning1, time.until.correct.cue4, by= "ID")
-nrow(merge(explain.learning1, time.until.correct.cue4, by= "ID"))
-
-#METER TIME UNTIL CORRECT CUE.4^
+explain.learning1<-merge(explain.learning1, time.until.correct.cue4, by= "ID")
 
 is.data.frame(explain.innovation1)
 
@@ -2167,8 +2165,24 @@ summary(glm(success4 ~ time.until.any.cue2, data = explain.learning1,
             family = binomial))
 
 #success4 ~ time.until.correct.cue
-trial4$time.until.correct.cue
-explain.learning1
+
+explain.learning1$time.until.correct.cue4
+#It should be an acumulation of success at the beggining
+plot(success4 ~ time.until.correct.cue4, data = explain.learning1)
+lm.succ4timeuntilecue<-lm(success4 ~ time.until.correct.cue4, data = explain.learning1)
+#There is a descending accumulation as expected, but with considerable dispersion
+summary(lm.succ4timeuntilecue)
+visreg(lm.succ4timeuntilecue)
+hist(lm.succ4timeuntilecue$residuals)
+
+succ4timeuntilecue<-glm(success4 ~ time.until.correct.cue4, data = explain.learning1, family = binomial)
+summary(succ4timeuntilecue)
+
+#The test results in overdispersion, but the residuals don't seem so
+disp<-simulateResiduals(succ4timeuntilecue, plot = T)
+testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+
 ###por aquí----
 
 
