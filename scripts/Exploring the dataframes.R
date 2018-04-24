@@ -1698,7 +1698,7 @@ cox.activity.prop <- coxph(Surv(virtual.success.time5, success5) ~ activity.prop
 #Big effect, there are big differences in survival curves for activity prop 
 cox.activity.prop
 
-#success5~times.resting----
+#success5~times.resting5----
 plot(explain.innovation1$times.resting5,explain.innovation1$success5)
 
 #How many rested 2 times
@@ -2164,8 +2164,8 @@ summary(lm(success4 ~ time.until.any.cue2, data = explain.learning1))
 summary(glm(success4 ~ time.until.any.cue2, data = explain.learning1, 
             family = binomial))
 
-#success4 ~ time.until.correct.cue
-
+#success4 ~ time.until.correct.cue-----
+#(CORRELATION)
 explain.learning1$time.until.correct.cue4
 #It should be an acumulation of success at the beggining
 plot(success4 ~ time.until.correct.cue4, data = explain.learning1)
@@ -2181,7 +2181,55 @@ summary(succ4timeuntilecue)
 #The test results in overdispersion, but the residuals don't seem so
 disp<-simulateResiduals(succ4timeuntilecue, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+allEffects(succ4timeuntilecue)
 
+colnames(explain.learning1)
+cox.refuge <- coxph(Surv(virtual.success.time4, success4) ~ time.until.correct.cue4, na.action = na.exclude, data = explain.learning1) 
+#the curves are different, so we are ok
+cox.refuge
+
+
+#success4 ~ time.until.lid.exploring----
+#(NO CORRELATION)
+lm.succ4lid<-lm(success4 ~ time.until.lid.exploring, data = explain.learning1)
+summary(lm.succ4lid)
+succ4lid<-glm(success4 ~ time.until.lid.exploring, data = explain.learning1, 
+              family = binomial)
+summary(succ4lid)
+
+#Learning explained with activity----
+
+#success4 ~ activity.prop4----
+#(NO CORRELATION)
+plot(explain.learning1$success4 ~ explain.learning1$activity.prop4)
+lm.succ4act<-lm(success4 ~ activity.prop4, data = explain.learning1) 
+summary(lm.succ4act) 
+succ4act<-glm(success4 ~ activity.prop4, data = explain.learning1, 
+              family = binomial) 
+summary(succ4act) 
+
+
+
+#success4 ~ times.resting4----
+plot(explain.learning1$success4 ~ explain.learning1$times.resting4)
+summary(as.factor(explain.learning1$times.resting4))
+
+#We can't see great thing, let's separate success4 and not success4
+succ4T<-subset(explain.learning1, subset = (explain.learning1$success4 == TRUE))
+succ4F<-subset(explain.learning1, subset = (explain.learning1$success4 == FALSE))
+hist(succ4T$times.resting4, xlim=c(0,5), breaks = 5, main= "Learning test success", ylim = c(0,22), xlab = "Times resting")
+
+
+par(mfrow=c(1,2))
+succ4T$times.resting4
+hist(succ4T$times.resting4, xlim=c(0,5), breaks = 5, main= "Learning test success", ylim = c(0,22), xlab = "Times resting")
+hist(succ4F$times.resting4, xlim=c(0,5), breaks = 5, main= "Learning test fail", ylim = c(0,22), xlab = "Times resting")
+par(mfrow=c(1,1))
+
+
+
+summary(as.factor(succ4T$times.resting4))
+summary(as.factor(succ4F$times.resting4))
 
 ###por aquí----
 
