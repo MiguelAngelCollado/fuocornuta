@@ -1173,6 +1173,7 @@ legend(10000, .2, c("No", "Yes"), lty = 1:2)
 survdiff (Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data)
 
 #success5 ~ re.enter----
+#(CORRELATION)
 #We see the same pattern as above, if you re-enter the refuge, you'll more
 #probabily succed in the fifth trial
 plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Re enter", ylab="Success 5", main= "Re enter ~ Success 5")
@@ -1183,6 +1184,7 @@ summary(succ5.renter)
 allEffects(succ5.renter)
 
 #success5 ~ refuge.time----
+#(MARGINAL CORRELATION)
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
                    data = explain.innovation1)
 summary(lm.succ.refuge)
@@ -1241,6 +1243,15 @@ clog.succ.refuge<-glm(formula = success5 ~ refuge.time,
 summary(clog.succ.refuge)
 
 
+refuge.surv <- survfit(Surv(virtual.success.time5, success5) ~ refuge.time, na.action = na.exclude, data = explain.innovation1) 
+plot(refuge.surv, lty = 1:2, xlab="refuge time", ylab="% individuals that has no solved the task") 
+legend(10000, .4, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes \n(treatment bees only)") 
+
+cox.refugesucc5 <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.action = na.exclude, data = explain.innovation1) 
+#Nothing, the curves are equal
+cox.refugesucc5
+
 
 #For this block, we are analyzing one by one success5 (TRUE/FALSE, dicotomical)
 #with the proxies of the behaviors
@@ -1282,7 +1293,8 @@ summary(succ5.IT)
 
 
 
-#Success5 ~ Sex (SOME DIFFERENCES, HOWEVER NOT ENOUGH n FOR MALES)
+#Success5 ~ Sex -----
+#(SOME DIFFERENCES, HOWEVER NOT ENOUGH n FOR MALES)
 
 #We have little sample of males
 summary(explain.innovation1$sex)
@@ -1349,7 +1361,8 @@ survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, d
 #But dependent for Treatment + Control
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
 
-#Brain weight (NOPE)
+#Success5 ~ Brain weight---- 
+#(NO CORRELATION)
 colnames(explain.innovation1)
 
 plot(success5 ~ brain.weight, data= explain.innovation1, main= "Is brain weight correlated with innovation?")
@@ -1485,7 +1498,7 @@ cox.explore <- coxph(Surv(virtual.success.time5, success5) ~ virtual.success.tim
 cox.explore
 
 #success5~total.cue.time1-----
-
+#(NO CORRELATION)
 #Nobody spent a lot of time inside the cues in the experiment 1,
 #having succed in test 5 or not
 plot(success5 ~ total.cue.time1, data = explain.innovation1, 
@@ -1504,7 +1517,7 @@ hist(lm.succ5cue1$residuals)
 succ5.cue1<-glm(success5~total.cue.time1, data = explain.innovation1, family = "binomial")
 summary(succ5.cue1)
 
-#Inversamente proporcional y marginalmente significativa la relación
+#Inversamente proporcional pero no significativa la relación
 summary(succ5.cue1)
 plot(succ5.cue1)
 
@@ -1629,8 +1642,6 @@ plot(success5 ~ virtual.time.until.lid.exploring, data = explain.innovation1.ful
 plot(factor(success5) ~ virtual.time.until.lid.exploring, data = explain.innovation1.full)
 
 
-
-####
 cox.lid.exploring <- coxph(Surv(virtual.success.time5, success5) ~ time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1) 
 cox.lid.exploring2 <- coxph(Surv(virtual.success.time5, success5) ~ time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1.full) 
 
@@ -1667,7 +1678,7 @@ colnames(activity.for.innovation)
 #are not correlated between them, activity is not 
 
 #success5~activity.prop5----
-
+#(CORRELATION)
 #More activity may mean more success probability
 plot(explain.innovation1$success5~explain.innovation1$activity.prop5)
 plot(factor(explain.innovation1$success5)~explain.innovation1$activity.prop5)
@@ -1699,6 +1710,7 @@ cox.activity.prop <- coxph(Surv(virtual.success.time5, success5) ~ activity.prop
 cox.activity.prop
 
 #success5~times.resting5----
+#(CORRELATION)
 plot(explain.innovation1$times.resting5,explain.innovation1$success5)
 
 #How many rested 2 times
@@ -1751,9 +1763,17 @@ survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na
 #Innovation explain with learning-----
 
 #success5 ~ success4----
-
+#(NO CORRELATION)
 #It seems graphically that passing the fourth trial helps passing the fifth
+
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
+
+lm.succ5succ4<-lm(success5 ~ success4, data = explain.innovation1)
+summary(lm.succ5succ4)
+succ5succ4<-glm(success5 ~ success4, data = explain.innovation1, 
+                   family = binomial)
+summary(succ5succ4)
+
 
 #the models are not good with TRUE/FALSE as response, I don't know why, so we create'
 #a new data.frame for this model
@@ -1805,7 +1825,7 @@ survdiff (Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclu
 
 
 #success5 ~ correct.cue.time4----
-
+#(NO CORRELATION)
 #This isn't promising
 plot(explain.innovation1$success5~ explain.innovation1$correct.cue.time4, xlab= "Correct cue time 4", ylab= "Success 5", xlim=c(0,900000))
 lm.succ5corr4<-lm(success5 ~ correct.cue.time4, data = explain.innovation1)
@@ -1814,6 +1834,7 @@ succ5corr4<-glm(success5 ~ correct.cue.time4, data = explain.innovation1)
 summary(succ5corr4)
 
 #success5 ~ virtual.success.time4----
+#(CORRELATION)
 succ5.time4formodels<-data.frame(explain.innovation1$ID, 
            explain.innovation1$success5, 
            explain.innovation1$virtual.success.time4)
@@ -1892,7 +1913,7 @@ succ4.IT<-glm(success4 ~ IT, data = explain.learning1)
 summary(succ4.IT)
 
 #Sex
-
+#(CORRELATION)
 #As seen in innovation, males seem to learn better
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
 #but there are triple n of females
@@ -1936,6 +1957,7 @@ disp<-simulateResiduals(succ4.sex.full, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 
 #Brain weight correlations
+#(NO CORRELATION)
 #We create dataframes
 explain.learning1$success4
 explain.learning1$brain.weight
@@ -2000,8 +2022,7 @@ plot(brain.succ4$success4 ~ brain.succ4$brain.residuals, main= "Learning and bra
 
 #Learning explained with shyness----
 #success4 ~ refuge.time---- 
-#(No correlation)
-
+#(NO CORRELATION)
 shyness
 plot(success4 ~ refuge.time, data = explain.learning1)
 subset(explain.learning1, su)
@@ -2010,13 +2031,12 @@ summary(lm.succ4.reft)
 hist(explain.learning1$refuge.time)
 hist(lm.succ4.reft$residuals)
 
-
 succ4reft<-glm(success4 ~ refuge.time, data = explain.learning1, family = binomial)
 summary(succ4reft)
 plot(lm.succ4.reft)
 
-
 #success4 ~ refuge.enter.times----
+#(CORRELATION)
 colnames(explain.learning1)
 plot(success4 ~ refuge.enter.times, data = explain.learning1)
 plot(factor(success4) ~ refuge.enter.times, data = explain.learning1)
@@ -2051,7 +2071,7 @@ survdiff (Surv(virtual.success.time4, success4) ~ refuge.enter.times, na.action 
 
 surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.enter.times, na.action = na.exclude, data = explain.learning1) 
 plot(surv.refuge.enter, lty = 1:6, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
-legend(500000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, ncol = 3) 
+legend(400000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, ncol = 3) 
 
 #re-enter vs no re-enter
 #We need to create some data
@@ -2226,37 +2246,24 @@ hist(succ4T$times.resting4, xlim=c(0,5), breaks = 5, main= "Learning test succes
 hist(succ4F$times.resting4, xlim=c(0,5), breaks = 5, main= "Learning test fail", ylim = c(0,22), xlab = "Times resting")
 par(mfrow=c(1,1))
 
-
-
 summary(as.factor(succ4T$times.resting4))
 summary(as.factor(succ4F$times.resting4))
 
-###por aquí----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+lm.succ4rest<-lm(success4 ~ times.resting4, data = explain.learning1)
+summary(lm.succ4rest)
+succ4rest<-glm(success4 ~ times.resting4, data = explain.learning1, 
+               family = binomial)
+summary(succ4rest)
 
 
 
 #MULTIVARIATE MODELS----
-
+#Innovation----
 #success5 ~ success4 + success1
-#Non related
+#(NO CORRELATION)
+summary(succ5.succ1)
+summary(succ5.succ4)
+
 summary(succ5.succ4)
 summary(succ5.succ1)
 succ541<-glm(success5 ~ success1 + success4, data = explain.innovation1, family = binomial)
@@ -2275,22 +2282,7 @@ summary(succ5vtime5)
 
 
 
-#OTHER THINGS----
-#Histograms of time spent in the cues
-par(mfrow=c(1,5))
-hist(trial1$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 1", xlab="Time spent in cues")
-hist(trial2$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 2", xlab="Time spent in cues")
-hist(trial3$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 3", xlab="Time spent in cues")
-hist(trial4$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 4", xlab="Time spent in cues")
-hist(trial5$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 5", xlab="Time spent in cues")
-par(mfrow=c(1,1))
 
-0.5*100000 #ms
-(0.5*100000)/1000
-#You can see almost no time spent at first, then when there is food more time, and then a bit less when you remove
-#it, 
-
-#Success5----
 colnames(explain.innovation1)
 
 lm.model.success5<-lm(success5 ~ refuge.time + 
@@ -2372,21 +2364,28 @@ model.success5.5<-glm(success5 ~ refuge.time +
 summary(model.success5.5)
 
 
+#OTHER THINGS----
+#Histograms of time spent in the cues-----
+par(mfrow=c(1,5))
+hist(trial1$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 1", xlab="Time spent in cues")
+hist(trial2$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 2", xlab="Time spent in cues")
+hist(trial3$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 3", xlab="Time spent in cues")
+hist(trial4$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 4", xlab="Time spent in cues")
+hist(trial5$total.cue.time, xlim=c(0,900000), ylim = c(0,110), main= "Trial 5", xlab="Time spent in cues")
+par(mfrow=c(1,1))
 
+0.5*100000 #ms
+(0.5*100000)/1000
 
-
-#success4 ~ sex
-trial4t
-
-#success1 ~ sex
-
-
-
-#Compara los sexos para el success1 y el success4, que tendrás más muestreo de machos
-
-
-
-
+#Success 1 ~ sex----
+trial1$success
+trial1$sex
+plot(factor(trial1$success) ~ factor(trial1$sex))
+lm.succ1.sex<-lm(success ~ sex, data = trial1)
+summary(succ1.sex)
+succ1.sex<-glm(success ~ sex, data = trial1, family = binomial)
+summary(succ1.sex)
+allEffects(succ1.sex)
 
 
 
