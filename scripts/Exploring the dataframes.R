@@ -2258,16 +2258,64 @@ summary(succ4rest)
 
 
 #MULTIVARIATE MODELS----
-#Innovation----
-#success5 ~ success4 + success1
+#INNOVATION----
+#First, Is innovation explain by success in learning and exploration?
+#The answer is NO
+
+#success5 ~ success4 + success1----
 #(NO CORRELATION)
 summary(succ5.succ1)
 summary(succ5.succ4)
 
-summary(succ5.succ4)
-summary(succ5.succ1)
 succ541<-glm(success5 ~ success1 + success4, data = explain.innovation1, family = binomial)
+
 summary(succ541)
+
+
+
+#Innovation with shyness-----
+#Our shyness descriptors
+summary(succ5.renter)
+summary(succ.refuge)
+#Maybe successtime1 has something to do
+summary(succ5.succtime1)
+
+#Re.enter was created later, let's check that is not correlated
+renter.refugetime<-glm(factor(re.enter) ~ explain.innovation1$refuge.time, family = binomial)
+summary(renter.refugetime)
+
+renter.succtime<-glm(factor(re.enter) ~ explain.innovation1$refuge.time, 
+                     family = binomial) 
+summary(renter.succtime)
+
+#Success5 ~ re.enter + refuge.time
+succ5shy<-glm(explain.innovation1$success5 ~ factor(re.enter) + explain.innovation1$refuge.time,
+    family = binomial)
+
+#When you add both shyness descriptors together, the model fails! 
+summary(succ5shy)
+
+summary(succ5.renter)
+summary(succ.refuge)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #success5 ~ success4.time + success1.time
 
@@ -2363,6 +2411,8 @@ model.success5.5<-glm(success5 ~ refuge.time +
 
 summary(model.success5.5)
 
+
+#Learning----
 
 #OTHER THINGS----
 #Histograms of time spent in the cues-----
