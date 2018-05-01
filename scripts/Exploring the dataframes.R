@@ -1479,7 +1479,8 @@ allEffects(succ5.virtual1)
 #(So now we are only using successful bees for the trial 1 )
 
 #success5~success.time1----
-#(Correlation)
+#(Correlation) but n=17 (all succeeders)
+na.omit(explain.innovation1$success.time1)
 plot(success5 ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1", xlim=c(0,900000))
 plot(factor(success5) ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1")
 
@@ -2262,7 +2263,7 @@ summary(succ4rest)
 #First, Is innovation explain by success in learning and exploration?
 #The answer is NO
 
-#success5 ~ success4 + success1----
+#success5 ~ success4 + success1
 #(NO CORRELATION)
 summary(succ5.succ1)
 summary(succ5.succ4)
@@ -2292,30 +2293,92 @@ summary(renter.succtime)
 succ5shy<-glm(explain.innovation1$success5 ~ factor(re.enter) + explain.innovation1$refuge.time,
     family = binomial)
 
-#When you add both shyness descriptors together, the model fails! 
+#When you add both shyness descriptors together, the model fails, and AIC doesn't
+#improve! 
 summary(succ5shy)
-
+#But not individually 
 summary(succ5.renter)
 summary(succ.refuge)
 
+#Innovation with exploration-----
+#These variables are correlated with innovation
+explain.innovation1$success.time1
+explain.innovation1$virtual.time.until.lid.exploring
+summary(succ5.succtime1)
+summary(succ5.lid)
+
+succ5.succtime1.lid<-glm(success5 ~ success.time1 + virtual.time.until.lid.exploring, 
+    data = explain.innovation1, family = binomial)
+
+#This is ok, is better the model with two variables than
+#More time until success (but neccesarily succeeding) the exploration trial summed
+#with less time until lid exploring give us a model about success in innovation
+
+summary(succ5.succtime1.lid)
+allEffects(succ5.succtime1.lid)
+
+summary(succ5.succtime1)
+summary(succ5.lid)
+
+allEffects(succ5.succtime1)
+allEffects(succ5.lid)
+
+#Innovation with Activity-----
+explain.innovation1$activity.prop5
+explain.innovation1$times.resting5
+summary(succ5.act)
+summary(succ5.rest)
+
+#Multivariate model does not improve success 5 explanation
+succ5.act.rest<-glm(success5 ~ activity.prop5 + times.resting5, data = explain.innovation1,
+    family = binomial)
+summary(succ5.act.rest)
+summary(succ5.act)
+summary(succ5.rest)
 
 
+#Innovation with Learning-----
+
+virtual.success.time4  
+summary(succ5time4)
 
 
+#LEARNING-----
+#We need a new data.frame
+learning.for<-data.frame(explain.learning1$ID,
+                         explain.learning1$success4,
+                         explain.learning1$sex,
+                         explain.learning1$refuge.enter.times,
+                         explain.learning1$time.until.correct.cue4)
+colnames(learning.for)
+learning.for<-rename(learning.for, ID = explain.learning1.ID, sex = explain.learning1.sex,
+       refuge.enter.times = explain.learning1.refuge.enter.times,
+       time.until.correct.cue4 = explain.learning1.time.until.correct.cue4,
+       success4 = explain.learning1.success4)
+learning.for.multi<-merge(learning.for, refuge.renter, by="ID")
 
+check<-glm(refuge.re.enter ~ refuge.enter.times, data = learning.for.multi)
+summary(check)
+allEffects(check)
 
+#Let's use only refuge.re.enter because is more simple
+learning.full.model<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter + sex, 
+    data = learning.for.multi, family = binomial)
+summary(learning.full.model)
 
+learning.models1<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter, 
+                      data = learning.for.multi, family = binomial)
+summary(learning.models1)
+summary(succ4timeuntilecue)
+summary(succ4timeuntilecue)
 
+library(rcompanion)
+nagelkerke(learning.full.model)
+nagelkerke(learning.models1)
+#por aquí-----
 
-
-
-
-
-
-
-
-
-
+learning.models1$null.deviance + learning.models1$deviance
+#Other multivariate combinations----
 
 #success5 ~ success4.time + success1.time
 
@@ -2343,6 +2406,7 @@ lm.model.success5<-lm(success5 ~ refuge.time +
 
 summary(lm.model.success5)
 hist(lm.model.success5$residuals)
+
 
 #We do a model with every variable that resulted significative for individual
 #models
