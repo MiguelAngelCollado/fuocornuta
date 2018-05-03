@@ -2357,9 +2357,10 @@ learning.for<-rename(learning.for, ID = explain.learning1.ID, sex = explain.lear
        success4 = explain.learning1.success4)
 learning.for.multi<-merge(learning.for, refuge.renter, by="ID")
 
+#Refuge enter times must be correlated with refuge.re.enter, because it's
+#extracted from the same variable
 check<-glm(refuge.re.enter ~ refuge.enter.times, data = learning.for.multi)
 summary(check)
-allEffects(check)
 
 #Let's use only refuge.re.enter because is more simple
 learning.full.model<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter + sex, 
@@ -2368,9 +2369,15 @@ summary(learning.full.model)
 
 learning.models1<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter, 
                       data = learning.for.multi, family = binomial)
+#We compare the models
+summary(learning.full.model)
 summary(learning.models1)
 summary(succ4timeuntilecue)
-summary(succ4timeuntilecue)
+summary(succ4rre)
+
+#Best model is
+summary(learning.models1)
+
 
 library(rcompanion)
 nagelkerke(learning.full.model)
