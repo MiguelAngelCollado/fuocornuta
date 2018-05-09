@@ -861,7 +861,6 @@ plot(lm.brain.IT$residuals ~ brain.weight.sex$sex)
 #We create a dataframe, including all the variables from other behaviors 
 #that may explain innovation (defined as success.time)
 
-
 innovation
 shyness
 exploration
