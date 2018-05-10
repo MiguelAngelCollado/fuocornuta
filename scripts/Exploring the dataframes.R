@@ -913,7 +913,13 @@ is.data.frame(explain.innovation1)
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
 #but is everything under control#
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
+View(explain.innovation1)
+explain.innovation1$success4
+explain.learning1$success4
 
+
+explain.innovation1[which(explain.innovation1$ID == "OC20"),
+which(colnames(explain.innovation1) == "success4")]<- FALSE
 #Let's build the same dataframe but for control individuals
 
 virtual.success.time5c<-trial5c$success.time
@@ -1766,55 +1772,16 @@ survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na
 #Innovation explain with learning-----
 
 #success5 ~ success4----
-#(NO CORRELATION)
+#(GRAPHICAL RELATIONSHIP)
 #It seems graphically that passing the fourth trial helps passing the fifth
 
-plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success")
 
 lm.succ5succ4<-lm(success5 ~ success4, data = explain.innovation1)
 summary(lm.succ5succ4)
-succ5succ4<-glm(success5 ~ success4, data = explain.innovation1, 
+succ5succ4<-glm(factor(success5) ~ factor(success4), data = explain.innovation1, 
                    family = binomial)
 summary(succ5succ4)
-
-
-#the models are not good with TRUE/FALSE as response, I don't know why, so we create'
-#a new data.frame for this model
-
-#OC20.4 fails is missing, I can't run JWatcher on MAC to solve it
-
-explain.innovation1$success4
-
-succ4succ5formodels<-na.omit(data.frame(explain.innovation1$ID,factor(explain.innovation1$success4), factor(explain.innovation1$success5)))
-succ4succ5formodels<-rename(succ4succ5formodels, ID = explain.innovation1.ID, 
-                            success4 = factor.explain.innovation1.success4., 
-                            success5 = factor.explain.innovation1.success5.)
-str(succ4succ5formodels)
-success4and5<-(succ4succ5formodels$success4 == TRUE)&(succ4succ5formodels$success5 == TRUE)
-fail4and5<-(succ4succ5formodels$success4 == FALSE)&(succ4succ5formodels$success5 == FALSE)
-
-#How many passed trial 4 and 5?
-length(which(success4and5 == TRUE))/length(success4and5)
-#How many failed trial 4 and 5?
-length(which(fail4and5 == TRUE))/length(success4and5)
-
-
-succ4succ5formodels
-
-
-
-summary(lm.succ5.succ4)
-
-#This plot is promising
-plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
-#But this table is not
-table(explain.innovation1$success5, explain.innovation1$success4)
-
-succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
-#Why we don't have significance here?? The difference is clear graphicaly
-summary(succ5.succ4)
-allEffects(succ5.succ4)
-
 
 surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
@@ -1823,7 +1790,18 @@ legend(10000, .2, c("Individuals that didn't succeed learning test", "Individual
 #There are no differences neither for the survival curves, so we suppose
 #no relationship between learning and innovation!
 table(explain.innovation1$success5, explain.innovation1$success4)
+
+chisq.test(explain.innovation1$success5, explain.innovation1$success4, correct=FALSE)
+chisq.test(explain.innovation1$success5, explain.innovation1$success4, correct=FALSE)
+chisq.test(c(2,8))
+chisq.test(c(9,9))
+
 survdiff (Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1)
+
+
+
+
+
 
 
 
