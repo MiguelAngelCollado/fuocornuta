@@ -210,65 +210,65 @@ cor(na.omit(explora.merge.1[,3:length(explora.merge.1)]))
 
 #we do a function to do ggheatmaps, for easily visualization
 heatmap<-function(data, columns){
-cormat<-cor(na.omit(data[columns]))
-library(reshape2)
-melted_cormat <- melt(cormat)
-head(melted_cormat)
-library(ggplot2)
-ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
-  geom_tile()
-
-# Get lower triangle of the correlation matrix
-get_lower_tri<-function(cormat){
-  cormat[upper.tri(cormat)] <- NA
-  return(cormat)
-}
-# Get upper triangle of the correlation matrix
-get_upper_tri <- function(cormat){
-  cormat[lower.tri(cormat)]<- NA
-  return(cormat)
-}
-upper_tri <- get_upper_tri(cormat)
-upper_tri
-
-library(reshape2)
-melted_cormat <- melt(upper_tri, na.rm = TRUE)
-# Heatmap
-library(ggplot2)
-ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
-  geom_tile(color = "white")+
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
-                       midpoint = 0, limit = c(-1,1), space = "Lab", 
-                       name="Pearson\nCorrelation") +
-  theme_minimal()+ 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
-                                   size = 12, hjust = 1))+
-  coord_fixed()
-
-reorder_cormat <- function(cormat){
-  # Use correlation between variables as distance
-  dd <- as.dist((1-cormat)/2)
-  hc <- hclust(dd)
-  cormat <-cormat[hc$order, hc$order]
-}
-
-# Reorder the correlation matrix
-cormat <- reorder_cormat(cormat)
-upper_tri <- get_upper_tri(cormat)
-# Melt the correlation matrix
-melted_cormat <- melt(upper_tri, na.rm = TRUE)
-# Create a ggheatmap
-ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
-  geom_tile(color = "white")+
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
-                       midpoint = 0, limit = c(-1,1), space = "Lab", 
-                       name="Pearson\nCorrelation") +
-  theme_minimal()+ # minimal theme
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
-                                   size = 12, hjust = 1))+
-  coord_fixed()
-# Print the heatmap
-print(ggheatmap)}
+  cormat<-cor(na.omit(data[columns]))
+  library(reshape2)
+  melted_cormat <- melt(cormat)
+  head(melted_cormat)
+  library(ggplot2)
+  ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+    geom_tile()
+  
+  # Get lower triangle of the correlation matrix
+  get_lower_tri<-function(cormat){
+    cormat[upper.tri(cormat)] <- NA
+    return(cormat)
+  }
+  # Get upper triangle of the correlation matrix
+  get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+  }
+  upper_tri <- get_upper_tri(cormat)
+  upper_tri
+  
+  library(reshape2)
+  melted_cormat <- melt(upper_tri, na.rm = TRUE)
+  # Heatmap
+  library(ggplot2)
+  ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
+    geom_tile(color = "white")+
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                         midpoint = 0, limit = c(-1,1), space = "Lab", 
+                         name="Pearson\nCorrelation") +
+    theme_minimal()+ 
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                     size = 12, hjust = 1))+
+    coord_fixed()
+  
+  reorder_cormat <- function(cormat){
+    # Use correlation between variables as distance
+    dd <- as.dist((1-cormat)/2)
+    hc <- hclust(dd)
+    cormat <-cormat[hc$order, hc$order]
+  }
+  
+  # Reorder the correlation matrix
+  cormat <- reorder_cormat(cormat)
+  upper_tri <- get_upper_tri(cormat)
+  # Melt the correlation matrix
+  melted_cormat <- melt(upper_tri, na.rm = TRUE)
+  # Create a ggheatmap
+  ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
+    geom_tile(color = "white")+
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                         midpoint = 0, limit = c(-1,1), space = "Lab", 
+                         name="Pearson\nCorrelation") +
+    theme_minimal()+ # minimal theme
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                     size = 12, hjust = 1))+
+    coord_fixed()
+  # Print the heatmap
+  print(ggheatmap)}
 #It makes sense to select touch.4.cues, total.cue.time, 
 #and time.until.correct.cue from the second trial
 merge1.1
@@ -786,6 +786,8 @@ artifacts<-rename(artifacts, ID = trial1t.ID,
                   lobeless.weight =trial1t.no.optic.lobes.weight
   )
 
+
+
 #MODELS-----
 
 #Does males have bigger brains? IT DOESN'T SEEM SO----
@@ -826,6 +828,7 @@ hist(brain.weight.sex$IT)
 hist(brain.weight.sex$brain.weight)
 
 #Are IT and brain size well related?
+plot(brain.weight ~ IT, brain.weight.sex)
 lm.brain.IT<-lm(brain.weight ~ IT, brain.weight.sex)
 summary(lm.brain.IT)
 hist(lm.brain.IT$residuals)
@@ -912,7 +915,8 @@ is.data.frame(explain.innovation1)
 ##it seems that some control bees have fallen into our data, let's remove then
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
 #but is everything under control#
-explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
+explain.innovation1<-subset(explain.innovation1, 
+                            subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 
 #Let's build the same dataframe but for control individuals
 
@@ -1102,7 +1106,8 @@ v.succ.refuge<-lm(data = explain.innovation1, formula = virtual.success.time5 ~ 
 #The refuge time is not significative
 summary(v.succ.refuge)
 
-ggplot(innovation.refuge, aes(x = innovation.refuge$explain.innovation1.refuge.time, y = innovation.refuge$explain.innovation1.virtual.success.time5)) +
+ggplot(innovation.refuge, aes(x = innovation.refuge$explain.innovation1.refuge.time, 
+                              y = innovation.refuge$explain.innovation1.virtual.success.time5)) +
   geom_point()+
   geom_smooth(method = "lm")
 
@@ -1811,6 +1816,7 @@ plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4)
 table(explain.innovation1$success5, explain.innovation1$success4)
 
 succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
+chisq.test(x = c(2,7))
 #Why we don't have significance here?? The difference is clear graphicaly
 summary(succ5.succ4)
 allEffects(succ5.succ4)
@@ -1931,7 +1937,10 @@ visreg(succ4.sex)
 allEffects(succ4.sex)
 
 #Let's add the control bees, the ratio is the same, a bit different results
-explain.learning1.full<-rbind(explain.learning1,explain.learning1c)
+colnames(explain.learning1)
+colnames(explain.learning1c)
+explain.learning1.full<-rbind(explain.learning1[-21],explain.learning1c)
+
 par(mfrow=c(1,2))
 plot(factor(success4) ~ factor(sex), explain.learning1.full, main= "Success in learning grouped by sex \nTreatment + Control", ylab= "Learning test success", xlab = "Sex")
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
