@@ -915,9 +915,19 @@ is.data.frame(explain.innovation1)
 ##it seems that some control bees have fallen into our data, let's remove then
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
 #but is everything under control#
+<<<<<<< HEAD
 explain.innovation1<-subset(explain.innovation1, 
                             subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
+=======
+explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
+View(explain.innovation1)
+explain.innovation1$success4
+explain.learning1$success4
+>>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 
+
+explain.innovation1[which(explain.innovation1$ID == "OC20"),
+which(colnames(explain.innovation1) == "success4")]<- FALSE
 #Let's build the same dataframe but for control individuals
 
 virtual.success.time5c<-trial5c$success.time
@@ -1771,17 +1781,18 @@ survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na
 #Innovation explain with learning-----
 
 #success5 ~ success4----
-#(NO CORRELATION)
+#(GRAPHICAL RELATIONSHIP)
 #It seems graphically that passing the fourth trial helps passing the fifth
 
-plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Success 4", ylab = "Success 5")
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success")
 
 lm.succ5succ4<-lm(success5 ~ success4, data = explain.innovation1)
 summary(lm.succ5succ4)
-succ5succ4<-glm(success5 ~ success4, data = explain.innovation1, 
+succ5succ4<-glm(factor(success5) ~ factor(success4), data = explain.innovation1, 
                    family = binomial)
 summary(succ5succ4)
 
+<<<<<<< HEAD
 
 #the models are not good with TRUE/FALSE as response, I don't know why, so we create'
 #a new data.frame for this model
@@ -1822,6 +1833,8 @@ summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 
+=======
+>>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
 legend(10000, .2, c("Individuals that didn't succeed learning test", "Individuals that succeed learning test"), lty = 1:2) 
@@ -1829,7 +1842,18 @@ legend(10000, .2, c("Individuals that didn't succeed learning test", "Individual
 #There are no differences neither for the survival curves, so we suppose
 #no relationship between learning and innovation!
 table(explain.innovation1$success5, explain.innovation1$success4)
+
+chisq.test(explain.innovation1$success5, explain.innovation1$success4, correct=FALSE)
+chisq.test(explain.innovation1$success5, explain.innovation1$success4, correct=FALSE)
+chisq.test(c(2,8))
+chisq.test(c(9,9))
+
 survdiff (Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1)
+
+
+
+
+
 
 
 
