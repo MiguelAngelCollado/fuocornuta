@@ -1792,7 +1792,6 @@ succ5succ4<-glm(factor(success5) ~ factor(success4), data = explain.innovation1,
                    family = binomial)
 summary(succ5succ4)
 
-<<<<<<< HEAD
 
 #the models are not good with TRUE/FALSE as response, I don't know why, so we create'
 #a new data.frame for this model
