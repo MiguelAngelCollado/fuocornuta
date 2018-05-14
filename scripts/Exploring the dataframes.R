@@ -915,15 +915,10 @@ is.data.frame(explain.innovation1)
 ##it seems that some control bees have fallen into our data, let's remove then
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
 #but is everything under control#
-<<<<<<< HEAD
-explain.innovation1<-subset(explain.innovation1, 
-                            subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
-=======
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 View(explain.innovation1)
 explain.innovation1$success4
 explain.learning1$success4
->>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 
 
 explain.innovation1[which(explain.innovation1$ID == "OC20"),
@@ -1832,8 +1827,6 @@ summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 
-=======
->>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
 legend(10000, .2, c("Individuals that didn't succeed learning test", "Individuals that succeed learning test"), lty = 1:2) 
@@ -2596,3 +2589,4 @@ shyness
 exploration
 learning
 activity.for.innovation
+
