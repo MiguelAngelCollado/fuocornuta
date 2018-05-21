@@ -1356,6 +1356,16 @@ succ5.all<-rename(succ5.all,
                   success5 = trial5.success,
                   experiment.type = trial5.experiment.type)
 
+#We have a contingency table, let's use chi-squared
+table(explain.innovation1$sex, explain.innovation1$success5)
+chisq.test(explain.innovation1$sex, explain.innovation1$success5, correct=FALSE)
+chisq.test(c(16,7))
+chisq.test(c(2,4))
+
+table(explain.innovation1.full$sex, explain.innovation1.full$success5)
+chisq.test(explain.innovation1.full$sex, explain.innovation1.full$success5, correct=FALSE)
+
+
 #Adding the controls, it maintains some differences
 plot(factor(success5) ~ factor(sex), data = succ5.all, xlab="Sex", ylab="Success 5")
 
@@ -2543,56 +2553,17 @@ summary(succ1.sex)
 allEffects(succ1.sex)
 
 
+#Figures
+#Cómo pongo las n debajo de las barras?
+par(mfrow=c(2,2))
+plot(factor(success5) ~ factor (sex), data = explain.innovation1, main= "Sucess in innovation grouped by sex (a)", ylab="Innovation test success", xlab="")
+plot(factor(success5) ~ factor(sex), data = succ5.all, ylab="", main= "Success in innovation grouped by sex \nTreatment + Control (b)", xlab="")
+plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex (c)", ylab= "Learning test success", xlab="")
+plot(factor(success4) ~ factor(sex), explain.learning1.full, main= "Success in learning grouped by sex \nTreatment + Control (d)", ylab= "", xlab="")
+par(mfrow=c(1,1))
 
 
 
 
 
 
-
-
-#We are going to try to explain innovation defined as success.time5
-#using linear models
-#FAIL----
-#WE'VE GOT LOT OF NAs, maybe that's why the model is failing
-dim(explain.innovation1)
-lminnovation1<-lm(formula = success.time5 ~ refuge.time + refuge.enter.times + 
-                    touch.4.cues + total.cue.time + time.until.lid.exploring + 
-                    activity.time5 + times.resting5, data = explain.innovation1, na.action = "na.omit")
-summary(lminnovation1)
-explain.innovation1$success.time <- ifelse(is.na(explain.innovation1$success.time5), 0, 1)
-m <- glm(formula = success.time ~ refuge.time + refuge.enter.times + 
-      touch.4.cues + total.cue.time + time.until.lid.exploring + 
-      activity.time5 + times.resting5, family = "binomial", 
-      data = explain.innovation1)
-summary(m)
-
-
-
-
-
-
-
-
-#usar survival models.
-
-
-
-
-
-#CANT GET RESIDUALS
-lminnovation1$residuals
-rstandard(lminnovation1)
-
-#let's explore the model'
-
-
-
-
-#We create a dataframe, including all the variables from other behaviors 
-#that may explain innovation (defined as success, just being successful in the last trial)
-innovation
-shyness
-exploration
-learning
-activity.for.innovation
