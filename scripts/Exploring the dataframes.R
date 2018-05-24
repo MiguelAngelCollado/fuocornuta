@@ -1280,17 +1280,25 @@ cox.refugesucc5
 
 #success.time5~IT (NO CORRELATION)
 #Just treatment data
-plot(explain.innovation1$success.time5, explain.innovation1$IT, xlab= "Success time 5", ylab = "IT")
-plot(explain.innovation1$virtual.success.time5, explain.innovation1$IT, xlab= "Virtual success time 5", ylab = "IT")
+plot(explain.innovation1$IT, explain.innovation1$success.time5, xlab= "Success time 5", ylab = "IT")
+plot(explain.innovation1$IT, explain.innovation1$virtual.success.time5, xlab= "Virtual success time 5", ylab = "IT")
+
 #Using treatment and control
-plot(explain.innovation1.full$success.time5, explain.innovation1.full$IT)
-plot(explain.innovation1.full$virtual.success.time5, explain.innovation1.full$IT)
+plot(explain.innovation1.full$IT, explain.innovation1.full$success.time5)
+plot(explain.innovation1.full$IT, explain.innovation1.full$virtual.success.time5)
 
 #No correlation for just treatment, or even adding control bees
 lm.succ5IT<-lm(success.time5 ~ IT, data = explain.innovation1)
 summary(lm.succ5IT)
 lm.succ5ITfull<-lm(success.time5 ~ IT, data = explain.innovation1.full)
 summary(lm.succ5ITfull)
+
+lm.succvirtual5IT<-lm(virtual.success.time5 ~ IT, data = explain.innovation1)
+summary(lm.succvirtual5IT)
+
+#Correlation here!
+lm.succvirtual5ITfull<-lm(virtual.success.time5 ~ IT, data = explain.innovation1.full)
+summary(lm.succvirtual5ITfull)
 
 
 #For success5 ~ IT (NO CORRELATION)
@@ -1308,6 +1316,11 @@ hist(lm.succ5.IT$residuals)
 succ5.IT<-glm(success5 ~ IT, data = explain.innovation1, family = "binomial")
 summary(succ5.IT)
 
+#Sex ~ IT (OBVIOUS DIFFERENCES)
+boxplot(trial1$IT ~ trial1$sex, notch = TRUE)
+aggregate(IT ~ sex, data = trial1, FUN = mean)
+sexit<-aov(IT ~ sex, data=trial1)
+summary(sexit)
 
 
 #Success5 ~ Sex -----
@@ -1318,6 +1331,9 @@ summary(explain.innovation1$sex)
 
 #They seem different, but their n is quite different
 plot(factor(success5) ~ factor (sex), data = explain.innovation1)
+t(table(explain.innovation1$sex, explain.innovation1$success5))
+by.sex1<-table(explain.innovation1$sex, explain.innovation1$success5)
+
 
 #Let's randomly sample females
 #Males are always more successful
@@ -1367,9 +1383,11 @@ chisq.test(explain.innovation1.full$sex, explain.innovation1.full$success5, corr
 
 
 #Adding the controls, it maintains some differences
-plot(factor(success5) ~ factor(sex), data = succ5.all, xlab="Sex", ylab="Success 5")
+plot(factor(success5) ~ factor(sex), data = explain.innovation1.full, xlab="Sex", ylab="Success 5")
+table(explain.innovation1.full$success5, explain.innovation1.full$sex)
 
 glm.succ5.all<-glm(success5 ~ sex, data = succ5.all, family = "binomial")
+glm.succ5.all<-glm(success5 ~ sex, data = explain.innovation1.full, family = "binomial")
 
 
 summary(glm.succ5.all)
@@ -1378,7 +1396,7 @@ allEffects(glm.succ5.all)
 coefficients(glm.succ5.all)
 
 sex.surv.full <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
-plot(sex.surv.full, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
+plot(sex.surv.full, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task") 
 legend(10000, .3, c("Female", "Male"), lty = 1:2) 
 title("Kaplan-Meier Curves comparing sexes\n(treatment and control bees)") 
 
@@ -1939,6 +1957,8 @@ summary(explain.learning1$success4)
 
 plot(success4 ~ IT, data = explain.learning1)
 plot(factor(success4) ~ IT, data = explain.learning1)
+plot(success.time4 ~ IT, data = explain.learning1)
+plot(virtual.success.time4 ~ IT, data = explain.learning1)
 
 #Maybe the variances are different, or the means?
 library(car)
@@ -1946,6 +1966,12 @@ leveneTest(IT ~ success4, data = explain.learning1)
 aov(IT ~ success4, data = explain.learning1)
 summary(aov(IT ~ success4, data = explain.learning1))
 #No, they are not, that's good for us
+lm.succtime4<-lm(success.time4 ~ IT, data = explain.learning1)
+summary(lm.succtime4)
+lm.succtime4.virtual<-lm(virtual.success.time4 ~ IT, data = explain.learning1)
+summary(lm.succtime4.virtual)
+
+
 
 lm.succ4.IT<-lm(success4 ~ IT, data = explain.learning1)
 summary(lm.succ4.IT)
@@ -1954,20 +1980,29 @@ hist(lm.succ4.IT$residuals)
 succ4.IT<-glm(success4 ~ IT, data = explain.learning1)
 summary(succ4.IT)
 
+
+
 #Sex
 #(CORRELATION)
 #As seen in innovation, males seem to learn better
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
 #but there are triple n of females
 summary(explain.learning1$sex)
-table(explain.learning1$sex, explain.learning1$success4)
+table(explain.learning1$success4, explain.learning1$sex)
 chisq.test(explain.learning1$sex, explain.learning1$success4, correct=FALSE)
-chisq.test(explain.learning1$sex, explain.learning1$success4, correct=TRUE)
 
 succ4.sex<-glm(success4 ~ sex, data = explain.learning1, family = binomial)
 summary(succ4.sex)
 visreg(succ4.sex)
 allEffects(succ4.sex)
+
+#Let's add virtual success time with survival curves
+sex.surv.learn <- survfit(Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1) 
+plot(sex.surv.learn, lty = 1:2, xlab="Virtual success time 4", ylab="% individuals that has no solved the task") 
+legend(10000, .2, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes for learning \n(treatment bees only)") 
+
+survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
 
 #Let's add the control bees, the ratio is the same, a bit different results
 colnames(explain.learning1)
@@ -1980,7 +2015,7 @@ plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learni
 par(mfrow=c(1,1))
 
 summary(explain.learning1.full$sex)
-table(explain.learning1.full$sex, explain.learning1.full$success4)
+table(explain.learning1.full$success4, explain.learning1.full$sex)
 
 #BUT, chi-squared tests now tell us that they are not different (?)
 chisq.test(explain.learning1.full$sex, explain.learning1.full$success4, correct=FALSE)
@@ -2000,6 +2035,17 @@ testUniformity(simulationOutput = simulationOutput)
 
 disp<-simulateResiduals(succ4.sex.full, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
+
+
+
+sex.surv.learn.full <- survfit(Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full) 
+plot(sex.surv.learn.full, lty = 1:2, xlab="Virtual success time 4", ylab="% individuals that has no solved the task") 
+legend(10000, .2, c("Female", "Male"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing sexes for learning \n(treatment + control bees)") 
+
+survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full)
+
+
 
 #Brain weight correlations
 #(NO CORRELATION)
@@ -2555,15 +2601,35 @@ allEffects(succ1.sex)
 
 #Figures
 #Cómo pongo las n debajo de las barras?
+#Differences between males and females
+#Success 5 ~ sex
 par(mfrow=c(2,2))
 plot(factor(success5) ~ factor (sex), data = explain.innovation1, main= "Sucess in innovation grouped by sex (a)", ylab="Innovation test success", xlab="")
-plot(factor(success5) ~ factor(sex), data = succ5.all, ylab="", main= "Success in innovation grouped by sex \nTreatment + Control (b)", xlab="")
+plot(factor(success5) ~ factor(sex), data = explain.innovation1.full, ylab="", main= "Success in innovation grouped by sex \nTreatment + Control (b)", xlab="")
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex (c)", ylab= "Learning test success", xlab="")
 plot(factor(success4) ~ factor(sex), explain.learning1.full, main= "Success in learning grouped by sex \nTreatment + Control (d)", ylab= "", xlab="")
 par(mfrow=c(1,1))
 
+#Survival curves
+par(mfrow=c(2,2))
+sex.surv <- survfit(Surv((virtual.success.time5/1000), success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
+plot(sex.surv, lty = 1:2, xlab="Censored success time for innovation", ylab="% individuals that has no solved the task") 
+legend(c("Female", "Male"), lty = 1:2, x =(-50) ,y =0.45) 
+title("Kaplan-Meier curves comparing sex for innovation \n(treatment bees only) (a)") 
+survdiff (Surv((virtual.success.time5), success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
 
+sex.surv.full <- survfit(Surv(virtual.success.time5/1000, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
+plot(sex.surv.full, lty = 1:2, xlab="Censored success time for innovation", ylab="% individuals that has no solved the task") 
+title("Kaplan-Meier curves comparing sex for innovation \n(treatment and control bees) (b)") 
+survdiff (Surv((virtual.success.time5), success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
 
+sex.surv.learn <- survfit(Surv(virtual.success.time4/1000, success4) ~ sex, na.action = na.exclude, data = explain.learning1) 
+plot(sex.surv.learn, lty = 1:2, xlab="Censored success time for learning", ylab="% individuals that has no solved the task") 
+title("Kaplan-Meier curves comparing sex for learning \n(treatment bees only) (c)") 
+survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
 
-
+sex.surv.learn.full <- survfit(Surv(virtual.success.time4/1000, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full) 
+plot(sex.surv.learn.full, lty = 1:2, xlab="Censored success time for learning", ylab="% individuals that has no solved the task") 
+title("Kaplan-Meier curves comparing sex for learning \n(treatment and control bees) (d)") 
+survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full)
 
