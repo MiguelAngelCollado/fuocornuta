@@ -1965,10 +1965,12 @@ library(car)
 leveneTest(IT ~ success4, data = explain.learning1)
 aov(IT ~ success4, data = explain.learning1)
 summary(aov(IT ~ success4, data = explain.learning1))
-#No, they are not, that's good for us
+#R squared are ridicuouls
 lm.succtime4<-lm(success.time4 ~ IT, data = explain.learning1)
 summary(lm.succtime4)
 lm.succtime4.virtual<-lm(virtual.success.time4 ~ IT, data = explain.learning1)
+summary(lm.succtime4.virtual)
+lm.succtime4.virtual<-lm(virtual.success.time4 ~ IT, data = explain.learning1.full)
 summary(lm.succtime4.virtual)
 
 
@@ -2632,4 +2634,10 @@ sex.surv.learn.full <- survfit(Surv(virtual.success.time4/1000, success4) ~ sex,
 plot(sex.surv.learn.full, lty = 1:2, xlab="Censored success time for learning", ylab="% individuals that has no solved the task") 
 title("Kaplan-Meier curves comparing sex for learning \n(treatment and control bees) (d)") 
 survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full)
+
+#Success 1 ~ success 5
+par(mfrow=c(2,1))
+plot(explain.innovation1$success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Success time in exploration test", main= "Success time in exploration \nrelated to success in innovation \n(only innovation test succeeders)", xlim=c(0,900))
+plot(explain.innovation1$virtual.success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Censored success time in exploration test", main="Success time in exploration \nrelated to success in innovation", xlim=c(0,900))
+par(mfrow=c(1,1))
 
