@@ -343,7 +343,17 @@ cor(activitycor[2:4])
 heatmap(data = activitycor, columns = 2:4)
 #They are not correlated :(
 
+#######
+activity2t<-data.frame(trial2t$ID,trial2t$activity.time)
+colnames(activity2t)<-c("ID","activity.time2")
+activity3t<-data.frame(trial3t$ID,trial3t$activity.time)
+colnames(activity3t)<-c("ID","activity.time3")
 
+activitycor2<-merge(merge(merge(merge(activity1,activity2t, by="ID"), activity3t, by = "ID"), activity4, by = "ID"), activity5, by = "ID")
+cor(activitycor2[2:6])
+heatmap(data = activitycor2, columns = 2:6)
+
+#######
 
 #is inactivity time correlated?
 inactivity1<-data.frame(trial1t$ID, trial1t$inactivity.time)
@@ -2295,7 +2305,7 @@ summary(succ4timeuntilecue)
 disp<-simulateResiduals(succ4timeuntilecue, plot = T)
 testOverdispersion(disp, alternative = "overdispersion", plot = TRUE)
 allEffects(succ4timeuntilecue)
-
+400
 colnames(explain.learning1)
 cox.refuge <- coxph(Surv(virtual.success.time4, success4) ~ time.until.correct.cue4, na.action = na.exclude, data = explain.learning1) 
 #the curves are different, so we are ok
