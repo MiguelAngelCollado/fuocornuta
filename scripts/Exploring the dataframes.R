@@ -1815,6 +1815,58 @@ plot(succ5.rest5, lty = 1:3, xlab="Censored success time 5", ylab="% individuals
 legend(10000, .3, c("No resting", "Resting 1 time","Resting 2 times"), lty = 1:3) 
 
 survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na.exclude, data = explain.innovation1)
+#success5 ~ activity.time.1----
+#(CORRELATION)
+temp10<-data.frame(trial5t$ID, trial5t$success)
+temp11<-data.frame(trial1t$ID, trial1t$activity.time)
+temp10<-rename(temp10, ID = trial5t.ID, success5 = trial5t.success)
+temp11<-rename(temp11, ID = trial1t.ID, activity.time1 = trial1t.activity.time)
+
+succ5act1<-merge(temp10,temp11, by= "ID")
+glm.succ5act1<-glm(success5 ~ activity.time1, data = succ5act1, family = binomial)
+plot(succ5act1$success5 ~ succ5act1$activity.time1)
+summary(glm.succ5act1)
+allEffects(glm.succ5act1)
+
+#success5 ~ activity.time.2----
+#(CORRELATION)
+temp12<-data.frame(trial2t$ID, trial2t$activity.time, trial2t$activity.prop)
+temp12<-rename(temp12, ID = trial2t.ID, activity.time2 = trial2t.activity.time,
+               activity.prop2 = trial2t.activity.prop)
+
+succ5act2<-merge(temp10,temp12, by= "ID")
+plot(succ5act2$success5 ~ succ5act2$activity.time2)
+lm.succ5act2<-lm(success5 ~ activity.time2, data = succ5act2)
+summary(lm.succ5act2)
+hist(succ5act2$activity.time2)
+glm.succ5act2<-glm(success5 ~ activity.time2, data = succ5act2, family = binomial)
+summary(glm.succ5act2)
+#success5 ~ activity.time.3
+#(NO CORRELATION)
+temp13<-data.frame(trial3t$ID, trial3t$activity.time)
+temp13<-rename(temp13, ID = trial3t.ID, activity.time.3 = trial3t.activity.time)
+succ5act3<-merge(temp10, temp13)
+plot(succ5act3$success5 ~ succ5act3$activity.time.3)
+lm.succ5act3<-lm(success5 ~ activity.time.3, data= succ5act3)
+summary(lm.succ5act3)
+
+glm.succ5act3<-glm(success5 ~ activity.time.3, data= succ5act3, family = binomial)
+summary(glm.succ5act3)
+
+#success5 ~ activity.time.4
+#(No correlation)
+temp14<-data.frame(trial4t$ID, trial4t$activity.time)
+temp14<-rename(temp14, ID = trial4t.ID, activity.time.4 = trial4t.activity.time)
+succ5act4<-merge(temp10, temp14)
+plot(succ5act4$success5 ~ succ5act4$activity.time.4)
+lm.succ5act3<-lm(success5 ~ activity.time.4, data = succ5act4)
+summary(lm.succ5act3)
+glm.succ5act3<-glm(success5 ~ activity.time.4, data = succ5act4, family = binomial)
+summary(glm.succ5act3)
+
+
+
+#por aquí-----
 
 #Innovation explain with learning-----
 
@@ -2332,7 +2384,6 @@ succ4act<-glm(success4 ~ activity.prop4, data = explain.learning1,
 summary(succ4act) 
 
 
-
 #success4 ~ times.resting4----
 plot(explain.learning1$success4 ~ explain.learning1$times.resting4)
 summary(as.factor(explain.learning1$times.resting4))
@@ -2358,7 +2409,7 @@ succ4rest<-glm(success4 ~ times.resting4, data = explain.learning1,
                family = binomial)
 summary(succ4rest)
 
-
+#Por aquí, try activity.time de los diferentes tests compararlo con learning
 
 #MULTIVARIATE MODELS----
 #INNOVATION----
@@ -2609,6 +2660,14 @@ summary(succ1.sex)
 succ1.sex<-glm(success ~ sex, data = trial1, family = binomial)
 summary(succ1.sex)
 allEffects(succ1.sex)
+
+#Activity.time.1 ~ re.enter
+trial1t$activity.time
+trial1t$refuge.re.enter
+
+refuge.activity<-glm(refuge.re.enter ~ activity.time, trial1t, family = binomial)
+summary(refuge.activity)
+allEffects(refuge.activity)
 
 
 #Figures
