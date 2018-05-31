@@ -1149,6 +1149,10 @@ cox.refuge <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.acti
 #It seems it doesn't have effect
 cox.refuge
 
+#Let's try binomial
+colnames(innovation.refuge)
+glm(explain.innovation1.virtual.success.time5 ~ explain.innovation1.virtual.success.time5, data = innovation.refuge, family = binomial)
+
 #success.time5 ~ refuge.enter.times----
 #(HAY SIGNIFICANCIA)
 explain.innovation1$virtual.success.time5
@@ -1737,6 +1741,7 @@ colnames(activity.for.innovation)
 #(CORRELATION)
 #More activity may mean more success probability
 plot(explain.innovation1$success5~explain.innovation1$activity.prop5)
+plot(explain.innovation1$success5~explain.innovation1$activity.time5)
 plot(factor(explain.innovation1$success5)~explain.innovation1$activity.prop5)
 which(explain.innovation1$activity.prop5 > 0.6 & explain.innovation1$activity.prop5 < 0.7)
 
@@ -1815,7 +1820,8 @@ plot(succ5.rest5, lty = 1:3, xlab="Censored success time 5", ylab="% individuals
 legend(10000, .3, c("No resting", "Resting 1 time","Resting 2 times"), lty = 1:3) 
 
 survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na.exclude, data = explain.innovation1)
-#success5 ~ activity.time.1----
+#success5 ~ activity.times----
+#success5 ~ activity.time.1
 #(CORRELATION)
 temp10<-data.frame(trial5t$ID, trial5t$success)
 temp11<-data.frame(trial1t$ID, trial1t$activity.time)
@@ -1823,12 +1829,13 @@ temp10<-rename(temp10, ID = trial5t.ID, success5 = trial5t.success)
 temp11<-rename(temp11, ID = trial1t.ID, activity.time1 = trial1t.activity.time)
 
 succ5act1<-merge(temp10,temp11, by= "ID")
+nrow(succ5act1)
 glm.succ5act1<-glm(success5 ~ activity.time1, data = succ5act1, family = binomial)
 plot(succ5act1$success5 ~ succ5act1$activity.time1)
 summary(glm.succ5act1)
 allEffects(glm.succ5act1)
 
-#success5 ~ activity.time.2----
+#success5 ~ activity.time.2
 #(CORRELATION)
 temp12<-data.frame(trial2t$ID, trial2t$activity.time, trial2t$activity.prop)
 temp12<-rename(temp12, ID = trial2t.ID, activity.time2 = trial2t.activity.time,
@@ -1859,14 +1866,38 @@ temp14<-data.frame(trial4t$ID, trial4t$activity.time)
 temp14<-rename(temp14, ID = trial4t.ID, activity.time.4 = trial4t.activity.time)
 succ5act4<-merge(temp10, temp14)
 plot(succ5act4$success5 ~ succ5act4$activity.time.4)
-lm.succ5act3<-lm(success5 ~ activity.time.4, data = succ5act4)
-summary(lm.succ5act3)
-glm.succ5act3<-glm(success5 ~ activity.time.4, data = succ5act4, family = binomial)
-summary(glm.succ5act3)
+lm.succ5act4<-lm(success5 ~ activity.time.4, data = succ5act4)
+summary(lm.succ5act4)
+glm.succ5act4<-glm(success5 ~ activity.time.4, data = succ5act4, family = binomial)
+summary(glm.succ5act4)
+
+#success5 ~ activity.time.5 (This is not valid, experiments were cut after succeeding, 
+#so activity prop is the variable that must be used)
+#(No correlation)
+
+temp15<-data.frame(trial5t$ID, trial5t$activity.time)
+temp15<-rename(temp15, ID = trial5t.ID, activity.time.5 = trial5t.activity.time)
+succ5act5<-merge(temp10, temp15)
+plot(succ5act5$success5 ~ succ5act5$activity.time.5)
+lm.succ5act5<-lm(success5 ~ activity.time.5, data = succ5act5)
+summary(lm.succ5act5)
+glm.succ5act5<-glm(success5 ~ activity.time.5, data = succ5act5, family = binomial)
+summary(glm.succ5act5)
+
+colnames(explain.innovation1)
+plot(explain.innovation1$success5 ~ explain.innovation1$activity.time5)
+summary(glm(success5 ~ activity.time5, data=explain.innovation1, family = binomial))
+#Resumen
+
+par(mfrow=c(2,2))
+plot(succ5act1$success5 ~ succ5act1$activity.time1, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 1")
+plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 2")
+plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 3")
+plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 4")
+par(mfrow=c(1,1))
 
 
 
-#por aquí-----
 
 #Innovation explain with learning-----
 
@@ -2108,7 +2139,6 @@ legend(10000, .2, c("Female", "Male"), lty = 1:2)
 title("Kaplan-Meier Curves comparing sexes for learning \n(treatment + control bees)") 
 
 survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full)
-
 
 
 #Brain weight correlations
@@ -2409,7 +2439,58 @@ succ4rest<-glm(success4 ~ times.resting4, data = explain.learning1,
                family = binomial)
 summary(succ4rest)
 
-#Por aquí, try activity.time de los diferentes tests compararlo con learning
+#Success4 ~ activity times----
+#success4 ~ activity.time1
+#(NO CORRELATION)
+succ4<-data.frame(trial4t$ID, trial4t$success)
+succ4<-rename(succ4, ID = trial4t.ID, success4 = trial4t.success)
+act1<-data.frame(trial1t$ID, trial1t$activity.time)
+act1<-rename(act1, ID = trial1t.ID, activity.time1 = trial1t.activity.time)
+succ4act1<-merge(succ4, act1)
+plot(succ4act1$success4 ~ succ4act1$activity.time1)
+
+lm.succ4act1<-lm(success4 ~ activity.time1, data=succ4act1)
+summary(lm.succ4act1)
+glm.succ4act1<-glm(success4 ~ activity.time1, data=succ4act1, family = binomial)
+summary(glm.succ4act1)
+
+#success4 ~ activity.time2
+#(NO CORRELATION)
+act2<-data.frame(trial2t$ID, trial2t$activity.time)
+act2<-rename(act2, ID = trial2t.ID, activity.time2 = trial2t.activity.time)
+succ4act2<-merge(succ4, act2)
+plot(succ4act2$success4 ~ succ4act2$activity.time2)
+
+lm.succ4act2<-lm(success4 ~ activity.time2, data=succ4act2)
+summary(lm.succ4act2)
+glm.succ4act2<-glm(success4 ~ activity.time2, data=succ4act2, family = binomial)
+summary(glm.succ4act2)
+
+#success4 ~ activity.time3
+#(NO CORRELATION)
+act3<-data.frame(trial3t$ID, trial3t$activity.time)
+act3<-rename(act3, ID = trial3t.ID, activity.time3 = trial3t.activity.time)
+succ4act3<-merge(succ4, act3)
+plot(succ4act3$success4 ~ succ4act3$activity.time3)
+
+lm.succ4act3<-lm(success4 ~ activity.time3, data=succ4act3)
+summary(lm.succ4act3)
+glm.succ4act3<-glm(success4 ~ activity.time3, data=succ4act3, family = binomial)
+summary(glm.succ4act3)
+
+
+#success4 ~ activity.time4
+#(NO CORRELATION)
+act4<-data.frame(trial4t$ID, trial4t$activity.time)
+act4<-rename(act4, ID = trial4t.ID, activity.time4 = trial4t.activity.time)
+succ4act4<-merge(succ4, act4)
+plot(succ4act4$success4 ~ succ4act4$activity.time4)
+
+lm.succ4act4<-lm(success4 ~ activity.time4, data=succ4act4)
+summary(lm.succ4act4)
+glm.succ4act4<-glm(success4 ~ activity.time4, data=succ4act4, family = binomial)
+summary(glm.succ4act4)
+
 
 #MULTIVARIATE MODELS----
 #INNOVATION----
@@ -2710,3 +2791,19 @@ plot(explain.innovation1$success.time1/1000, explain.innovation1$success5, ylab 
 plot(explain.innovation1$virtual.success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Censored success time in exploration test", main="Success time in exploration \nrelated to success in innovation", xlim=c(0,900))
 par(mfrow=c(1,1))
 
+
+#Activity related with learning
+par(mfrow=c(2,2))
+plot(succ4act1$success4 ~ succ4act1$activity.time1, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 1")
+plot(succ4act2$success4 ~ succ4act2$activity.time2, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 2")
+plot(succ4act3$success4 ~ succ4act3$activity.time3, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 3")
+plot(succ4act4$success4 ~ succ4act4$activity.time4, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 4")
+par(mfrow=c(1,1))
+
+#Activity related with innovation
+par(mfrow=c(2,2))
+plot(succ5act1$success5 ~ succ5act1$activity.time1, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 1")
+plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 2")
+plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 3")
+plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 4")
+par(mfrow=c(1,1))
