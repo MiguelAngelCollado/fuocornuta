@@ -2300,7 +2300,7 @@ survdiff (Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = n
 
 surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
 plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
-legend(250000, .99999999, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
+legend(200000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
 
 #Learning explained with exploration------
 nrow(explain.learning1)
@@ -2807,3 +2807,18 @@ plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation"
 plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 3")
 plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 4")
 par(mfrow=c(1,1))
+
+#Shyness
+par(mfrow=c(2,2))
+
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge", main = "Relationship between \n innovation success and time spent in the refuge (a)")
+plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Success 5", main= "Relationship between \ninnovation success and re-entering the refuge (b)")
+plot(factor(success4) ~ factor(refuge.re.enter), data = succ4ref, main= "Relationship between \nlearning success and re-entering the refuge (c)", 
+     ylab= "Learning test success", xlab= "Refuge re-enter")
+surv.refuge.enter <- survfit(Surv(virtual.success.time4/1000, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
+plot(surv.refuge.enter, lty = 1:2, xlab="Censored success time 4", ylab="% of success in trial 4", main= "Survival curves for refuge re-enter times (d)") 
+legend(200, .30, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1, cex = 0.6, text.width = 550) 
+
+par(mfrow=c(1,1))
+
+multiplot
