@@ -1906,18 +1906,22 @@ par(mfrow=c(1,1))
 #It seems graphically that passing the fourth trial helps passing the fifth
 
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success")
+table(explain.innovation1$success5,explain.innovation1$success4)
+chisq.test(explain.innovation1$success5,explain.innovation1$success4, correct = FALSE)
+fisher.test(explain.innovation1$success5,explain.innovation1$success4)
 
 lm.succ5succ4<-lm(success5 ~ success4, data = explain.innovation1)
 summary(lm.succ5succ4)
-succ5succ4<-glm(factor(success5) ~ factor(success4), data = explain.innovation1, 
+succ5succ4<-glm(success5 ~ success4, data = explain.innovation1, 
                    family = binomial)
 summary(succ5succ4)
+allEffects(succ5succ4)
 
 
 #the models are not good with TRUE/FALSE as response, I don't know why, so we create'
 #a new data.frame for this model
 
-#OC20.4 fails is missing, I can't run JWatcher on MAC to solve it
+#OC20.4 fails is missing, JWatcher is not supported on MAC anymore
 
 explain.innovation1$success4
 
@@ -2821,4 +2825,10 @@ legend(200, .30, c("Bees that didn't re-entered the refuge","Bees that re-entere
 
 par(mfrow=c(1,1))
 
-multiplot
+par(mfrow=c(1,2)) 
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success (a)")
+visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)", ylab ="", main="Descending probability of innovation success \n with time until succeess in learning test (b)")
+par(mfrow=c(1,1))
+succ5time4.2<-glm(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4/1000, family = binomial)
+
+
