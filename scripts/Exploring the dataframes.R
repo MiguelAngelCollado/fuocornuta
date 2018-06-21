@@ -1368,6 +1368,8 @@ tidy(succ5.sex)
 coefficients(succ5.sex)
 allEffects(succ5.sex)
 
+
+
 #We can see Kaplan-Meier curves for sexes
 sex.surv <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
 plot(sex.surv, lty = 1:2, xlab="Virtual success time 5", ylab="% individuals that has no solved the task") 
@@ -1419,6 +1421,27 @@ title("Kaplan-Meier Curves comparing sexes\n(treatment and control bees)")
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
 #But dependent for Treatment + Control
 survdiff (Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
+
+#Success5 ~ IT-----
+
+#Is IT related to sex? They are different
+boxplot(IT ~ sex, data = explain.innovation1, ylab = "Intertegular distance")
+females.innovation<-subset(explain.innovation1, subset = (explain.innovation1$sex == "Female"))
+males.innovation<-subset(explain.innovation1, subset = (explain.innovation1$sex == "Male"))
+
+#
+plot(explain.innovation1$success5 ~  explain.innovation1$IT)
+plot(females.innovation$success5 ~  females.innovation$IT)
+plot(males.innovation$success5 ~  males.innovation$IT)
+
+#Does smaller bees succeed better (No differences observed)
+succ5IT<-glm(success5 ~ IT, explain.innovation1, family = binomial)
+
+summary(succ5IT)
+summary(succ5ITfem)
+#Does smaller females succeed better (No relationship)
+succ5ITfem<-glm(success5 ~ IT, females.innovation, family = binomial)
+
 
 #Success5 ~ Brain weight---- 
 #(NO CORRELATION)
