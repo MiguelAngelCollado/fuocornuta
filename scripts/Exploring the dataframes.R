@@ -1773,7 +1773,7 @@ explain.innovation1$activity.prop5[which(explain.innovation1$activity.prop5 > 0.
 
 lm.succ5.act<-lm(success5 ~ activity.prop5, data = explain.innovation1)
 summary(lm.succ5.act)
-
+visreg(lm.succ5.act)
 #Weird residuals, normality for a lm, but very low R-squared
 hist(lm.succ5.act$residuals)
 shapiro.test(lm.succ5.act$residuals)
@@ -2821,20 +2821,24 @@ par(mfrow=c(1,1))
 
 #Activity related with learning
 par(mfrow=c(2,2))
-plot(succ4act1$success4 ~ succ4act1$activity.time1, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 1")
-plot(succ4act2$success4 ~ succ4act2$activity.time2, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 2")
-plot(succ4act3$success4 ~ succ4act3$activity.time3, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 3")
-plot(succ4act4$success4 ~ succ4act4$activity.time4, main= "No Correlation", ylab = "Success4", xlab = "Activity time trial 4")
+plot(succ4act1$success4 ~ succ4act1$activity.time1, main= "No Correlation", ylab = "Learning test success", xlab = "Activity time trial 1")
+plot(succ4act2$success4 ~ succ4act2$activity.time2, main= "No Correlation", ylab = "Learning test success", xlab = "Activity time trial 2")
+plot(succ4act3$success4 ~ succ4act3$activity.time3, main= "No Correlation", ylab = "Learning test success", xlab = "Activity time trial 3")
+plot(succ4act4$success4 ~ succ4act4$activity.time4, main= "No Correlation", ylab = "Learning test success", xlab = "Activity time trial 4")
 par(mfrow=c(1,1))
 
 #Activity related with innovation
 par(mfrow=c(2,2))
-plot(succ5act1$success5 ~ succ5act1$activity.time1, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 1")
-plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation", ylab = "Success5", xlab = "Activity time trial 2")
-plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 3")
-plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 4")
+plot(succ5act1$success5 ~ succ5act1$activity.time1, main= "Marginal Correlation", ylab = "Innovation test success", xlab = "Activity time trial 1")
+plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation", ylab = "Innovation test success", xlab = "Activity time trial 2")
+plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Innovation test success", xlab = "Activity time trial 3")
+plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Innovation test success", xlab = "Activity time trial 4")
 par(mfrow=c(1,1))
 
+visreg(succ5.act, scale = "response", main= "Correlation", ylab = "Innovation test success", xlab = "Activity time proportion trial 5")
+
+
+explain.innovation1$activity.prop5
 #Shyness
 par(mfrow=c(2,2))
 
