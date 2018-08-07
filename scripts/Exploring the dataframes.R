@@ -40,6 +40,12 @@ trial5c<-subset(trial5, subset = (trial5$experiment.type == "Control"))
 #principal component analysis should only be used with the raw data if all variables 
 #have the same units of measure.
 
+#Counting numbers for the article
+length(which(trial5t$success == TRUE))/nrow(trial5t)*100
+
+length(which(trial5$success == TRUE))/nrow(trial5)*100
+
+
 #Defining Shyness----
 #We define shyness using these variables
 trial1t$refuge.time
@@ -1518,6 +1524,7 @@ legend(10000, .2, c("No success 1", "Sucess 1"), lty = 1:2)
 
 #They are independent? They are not, they are very similar
 survdiff (Surv(virtual.success.time5, success5) ~ success1, na.action = na.exclude, data = explain.innovation1)
+
 
 #success5 ~ virtual.success.time1----
 #(Curious results)
