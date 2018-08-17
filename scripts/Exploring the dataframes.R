@@ -16,6 +16,7 @@ trial4 <- read.csv("data/dataframes/trial4.csv")
 trial5 <- read.csv("data/dataframes/trial5.csv")
 datafull <- read.csv("data/dataframes/datafull.csv")
 
+
 nrow(trial1)
 nrow(trial5)
 
@@ -2650,7 +2651,31 @@ summary(learning.models1)
 library(rcompanion)
 nagelkerke(learning.full.model)
 nagelkerke(learning.models1)
-#por aquí-----
+
+#####Are control and success in learning different?----
+length(which(trial4t$success == TRUE))
+nrow(trial4t)
+length(which(trial4t$success == TRUE))/nrow(trial4t)
+
+length(which(trial4c$success == TRUE))
+nrow(trial4c)
+length(which(trial4c$success == TRUE))/nrow(trial4c)
+
+
+length(which(trial4t$success == TRUE))
+nrow(trial4t)
+length(which(trial4c$success == TRUE))
+nrow(trial4c)
+
+learning.success.chi<-data.frame(Treatment = c(length(which(trial4t$success == TRUE))
+                                               ,nrow(trial4t)), Control= c(length(which(trial4c$success == TRUE)),nrow(trial4c)),row.names = c("SUCCESS","TOTAL"))
+
+chisq.test(learning.success.chi)
+fisher.test(learning.success.chi)
+
+################
+
+
 
 learning.models1$null.deviance + learning.models1$deviance
 #Other multivariate combinations----
