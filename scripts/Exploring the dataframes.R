@@ -1093,6 +1093,34 @@ sort(explain.innovation1$virtual.success.time5)
 boxplot(success.time5 ~ experiment.type, data=explain.innovation1.full, xlab="Experiment type", ylab="Success time in the trial 5 time", main="Control and Treatment comparison\nfor the innovation trial", ylim=(c(0,900000)))
 explain.innovation1.full$success.time5
 
+#Comparison Control vs Treatment----
+
+###Are control and success in innovation different?
+
+length(which(trial5t$success == TRUE))
+nrow(trial5t)
+length(which(trial5t$success == TRUE))/nrow(trial5t)
+
+length(which(trial5c$success == TRUE))
+nrow(trial5c)
+length(which(trial5c$success == TRUE))/nrow(trial5c)
+
+
+length(which(trial5t$success == TRUE))
+exploring.fast<-subset(trial5t, subset = (trial5t$success == TRUE))
+plot(exploring.fast$time.until.lid.exploring)
+nrow(trial5t)
+
+length(which(trial5c$success == TRUE))
+nrow(trial5c)
+
+innovation.success.chi<-data.frame(Treatment = c(length(which(trial5t$success == TRUE))
+                                                 ,nrow(trial5t)), Control= c(length(which(trial5c$success == TRUE)),nrow(trial5c)),row.names = c("SUCCESS","TOTAL"))
+
+chisq.test(innovation.success.chi)
+fisher.test(innovation.success.chi)
+
+
 #Anyway, the n is quite small for both control and treatment, for both
 #virtual.success5 and success5 and the differences are too small to be commented   
 length(which(explain.innovation1c$success5 == TRUE))
@@ -2673,6 +2701,8 @@ learning.success.chi<-data.frame(Treatment = c(length(which(trial4t$success == T
 chisq.test(learning.success.chi)
 fisher.test(learning.success.chi)
 
+
+
 ################
 
 
@@ -2810,7 +2840,7 @@ summary(refuge.activity)
 allEffects(refuge.activity)
 
 
-#Figures
+#Figures-----
 #Cómo pongo las n debajo de las barras?
 #Differences between males and females
 #Success 5 ~ sex
