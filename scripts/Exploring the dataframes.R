@@ -4,6 +4,8 @@ library(calibrate)
 library(visreg)
 library(DHARMa)
 library(survival)
+library(plotrix)
+
 #DEFINING (behaviors)----
 #Import data
 #We import first our data
@@ -1368,6 +1370,8 @@ summary(succ5.IT)
 #Sex ~ IT (OBVIOUS DIFFERENCES)
 boxplot(trial1$IT ~ trial1$sex, notch = TRUE)
 aggregate(IT ~ sex, data = trial1, FUN = mean)
+aggregate(IT ~ sex, data = trial1, FUN = std.error)
+??std.error
 sexit<-aov(IT ~ sex, data=trial1)
 summary(sexit)
 
@@ -1954,8 +1958,6 @@ plot(succ5act2$success5 ~ succ5act2$activity.time2, main= "Marginal Correlation"
 plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 3")
 plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Success5", xlab = "Activity time trial 4")
 par(mfrow=c(1,1))
-
-
 
 
 #Innovation explain with learning-----
