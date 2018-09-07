@@ -1374,7 +1374,7 @@ aggregate(IT ~ sex, data = trial1, FUN = std.error)
 ??std.error
 sexit<-aov(IT ~ sex, data=trial1)
 summary(sexit)
-
+t.test(IT ~ sex, data=trial1)
 
 #Success5 ~ Sex -----
 #(SOME DIFFERENCES, HOWEVER NOT ENOUGH n FOR MALES)
