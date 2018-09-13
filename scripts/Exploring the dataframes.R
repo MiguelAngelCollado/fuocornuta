@@ -905,7 +905,6 @@ explain.learning1<-merge(merge(merge(merge(learning, shyness, by = "ID", all.x =
                               activity.for.learning, by = "ID", all.x = TRUE),
                               artifacts, by="ID", all.x = TRUE)
 
-View(explain.learning1)
 
 #Somehow R didn't get some sex labels, let's correct them "manually"
 explain.learning1[which(explain.learning1$ID == "OC9"),which(colnames(explain.learning1) == "sex")]<-"Male"
@@ -1099,28 +1098,25 @@ explain.innovation1.full$success.time5
 
 ###Are control and success in innovation different?
 
-length(which(trial5t$success == TRUE))
-nrow(trial5t)
-length(which(trial5t$success == TRUE))/nrow(trial5t)
+controlvstreatment<-matrix(c((nrow(subset(trial5t, subset=(trial5t$success==TRUE)))),
+         (nrow(subset(trial5t, subset=(trial5t$success==FALSE)))),
+         (nrow(subset(trial5c, subset=(trial5c$success==TRUE)))),
+         (nrow(subset(trial5c, subset=(trial5c$success==FALSE))))
+), ncol = 2)
 
-length(which(trial5c$success == TRUE))
-nrow(trial5c)
-length(which(trial5c$success == TRUE))/nrow(trial5c)
+colnames(controlvstreatment)<-c("TREATMENT", "CONTROL")
+rownames(controlvstreatment)<-c("SUCCESS", "NO SUCCESS")
+
+controlvstreatment
+chisq.test(controlvstreatment)
+fisher.test(controlvstreatment)
+#por aquí------
+#Try chi-square-goodness of fit?-----
 
 
-length(which(trial5t$success == TRUE))
-exploring.fast<-subset(trial5t, subset = (trial5t$success == TRUE))
-plot(exploring.fast$time.until.lid.exploring)
-nrow(trial5t)
+#Treatment and control are independent from succeeding or no succeeding, success
+#has nothing to do with treatment, ergo they are equals
 
-length(which(trial5c$success == TRUE))
-nrow(trial5c)
-
-innovation.success.chi<-data.frame(Treatment = c(length(which(trial5t$success == TRUE))
-                                                 ,nrow(trial5t)), Control= c(length(which(trial5c$success == TRUE)),nrow(trial5c)),row.names = c("SUCCESS","TOTAL"))
-
-chisq.test(innovation.success.chi)
-fisher.test(innovation.success.chi)
 
 
 #Anyway, the n is quite small for both control and treatment, for both
@@ -2108,6 +2104,50 @@ explain.learning1
 summary(explain.learning1$success4)
 
 #Artifacts----
+
+#Comparison Treatment vs control----
+#por aquí----
+controlvstreatmentlearning<-matrix(c((nrow(subset(trial4t, subset=(trial4t$success==TRUE)))),
+                             (nrow(subset(trial4t, subset=(trial4t$success==FALSE)))),
+                             (nrow(subset(trial4c, subset=(trial4c$success==TRUE)))),
+                             (nrow(subset(trial4c, subset=(trial4c$success==FALSE))))
+), ncol = 2)
+
+colnames(controlvstreatmentlearning)<-c("TREATMENT", "CONTROL")
+rownames(controlvstreatmentlearning)<-c("SUCCESS", "NO SUCCESS")
+
+controlvstreatmentlearning
+
+controlvstreatmentlearning[1,1]/(controlvstreatmentlearning[1,1]+controlvstreatmentlearning[2,1])
+controlvstreatmentlearning[1,2]/(controlvstreatmentlearning[1,2]+controlvstreatmentlearning[2,2])
+
+chisq.test(controlvstreatmentlearning)$p.value
+
+fisher.test(controlvstreatmentlearning)
+
+
+chisq.test(matrix(c(30,48,24,48), ncol = 2))$p.value
+
+
+
+################
+observed = c(30, 18)        # observed frequencies
+expected = c(0.50, 0.50)      # expected proportions
+
+chisq.test(x = observed,
+           p = expected)$p.value
+
+#################
+observed = c(19, 17)        # observed frequencies
+expected = c(0.50, 0.50)      # expected proportions
+
+chisq.test(x = observed,
+           p = expected)$p.value
+
+
+
+
+##############
 
 #IT, sex, brain weight
 
