@@ -1110,8 +1110,6 @@ rownames(controlvstreatment)<-c("SUCCESS", "NO SUCCESS")
 controlvstreatment
 chisq.test(controlvstreatment)
 fisher.test(controlvstreatment)
-#por aquí------
-#Try chi-square-goodness of fit?-----
 
 
 #Treatment and control are independent from succeeding or no succeeding, success
@@ -2130,7 +2128,7 @@ chisq.test(matrix(c(30,48,24,48), ncol = 2))$p.value
 
 
 
-################
+#Comparison between success in learning with expected results
 observed = c(30, 18)        # observed frequencies
 expected = c(0.50, 0.50)      # expected proportions
 
