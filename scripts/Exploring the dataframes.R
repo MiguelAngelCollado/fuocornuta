@@ -1963,7 +1963,8 @@ par(mfrow=c(1,1))
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success")
 table(explain.innovation1$success5,explain.innovation1$success4)
 chisq.test(explain.innovation1$success5,explain.innovation1$success4, correct = FALSE)
-fisher.test(explain.innovation1$success5,explain.innovation1$success4)
+chisq.test(table(explain.innovation1$success5,explain.innovation1$success4))
+fisher.test(table(explain.innovation1$success5,explain.innovation1$success4))
 
 lm.succ5succ4<-lm(success5 ~ success4, data = explain.innovation1)
 summary(lm.succ5succ4)
@@ -2594,6 +2595,20 @@ summary(lm.succ4act4)
 glm.succ4act4<-glm(success4 ~ activity.time4, data=succ4act4, family = binomial)
 summary(glm.succ4act4)
 
+#Re-enter----
+#Re-enter seem to be an important predictor, but maybe is not shyness!
+
+#re-enter ~ exploration(hay correlación)----
+plot(factor(trial1t$refuge.re.enter) ~ factor(trial1t$success), xlab= "Exploration success", ylab="Refuge re-enter") 
+table(trial1t$refuge.re.enter, trial1t$success)
+lm.renterexpl<-lm(refuge.re.enter ~ success, data = trial1t)
+summary(lm.renterexpl)
+renterexpl<-glm(refuge.re.enter ~ success, data = trial1t, family = binomial)
+summary(renterexpl)
+chisq.test(table(trial1t$refuge.re.enter, trial1t$success))
+
+
+View(trial1t)
 
 #MULTIVARIATE MODELS----
 #INNOVATION----
