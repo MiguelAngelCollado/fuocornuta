@@ -2127,7 +2127,13 @@ fisher.test(controlvstreatmentlearning)
 
 chisq.test(matrix(c(30,48,24,48), ncol = 2))$p.value
 
+#Probamos con glm, nada
 
+View(trial4)
+trial4$success
+trial4$experiment.type
+
+summary(glm(success ~ experiment.type, data = trial4, family = binomial))
 
 #Comparison between success in learning with expected results
 observed = c(30, 18)        # observed frequencies
@@ -2598,7 +2604,7 @@ summary(glm.succ4act4)
 #Re-enter----
 #Re-enter seem to be an important predictor, but maybe is not shyness!
 
-#re-enter ~ exploration(hay correlación)----
+#re-enter ~ exploration(hay correlación, en cada test)----
 plot(factor(trial1t$refuge.re.enter) ~ factor(trial1t$success), xlab= "Exploration success", ylab="Refuge re-enter") 
 table(trial1t$refuge.re.enter, trial1t$success)
 lm.renterexpl<-lm(refuge.re.enter ~ success, data = trial1t)
@@ -2607,8 +2613,34 @@ renterexpl<-glm(refuge.re.enter ~ success, data = trial1t, family = binomial)
 summary(renterexpl)
 chisq.test(table(trial1t$refuge.re.enter, trial1t$success))
 
+#Not for success time, but we should remember that fast test 1 succeeders were
+#bad at learning and innovation
+plot(trial1t$refuge.re.enter ~ trial1t$success.time)
+summary(lm(refuge.re.enter ~ success.time, data = trial1t))
+summary(glm(refuge.re.enter ~ success.time, data = trial1t, family = binomial))
 
-View(trial1t)
+#re-enter ~ activity (hay correlación)----
+trial1t$success
+trial1t$activity.time
+
+plot(refuge.re.enter ~ activity.time, data = trial1t)
+plot(factor(refuge.re.enter) ~ activity.time, data = trial1t)
+
+#High correlation!
+summary(lm(refuge.re.enter ~ activity.time, data = trial1t))
+summary(glm(refuge.re.enter ~ activity.time, data = trial1t, family = binomial))
+
+#Even if we remove bees that did not move? This must be inflating the correlation
+success1M0<-subset(trial1t, subset=(trial1t$activity.time>0))
+summary(lm(refuge.re.enter ~ activity.time, data = success1M0))
+summary(glm(refuge.re.enter ~ activity.time, data = success1M0, family = binomial))
+
+#re-enter ~ shyness----
+plot(refuge.re.enter ~ refuge.time, data = trial1t)
+plot(factor(refuge.re.enter) ~ refuge.time, data = trial1t)
+
+summary(lm(refuge.re.enter ~ refuge.time, data = trial1t))
+summary(glm(refuge.re.enter ~ refuge.time, data = trial1t, family = binomial))
 
 #MULTIVARIATE MODELS----
 #INNOVATION----
