@@ -2609,7 +2609,11 @@ plot(factor(trial1t$refuge.re.enter) ~ factor(trial1t$success), xlab= "Explorati
 table(trial1t$refuge.re.enter, trial1t$success)
 lm.renterexpl<-lm(refuge.re.enter ~ success, data = trial1t)
 summary(lm.renterexpl)
+visreg(lm.renterexpl)
 renterexpl<-glm(refuge.re.enter ~ success, data = trial1t, family = binomial)
+visreg(renterexpl)
+
+
 summary(renterexpl)
 chisq.test(table(trial1t$refuge.re.enter, trial1t$success))
 
@@ -2891,9 +2895,25 @@ model.success5.5<-glm(success5 ~ refuge.time +
                       data = explain.innovation1, family = binomial)
 
 summary(model.success5.5)
+#Multivariate size + sex----
+trial4t$success
+trial4t$sex
+trial4t$IT
 
+#Learning
+summary(glm(success ~ sex + IT, data = trial4t, family = binomial))
+summary(glm(success ~ sex, data = trial4t, family = binomial))
+summary(glm(success ~ IT, data = trial4t, family = binomial))
+#Learning worked better adding control bees, only for sex in this case
+summary(glm(success ~ sex + IT, data = trial4, family = binomial))
+summary(glm(success ~ sex, data = trial4, family = binomial))
+summary(glm(success ~ IT, data = trial4, family = binomial))
 
-#Learning----
+#Innovation
+summary(glm(success ~ sex + IT, data = trial5t, family = binomial))
+summary(glm(success ~ sex, data = trial5t, family = binomial))
+summary(glm(success ~ IT, data = trial5t, family = binomial))
+
 
 #OTHER THINGS----
 #Histograms of time spent in the cues-----
@@ -3007,4 +3027,9 @@ visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)",
 par(mfrow=c(1,1))
 succ5time4.2<-glm(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4/1000, family = binomial)
 
+par(mfrow=c(1,2)) 
 
+plot(factor(trial1t$refuge.re.enter) ~ factor(trial1t$success), xlab= "Exploration success", ylab="Refuge re-enter") 
+visreg(lm.renterexpl)
+
+par(mfrow=c(1,1))
