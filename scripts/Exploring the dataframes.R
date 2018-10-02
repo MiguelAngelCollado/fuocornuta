@@ -350,6 +350,8 @@ activitycor<-merge(merge(activity1,activity4, by="ID"), activity5, by = "ID")
 
 cor(activitycor[2:4])
 heatmap(data = activitycor, columns = 2:4)
+
+cor(trial1$activity.time, trial2t$activity.time)
 #They are not correlated :(
 
 #######
@@ -2105,7 +2107,7 @@ summary(explain.learning1$success4)
 #Artifacts----
 
 #Comparison Treatment vs control----
-#por aquí----
+
 controlvstreatmentlearning<-matrix(c((nrow(subset(trial4t, subset=(trial4t$success==TRUE)))),
                              (nrow(subset(trial4t, subset=(trial4t$success==FALSE)))),
                              (nrow(subset(trial4c, subset=(trial4c$success==TRUE)))),
@@ -3033,3 +3035,10 @@ plot(factor(trial1t$refuge.re.enter) ~ factor(trial1t$success), xlab= "Explorati
 visreg(lm.renterexpl)
 
 par(mfrow=c(1,1))
+
+
+#Correlation between activity.times
+heatmap(data = activitycor2, columns = 2:6)
+
+
+
