@@ -1185,6 +1185,9 @@ cox.refuge
 #Let's try binomial
 colnames(innovation.refuge)
 glm(explain.innovation1.virtual.success.time5 ~ explain.innovation1.virtual.success.time5, data = innovation.refuge, family = binomial)
+glm(explain.innovation1.virtual.success.time5 ~ explain.innovation1.virtual.success.time5, data = innovation.refuge, family = binomial)
+
+
 
 #success.time5 ~ refuge.enter.times----
 #(HAY SIGNIFICANCIA)
