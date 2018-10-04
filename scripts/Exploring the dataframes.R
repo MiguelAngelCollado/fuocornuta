@@ -2159,7 +2159,7 @@ chisq.test(x = observed,
 
 ##############
 
-#IT, sex, brain weight
+#IT, sex, brain weight-----
 
 #IT (No correlation)
 
@@ -2508,7 +2508,6 @@ cox.refuge <- coxph(Surv(virtual.success.time4, success4) ~ time.until.correct.c
 #the curves are different, so we are ok
 cox.refuge
 
-
 #success4 ~ time.until.lid.exploring----
 #(NO CORRELATION)
 lm.succ4lid<-lm(success4 ~ time.until.lid.exploring, data = explain.learning1)
@@ -2651,7 +2650,7 @@ plot(factor(refuge.re.enter) ~ refuge.time, data = trial1t)
 summary(lm(refuge.re.enter ~ refuge.time, data = trial1t))
 summary(glm(refuge.re.enter ~ refuge.time, data = trial1t, family = binomial))
 
-#MULTIVARIATE MODELS----
+#MULTIVARIATE MODELS (Fishing)----
 #INNOVATION----
 #First, Is innovation explain by success in learning and exploration?
 #The answer is NO
@@ -2918,6 +2917,27 @@ summary(glm(success ~ IT, data = trial4, family = binomial))
 summary(glm(success ~ sex + IT, data = trial5t, family = binomial))
 summary(glm(success ~ sex, data = trial5t, family = binomial))
 summary(glm(success ~ IT, data = trial5t, family = binomial))
+
+#MULTIVARIATE MODELS (Ecological sense)-----
+#We want to get one variable as representative of each behavior and try to explain
+#innovatio with it
+
+#Explain this innovatio variable with
+explain.innovation1$success5
+#Exploration
+explain.innovation1$refuge.enter.times
+#Shyness
+explain.innovation1$refuge.time
+#Learning
+explain.innovation1$virtual.success.time4
+explain.innovation1$time.until.lid.exploring
+
+big.multiv<-glm(success5 ~ refuge.enter.times + refuge.time + virtual.success.time4 + time.until.lid.exploring, data=explain.innovation1, family = binomial)
+summary(big.multiv)
+
+
+
+
 
 
 #OTHER THINGS----
