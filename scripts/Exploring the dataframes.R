@@ -1716,13 +1716,17 @@ succ5.lid<-glm(success5 ~ virtual.time.until.lid.exploring,
                data = explain.innovation1, family = "binomial")
 
 summary(succ5.lid)
+summary(succ5.lid)$coefficients
+
 #I think residuals are not that bad but I'm not sure
 plot(succ5.lid)
 
 #There seem to decrease the probability of success with time until touch the
 #clue
 allEffects(succ5.lid)
+plot(allEffects(succ5.lid))
 
+(700000/1000)/60
 #A plot
 visreg(succ5.lid, scale = "response", xlab="Virtual time until lid exploring", ylab="Success 5", main= "")
 #Very beautiful residuals
@@ -2039,9 +2043,6 @@ survdiff (Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclu
 
 
 
-
-
-
 #success5 ~ correct.cue.time4----
 #(NO CORRELATION)
 #This isn't promising
@@ -2082,9 +2083,24 @@ succ5time4<-glm(success5 ~ virtual.success.time4, data = succ5.time4formodels,
                 family = binomial)
 
 
-summary(succ5time4)
+summary(succ5time4)$coefficients
 visreg(succ5time4, scale = "response")
 allEffects(succ5time4)
+
+
+#########AAAAAAAAA--------
+
+vst4.surv <- survfit(Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1) 
+plot(vst4.surv, lty = 1:2, xlab="a", ylab="a") 
+
+coxph(Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1)
+
+survdiff (Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1)
+plot(survdiff (Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1))
+
+
+
+#########
 
 #if we remove the virtual 9000000 results for failing
 #success5 ~ success.time4
@@ -2619,6 +2635,8 @@ visreg(renterexpl)
 
 
 summary(renterexpl)
+summary(renterexpl)$coefficients
+
 chisq.test(table(trial1t$refuge.re.enter, trial1t$success))
 
 #Not for success time, but we should remember that fast test 1 succeeders were
@@ -3065,3 +3083,5 @@ heatmap(data = activitycor2, columns = 2:6)
 
 
 
+length(which(explain.innovation1$success5 ==TRUE))
+nrow(explain.innovation1)
