@@ -354,7 +354,7 @@ heatmap(data = activitycor, columns = 2:4)
 cor(trial1$activity.time, trial2t$activity.time)
 #They are not correlated :(
 
-#######
+
 activity2t<-data.frame(trial2t$ID,trial2t$activity.time)
 colnames(activity2t)<-c("ID","activity.time2")
 activity3t<-data.frame(trial3t$ID,trial3t$activity.time)
@@ -366,6 +366,85 @@ heatmap(data = activitycor2, columns = 2:6)
 
 #######
 
+#Activity correlation one by one
+act1<-data.frame(trial1t$ID, trial1t$activity.time)
+colnames(act1)<-c("ID","activity.time1")
+
+act2<-data.frame(trial2t$ID,trial2t$activity.time)
+colnames(act2)<-c("ID","activity.time2")
+
+act3<-data.frame(trial3t$ID,trial3t$activity.time)
+colnames(act3)<-c("ID","activity.time3")
+
+act4<-data.frame(trial4t$ID,trial4t$activity.time)
+colnames(act4)<-c("ID","activity.time4")
+
+act5<-data.frame(trial5t$ID,trial5t$activity.time)
+colnames(act5)<-c("ID","activity.time5")
+
+act21<-merge(act2,act1, all.x = TRUE)
+act31<-merge(act3,act1, all.x = TRUE)
+act41<-merge(act4,act1, all.x = TRUE)
+act51<-merge(act5,act1, all.x = TRUE)
+act32<-merge(act3,act2, all.x = TRUE)
+act42<-merge(act4,act2, all.x = TRUE)
+act52<-merge(act5,act2, all.x = TRUE)
+act43<-merge(act4,act3, all.x = TRUE)
+act53<-merge(act5,act3, all.x = TRUE)
+act54<-merge(act5,act4, all.x = TRUE)
+
+
+
+#Activity 1 is not negatively correlated along time
+summary(lm(activity.time1~ activity.time2, data=act21))$coefficients[2,]
+summary(lm(activity.time1~ activity.time3, data=act31))$coefficients[2,]
+summary(lm(activity.time1~ activity.time4, data=act41))$coefficients[2,]
+summary(lm(activity.time1~ activity.time5, data=act51))$coefficients[2,]
+summary(lm(activity.time2~ activity.time3, data=act32))$coefficients[2,]
+summary(lm(activity.time2~ activity.time4, data=act42))$coefficients[2,]
+summary(lm(activity.time2~ activity.time5, data=act52))$coefficients[2,]
+summary(lm(activity.time3~ activity.time4, data=act43))$coefficients[2,]
+summary(lm(activity.time3~ activity.time5, data=act53))$coefficients[2,]
+summary(lm(activity.time4~ activity.time5, data=act54))$coefficients[2,]
+
+summary(lm(activity.time4~ activity.time5, data=act54))$r.squared
+summary(lm(activity.time3~ activity.time5, data=act53))$r.squared
+summary(lm(activity.time3~ activity.time4, data=act43))$r.squared
+summary(lm(activity.time2~ activity.time5, data=act52))$r.squared
+summary(lm(activity.time2~ activity.time4, data=act42))$r.squared
+summary(lm(activity.time2~ activity.time3, data=act32))$r.squared
+summary(lm(activity.time1~ activity.time5, data=act51))$r.squared
+summary(lm(activity.time1~ activity.time4, data=act41))$r.squared
+summary(lm(activity.time1~ activity.time3, data=act31))$r.squared
+summary(lm(activity.time1~ activity.time2, data=act21))$r.squared
+
+
+coef.act<-data.frame<-(rbind(summary(lm(activity.time1~ activity.time2, data=act21))$coefficients[2,],
+      summary(lm(activity.time1~ activity.time3, data=act31))$coefficients[2,],
+      summary(lm(activity.time1~ activity.time4, data=act41))$coefficients[2,],
+      summary(lm(activity.time1~ activity.time5, data=act51))$coefficients[2,],
+      summary(lm(activity.time2~ activity.time3, data=act32))$coefficients[2,],
+      summary(lm(activity.time2~ activity.time4, data=act42))$coefficients[2,],
+      summary(lm(activity.time2~ activity.time5, data=act52))$coefficients[2,],
+      summary(lm(activity.time3~ activity.time4, data=act43))$coefficients[2,],
+      summary(lm(activity.time3~ activity.time5, data=act53))$coefficients[2,],
+      summary(lm(activity.time4~ activity.time5, data=act54))$coefficients[2,]))
+coef.act
+r.squared<-c(summary(lm(activity.time1~ activity.time2, data=act21))$r.squared,
+summary(lm(activity.time1~ activity.time3, data=act31))$r.squared,
+summary(lm(activity.time1~ activity.time4, data=act41))$r.squared,
+summary(lm(activity.time1~ activity.time5, data=act51))$r.squared,
+summary(lm(activity.time2~ activity.time3, data=act32))$r.squared,
+summary(lm(activity.time2~ activity.time4, data=act42))$r.squared,
+summary(lm(activity.time2~ activity.time5, data=act52))$r.squared,
+summary(lm(activity.time3~ activity.time4, data=act43))$r.squared,
+summary(lm(activity.time3~ activity.time5, data=act53))$r.squared,
+summary(lm(activity.time4~ activity.time5, data=act54))$r.squared)
+
+act.coeff<-cbind(coef.act,r.squared)
+rownames(act.coeff)<-c("Activity 1 ~ Activity 2","Activity 1 ~ Activity 3","Activity 1 ~ Activity 4","Activity 1 ~ Activity 5","Activity 2 ~ Activity 3","Activity 2 ~ Activity 4","Activity 2 ~ Activity 5","Activity 3 ~ Activity 4","Activity 3 ~ Activity 5","Activity 4 ~ Activity 5")
+getwd()
+write.csv(act.coeff, "Activity.correlationships.csv")
 #is inactivity time correlated?
 inactivity1<-data.frame(trial1t$ID, trial1t$inactivity.time)
 colnames(inactivity1)<-c("ID","inactivity.time1")
