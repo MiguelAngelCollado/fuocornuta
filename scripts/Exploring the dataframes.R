@@ -1915,6 +1915,7 @@ cox.activity.prop <- coxph(Surv(virtual.success.time5, success5) ~ activity.prop
 #Big effect, there are big differences in survival curves for activity prop 
 cox.activity.prop
 
+
 #success5~times.resting5----
 #(CORRELATION)
 plot(explain.innovation1$times.resting5,explain.innovation1$success5)
@@ -2242,7 +2243,7 @@ expected = c(0.50, 0.50)      # expected proportions
 chisq.test(x = observed,
            p = expected)$p.value
 
-#################
+
 observed = c(19, 17)        # observed frequencies
 expected = c(0.50, 0.50)      # expected proportions
 
@@ -2252,7 +2253,7 @@ chisq.test(x = observed,
 
 
 
-##############
+
 
 #IT, sex, brain weight-----
 
@@ -2469,6 +2470,45 @@ plot(surv.refuge.enter, lty = 1:6, xlab="Virtual success time 4", ylab="% of no 
 legend(400000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, ncol = 3) 
 
 #re-enter vs no re-enter
+
+###########rebuild of evangelion-----------
+explain.learning1$ID
+explain.learning1$refuge.enter.times
+explain.learning1$virtual.success.time4
+explain.learning1$success4
+
+
+rent4<-data.frame(explain.learning1$ID,
+                  explain.learning1$refuge.enter.times,
+                  explain.learning1$virtual.success.time4,
+                  explain.learning1$success4)
+colnames(rent4)<-c("ID","refuge.enter.times","virtual.success.time4","success4")
+
+survdiff (Surv(virtual.success.time4, success4) ~ refuge.enter.times, na.action = na.exclude, data = rent4)
+
+rent4$refuge.enter.times<-replace()
+
+explain.learning1$refuge.enter.times>1
+
+replace(l, "b", "that's better")
+
+replace(rent4$refuge.enter.times, 2, "OK")
+n=1
+re.enter<-vector()
+
+rent4$refuge.enter.times
+for (n in 1:nrow(rent4)) {
+  if (rent4$refuge.enter.times[n] == 0) {
+re.enter[n]<-rent4$refuge.enter.times[n]}else{
+  if (rent4$refuge.enter.times[n] == 1) {
+re.enter[n]<-1
+  }
+}    
+  }
+
+############
+
+
 #We need to create some data
 refuge.renter<-data.frame(ID, refuge.re.enter)
 refuge.renter.learn<-data.frame(explain.learning1$ID, explain.learning1$refuge.enter.times)
@@ -2494,6 +2534,7 @@ plot(factor(success4) ~ factor(refuge.re.enter), data = succ4ref, main= "Relatio
 table(succ4ref$success4, succ4ref$refuge.re.enter)
 
 #Good significance 
+str(succ4ref)
 succ4ref$success4<-as.factor(succ4ref$success4)
 succ4ref$refuge.re.enter<-as.factor(succ4ref$refuge.re.enter)
 
@@ -2506,7 +2547,15 @@ str(succ4ref)
 allEffects(succ4rre)
 
 #Son curvas diferentes, bien
-survdiff (Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref)
+str(succ4ref)
+succ4ref$virtual.success.time4
+survdiff(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref)
+
+
+
+survdiff(Surv(virtual.success.time4, success4) ~ success1, na.action = na.exclude, data = explain.learning1)
+
+
 
 surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
 plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
