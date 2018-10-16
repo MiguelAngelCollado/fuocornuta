@@ -2156,19 +2156,19 @@ lm.succ5time4<-lm(success5 ~ virtual.success.time4, succ5.time4formodels)
 summary(lm.succ5time4)
 
 hist(lm.succ5time4$residuals)
+visreg(lm.succ5time4)
 shapiro.test(lm.succ5time4$residuals)
 
 
 succ5time4<-glm(success5 ~ virtual.success.time4, data = succ5.time4formodels,
                 family = binomial)
 
-
-summary(succ5time4)$coefficients
+summary(succ5time4)
 visreg(succ5time4, scale = "response")
 allEffects(succ5time4)
 
 
-#########AAAAAAAAA--------
+#survival curves
 
 vst4.surv <- survfit(Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1) 
 plot(vst4.surv, lty = 1:2, xlab="a", ylab="a") 
