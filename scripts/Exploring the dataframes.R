@@ -444,7 +444,7 @@ summary(lm(activity.time4~ activity.time5, data=act54))$r.squared)
 act.coeff<-cbind(coef.act,r.squared)
 rownames(act.coeff)<-c("Activity 1 ~ Activity 2","Activity 1 ~ Activity 3","Activity 1 ~ Activity 4","Activity 1 ~ Activity 5","Activity 2 ~ Activity 3","Activity 2 ~ Activity 4","Activity 2 ~ Activity 5","Activity 3 ~ Activity 4","Activity 3 ~ Activity 5","Activity 4 ~ Activity 5")
 getwd()
-write.csv(act.coeff, "Activity.correlationships.csv")
+#write.csv(act.coeff, "Activity.correlationships.csv")
 #is inactivity time correlated?
 inactivity1<-data.frame(trial1t$ID, trial1t$inactivity.time)
 colnames(inactivity1)<-c("ID","inactivity.time1")
@@ -3080,9 +3080,13 @@ explain.innovation1$time.until.lid.exploring
 
 big.multiv<-glm(success5 ~ refuge.enter.times + refuge.time + virtual.success.time4 + time.until.lid.exploring, data=explain.innovation1, family = binomial)
 summary(big.multiv)
+#Let's remove time until lid exploring to simplify
+big.multiv2<-glm(success5 ~ refuge.enter.times + refuge.time + virtual.success.time4, data=explain.innovation1, family = binomial)
+summary(big.multiv2)
 
 
-
+cox.multiv <- coxph(Surv(virtual.success.time5, success5) ~ refuge.enter.times + refuge.time + virtual.success.time4 + time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1.full) 
+cox.multiv
 
 
 
