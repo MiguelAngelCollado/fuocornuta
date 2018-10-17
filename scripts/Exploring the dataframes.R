@@ -10,6 +10,7 @@ library(plotrix)
 #Import data
 #We import first our data
 trial1 <- read.csv("data/dataframes/trial1.csv")
+View(trial1)
 trial2 <- read.csv("data/dataframes/trial2.csv")
 trial2cut <- read.csv("data/dataframes/trial2cut.csv")
 trial3 <- read.csv("data/dataframes/trial3.csv")
@@ -2290,6 +2291,7 @@ summary(succ4.IT)
 
 #Sex
 #(CORRELATION)
+
 #As seen in innovation, males seem to learn better
 plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex", ylab= "Learning test success", xlab = "Sex")
 #but there are triple n of females
@@ -3072,8 +3074,19 @@ summary(glm(success ~ IT, data = trial5t, family = binomial))
 explain.innovation1$success5
 #Exploration
 explain.innovation1$refuge.enter.times
+
+#You should try
+explain.innovation1$virtual.success.time1
+#Better
+
+#Or number of touched cues! must be correlated with re.enter
+
+
+
+
 #Shyness
 explain.innovation1$refuge.time
+
 #Learning
 explain.innovation1$virtual.success.time4
 explain.innovation1$time.until.lid.exploring
@@ -3088,7 +3101,19 @@ summary(big.multiv2)
 cox.multiv <- coxph(Surv(virtual.success.time5, success5) ~ refuge.enter.times + refuge.time + virtual.success.time4 + time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1.full) 
 cox.multiv
 
+#############
+big.multiv3<-glm(success5 ~ refuge.enter.times + refuge.time + virtual.success.time4, data=explain.innovation1, family = binomial)
+summary(big.multiv3)
 
+plot(big.multiv3)
+
+
+cox.multiv2 <- coxph(Surv(virtual.success.time5, success5) ~ refuge.enter.times + refuge.time + virtual.success.time4, na.action = na.exclude, data = explain.innovation1.full) 
+cox.multiv2
+
+
+
+##############
 
 #OTHER THINGS----
 #Histograms of time spent in the cues-----
@@ -3126,35 +3151,26 @@ allEffects(refuge.activity)
 #Cómo pongo las n debajo de las barras?
 #Differences between males and females
 #Success 5 ~ sex
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 plot(factor(success5) ~ factor (sex), data = explain.innovation1, main= "Sucess in innovation grouped by sex (a)", ylab="Innovation test success", xlab="")
-plot(factor(success5) ~ factor(sex), data = explain.innovation1.full, ylab="", main= "Success in innovation grouped by sex \nTreatment + Control (b)", xlab="")
-plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex (c)", ylab= "Learning test success", xlab="")
-plot(factor(success4) ~ factor(sex), explain.learning1.full, main= "Success in learning grouped by sex \nTreatment + Control (d)", ylab= "", xlab="")
+plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex (b)", ylab= "Learning test success", xlab="")
 par(mfrow=c(1,1))
 
 #Survival curves
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 sex.surv <- survfit(Surv((virtual.success.time5/1000), success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
 plot(sex.surv, lty = 1:2, xlab="Censored success time for innovation", ylab="% individuals that has no solved the task") 
-legend(c("Female", "Male"), lty = 1:2, x =(-50) ,y =0.45) 
-title("Kaplan-Meier curves comparing sex for innovation \n(treatment bees only) (a)") 
+legend(c("Female", "Male"), lty = 1:2, x =(50) ,y =0.2) 
+title("Kaplan-Meier curves for innovation compared by sex (a)") 
 survdiff (Surv((virtual.success.time5), success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
-
-sex.surv.full <- survfit(Surv(virtual.success.time5/1000, success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full) 
-plot(sex.surv.full, lty = 1:2, xlab="Censored success time for innovation", ylab="% individuals that has no solved the task") 
-title("Kaplan-Meier curves comparing sex for innovation \n(treatment and control bees) (b)") 
-survdiff (Surv((virtual.success.time5), success5) ~ sex, na.action = na.exclude, data = explain.innovation1.full)
+"Innovation success curves compared by sex"
 
 sex.surv.learn <- survfit(Surv(virtual.success.time4/1000, success4) ~ sex, na.action = na.exclude, data = explain.learning1) 
-plot(sex.surv.learn, lty = 1:2, xlab="Censored success time for learning", ylab="% individuals that has no solved the task") 
-title("Kaplan-Meier curves comparing sex for learning \n(treatment bees only) (c)") 
+plot(sex.surv.learn, lty = 1:2, xlab="Censored success time for learning", ylab="") 
+title("Kaplan-Meier curves comparing sex for learning (b)") 
 survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
+par(mfrow=c(1,1))
 
-sex.surv.learn.full <- survfit(Surv(virtual.success.time4/1000, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full) 
-plot(sex.surv.learn.full, lty = 1:2, xlab="Censored success time for learning", ylab="% individuals that has no solved the task") 
-title("Kaplan-Meier curves comparing sex for learning \n(treatment and control bees) (d)") 
-survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1.full)
 
 #Success 1 ~ success 5
 par(mfrow=c(2,1))
