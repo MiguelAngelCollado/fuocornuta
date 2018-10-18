@@ -10,7 +10,7 @@ library(plotrix)
 #Import data
 #We import first our data
 trial1 <- read.csv("data/dataframes/trial1.csv")
-View(trial1)
+
 trial2 <- read.csv("data/dataframes/trial2.csv")
 trial2cut <- read.csv("data/dataframes/trial2cut.csv")
 trial3 <- read.csv("data/dataframes/trial3.csv")
@@ -764,6 +764,47 @@ eatcatcnozero<-na.omit(eatcatcnozero)
 pairs(eatcatcnozero[2:7])
 cor(eatcatc[2:7])
 
+
+#number of explored cues
+first<-vector()
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$first.cue.time[n]>0){first[n] <- 1 }else{
+    first[n] <- trial1t$first.cue.time[n]}
+}
+
+second<-vector()
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$second.cue.time[n]>0){second[n] <- 1 }else{
+    second[n] <- trial1t$second.cue.time[n]}
+}
+
+third<-vector()
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$third.cue.time[n]>0){third[n] <- 1 }else{
+    third[n] <- trial1t$third.cue.time[n]}
+}
+
+fourth<-vector()
+
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$fourth.cue.time[n]>0){fourth[n] <- 1 }else{
+    fourth[n] <- trial1t$fourth.cue.time[n]}
+}
+first
+second
+third
+fourth
+
+n.of.explored.cues<-(first+second+third+fourth)
+
+rent<-data.frame(trial1t$ID, trial1t$refuge.re.enter, trial1t$refuge.enter.times, n.of.explored.cues)
+colnames(rent)<-c("ID","refuge.re.enter", "refuge.enter.times", "n.of.explored.cues")
+str(rent)
+explored.cues<-data.frame(trial1t$ID, n.of.explored.cues)
+colnames(explored.cues)<-c("ID", "n.of.explored.cues")
+
+
+
 #Defining learning----
 
 #We can only consider correct.cue.time, if the bees has eaten in the previous trials
@@ -1020,7 +1061,7 @@ explain.innovation1<-subset(explain.innovation1,
                             subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 =======
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
-View(explain.innovation1)
+
 explain.innovation1$success4
 explain.learning1$success4
 >>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
@@ -1330,6 +1371,19 @@ summary(succ5.renter)
 #And in the reverse logit effect
 allEffects(succ5.renter)
 
+
+#success5 ~ n.of.cues.explored----
+#(No correlation)
+re.enter.data
+explored.cues
+succ5cues<-merge(re.enter.data,explored.cues)
+str(succ5cues)
+
+plot(factor(success5) ~ n.of.explored.cues, data=succ5cues)
+summary(glm(success5 ~ n.of.explored.cues, data = succ5cues, family = binomial))
+
+
+explain.innovation1
 #success5 ~ refuge.time----
 #(MARGINAL CORRELATION)
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
@@ -1398,6 +1452,8 @@ title("Kaplan-Meier Curves comparing sexes \n(treatment bees only)")
 cox.refugesucc5 <- coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.action = na.exclude, data = explain.innovation1) 
 #Nothing, the curves are equal
 cox.refugesucc5
+
+
 
 
 #For this block, we are analyzing one by one success5 (TRUE/FALSE, dicotomical)
@@ -2232,7 +2288,7 @@ chisq.test(matrix(c(30,48,24,48), ncol = 2))$p.value
 
 #Probamos con glm, nada
 
-View(trial4)
+
 trial4$success
 trial4$experiment.type
 
@@ -2474,7 +2530,7 @@ legend(400000, .99999999, c("0","1","2","3","4","5"), lty = 1:6, horiz = FALSE, 
 
 #re-enter vs no re-enter
 
-###########rebuild of evangelion-----------
+
 explain.learning1$ID
 explain.learning1$refuge.enter.times
 explain.learning1$virtual.success.time4
@@ -2509,7 +2565,7 @@ re.enter[n]<-1
 }    
   }
 
-############
+
 
 
 #We need to create some data
@@ -2563,6 +2619,12 @@ survdiff(Surv(virtual.success.time4, success4) ~ success1, na.action = na.exclud
 surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
 plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
 legend(200000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
+
+#Success 4 ~ n.of.explored.cues----
+#por aquí----
+succ4cues<-merge(succ4ref, explored.cues)
+
+
 
 #Learning explained with exploration------
 nrow(explain.learning1)
@@ -2798,6 +2860,59 @@ plot(factor(refuge.re.enter) ~ refuge.time, data = trial1t)
 
 summary(lm(refuge.re.enter ~ refuge.time, data = trial1t))
 summary(glm(refuge.re.enter ~ refuge.time, data = trial1t, family = binomial))
+
+
+#Can re-enter be replaced with something else?
+
+first<-vector()
+for (n in 1:nrow(trial1t)) {
+ if(trial1t$first.cue.time[n]>0){first[n] <- 1 }else{
+   first[n] <- trial1t$first.cue.time[n]}
+}
+
+second<-vector()
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$second.cue.time[n]>0){second[n] <- 1 }else{
+    second[n] <- trial1t$second.cue.time[n]}
+}
+
+third<-vector()
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$third.cue.time[n]>0){third[n] <- 1 }else{
+    third[n] <- trial1t$third.cue.time[n]}
+}
+
+fourth<-vector()
+
+for (n in 1:nrow(trial1t)) {
+  if(trial1t$fourth.cue.time[n]>0){fourth[n] <- 1 }else{
+    fourth[n] <- trial1t$fourth.cue.time[n]}
+}
+first
+second
+third
+fourth
+
+n.of.explored.cues<-(first+second+third+fourth)
+
+rent<-data.frame(trial1t$ID, trial1t$refuge.re.enter, trial1t$refuge.enter.times, n.of.explored.cues)
+colnames(rent)<-c("ID","refuge.re.enter", "refuge.enter.times", "n.of.explored.cues")
+str(rent)
+explored.cues<-data.frame(trial1t$ID, n.of.explored.cues)
+colnames(explored.cues)<-c("ID", "n.of.explored.cues")
+
+
+
+plot(refuge.enter.times ~ n.of.explored.cues, data = rent)
+plot(factor(refuge.re.enter) ~ n.of.explored.cues, data = rent)
+boxplot(n.of.explored.cues ~ refuge.re.enter, data = rent)
+
+summary(lm(refuge.enter.times ~ n.of.explored.cues, data = rent))
+summary(glm(refuge.re.enter ~ n.of.explored.cues, data = rent, family = binomial))
+visreg(glm(refuge.re.enter ~ n.of.explored.cues, data = rent, family = binomial))
+
+explored.cues<-data.frame(rent$ID, rent$n.of.explored.cues)
+colnames(explored.cues)<-c("ID", "n.of.explored.cues")
 
 #MULTIVARIATE MODELS (Fishing)----
 #INNOVATION----
