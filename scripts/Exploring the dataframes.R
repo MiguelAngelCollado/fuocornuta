@@ -1683,6 +1683,7 @@ allEffects(succ5.virtual1)
 #(Correlation) but n=17 (all succeeders)
 na.omit(explain.innovation1$success.time1)
 plot(success5 ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1", xlim=c(0,900000))
+visreg(lm(success5 ~ success.time1, data=explain.innovation1))
 plot(factor(success5) ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1")
 
 succ5.succtime1<-glm(formula = success5 ~ success.time1, 
@@ -3170,12 +3171,12 @@ plot(sex.surv.learn, lty = 1:2, xlab="Censored success time for learning", ylab=
 title("Kaplan-Meier curves comparing sex for learning (b)") 
 survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
 par(mfrow=c(1,1))
-
-
 #Success 1 ~ success 5
 par(mfrow=c(2,1))
-plot(explain.innovation1$success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Success time in exploration test", main= "Success time in exploration \nrelated to success in innovation \n(only innovation test succeeders)", xlim=c(0,900))
-plot(explain.innovation1$virtual.success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Censored success time in exploration test", main="Success time in exploration \nrelated to success in innovation", xlim=c(0,900))
+visreg(lm(success5 ~ virtual.success.time1, data = explain.innovation1), xlab="Censored exploration success time", ylab="Innovation success", main="Success time in exploration related to success in innovation (a)")
+visreg(lm(success5 ~ (success.time1), data=explain.innovation1), xlab="Exploration success time", ylab="Innovation success", main="Success time in exploration related to success in innovation (only innovation test succeeders) (b)")
+#plot(explain.innovation1$success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Success time in exploration test", main= "Success time in exploration \nrelated to success in innovation \n(only innovation test succeeders)", xlim=c(0,900))
+#plot(explain.innovation1$virtual.success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Censored success time in exploration test", main="Success time in exploration \nrelated to success in innovation", xlim=c(0,900))
 par(mfrow=c(1,1))
 
 
@@ -3195,19 +3196,19 @@ plot(succ5act3$success5 ~ succ5act3$activity.time.3, main= "No Correlation", yla
 plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", ylab = "Innovation test success", xlab = "Activity time trial 4")
 par(mfrow=c(1,1))
 
-visreg(succ5.act, scale = "response", main= "Correlation", ylab = "Innovation test success", xlab = "Activity time proportion trial 5")
+visreg(succ5.act, scale = "response", main= "Activity in innovation test related to innovation success", ylab = "Innovation test success", xlab = "Activity time proportion trial 5")
 
 
 explain.innovation1$activity.prop5
 #Shyness
 par(mfrow=c(2,2))
 
-plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Success 5", xlab = "Time spent in the refuge", main = "Relationship between \n innovation success and time spent in the refuge (a)")
-plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Success 5", main= "Relationship between \ninnovation success and re-entering the refuge (b)")
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Innovation success", xlab = "Time spent in the refuge", main = "Relationship between \n innovation success and time spent in the refuge (a)")
+plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Innovation success", main= "Relationship between \ninnovation success and re-entering the refuge (b)")
 plot(factor(success4) ~ factor(refuge.re.enter), data = succ4ref, main= "Relationship between \nlearning success and re-entering the refuge (c)", 
      ylab= "Learning test success", xlab= "Refuge re-enter")
 surv.refuge.enter <- survfit(Surv(virtual.success.time4/1000, success4) ~ refuge.re.enter, na.action = na.exclude, data = succ4ref) 
-plot(surv.refuge.enter, lty = 1:2, xlab="Censored success time 4", ylab="% of success in trial 4", main= "Survival curves for refuge re-enter times (d)") 
+plot(surv.refuge.enter, lty = 1:2, xlab="Censored success time 4", ylab="% of success in learning", main= "Survival curves for refuge re-enter times (d)") 
 legend(200, .30, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1, cex = 0.6, text.width = 550) 
 
 par(mfrow=c(1,1))
