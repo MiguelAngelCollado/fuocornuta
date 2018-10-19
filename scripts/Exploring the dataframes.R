@@ -1371,6 +1371,15 @@ summary(succ5.renter)
 #And in the reverse logit effect
 allEffects(succ5.renter)
 
+rentsucc5km<-survfit (Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data)
+plot(rentsucc5km, lty = 1:2, xlab="Time until innovation success", ylab="% individuals that has no solved the task") 
+legend(10000, .3, c("Not re-enter the refuge", "Re-enter the refuge"), lty = 1:2) 
+title("Kaplan-Meier Curves comparing \n re-enter and no re-enter in the refuge") 
+survdiff (Surv(virtual.success.time5, success5) ~ re.enter, na.action = na.exclude, data = re.enter.data)
+
+
+
+
 
 #success5 ~ n.of.cues.explored----
 #(No correlation)
@@ -1382,8 +1391,20 @@ str(succ5cues)
 plot(factor(success5) ~ n.of.explored.cues, data=succ5cues)
 summary(glm(success5 ~ n.of.explored.cues, data = succ5cues, family = binomial))
 
+#Aquí, acaba esto------
+cuessucc5km<-survfit (Surv(virtual.success.time5, success5) ~ n.of.explored.cues, na.action = na.exclude, data = succ5cues)
+plot(cuessucc5km, lty = 1:2, xlab="Time until innovation success", ylab="% individuals that did not solved the task", main="Number of touched cues related to innovation success") 
+legend(10000, .42, c("Touch 3 cues", "Touch 4 cues", "Touch 2 cues", "Touch 0 cues"), lty = 1:4, cex = 0.5) 
+survdiff (Surv(virtual.success.time5, success5) ~ n.of.explored.cues, na.action = na.exclude, data = succ5cues)
+
+
 
 explain.innovation1
+
+
+
+
+
 #success5 ~ refuge.time----
 #(MARGINAL CORRELATION)
 lm.succ.refuge<-lm(formula = success5 ~ refuge.time, 
