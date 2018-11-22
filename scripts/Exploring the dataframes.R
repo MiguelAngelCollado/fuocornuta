@@ -3309,8 +3309,25 @@ survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, d
 par(mfrow=c(1,1))
 #Success 1 ~ success 5
 par(mfrow=c(2,1))
-visreg(lm(success5 ~ virtual.success.time1, data = explain.innovation1), xlab="Censored exploration success time", ylab="Innovation success", main="Success time in exploration related to success in innovation (a)")
-visreg(lm(success5 ~ (success.time1), data=explain.innovation1), xlab="Exploration success time", ylab="Innovation success", main="Success time in exploration related to success in innovation (only innovation test succeeders) (b)")
+
+explain.innovation1$success5.as.numeric<-as.numeric(explain.innovation1$success5)
+
+plot(success5.as.numeric ~ virtual.success.time1, data = explain.innovation1, main="Success time in exploration related to success in innovation (a)", xlab="Censored exploration success time", ylab = "Innovation success", xlim=c(0,900000))
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5.as.numeric ~ virtual.success.time1, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(virtual.success.time1 = xweight), type="response")
+lines(xweight, yweight)
+
+
+plot(success5.as.numeric ~ success.time1, data = explain.innovation1, main="Success time in exploration related to success in innovation (only innovation test succeders) (b)", xlab="Censored exploration success time", ylab = "Innovation success", xlim=c(0,900000))
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5.as.numeric ~ success.time1, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(success.time1 = xweight), type="response")
+lines(xweight, yweight)
+
+par(mfrow=c(1,1))
+
+
 #plot(explain.innovation1$success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Success time in exploration test", main= "Success time in exploration \nrelated to success in innovation \n(only innovation test succeeders)", xlim=c(0,900))
 #plot(explain.innovation1$virtual.success.time1/1000, explain.innovation1$success5, ylab = "Success in innovation test", xlab = "Censored success time in exploration test", main="Success time in exploration \nrelated to success in innovation", xlim=c(0,900))
 par(mfrow=c(1,1))
@@ -3333,6 +3350,14 @@ plot(succ5act4$success5 ~ succ5act4$activity.time.4, main= "No Correlation", yla
 par(mfrow=c(1,1))
 
 visreg(succ5.act, scale = "response", main= "Activity in innovation test related to innovation success", ylab = "Innovation test success", xlab = "Activity time proportion trial 5")
+
+
+plot(success5.as.numeric ~ activity.prop5, data = explain.innovation1, main="Activity in innovation test related to innovation success", xlab="Activity time proportion trial 5", ylab = "Innovation test success", xlim=c(0,1))
+xweight <- seq(0, 1, 0.01)
+fit <- glm(success5.as.numeric ~ activity.prop5, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(activity.prop5 = xweight), type="response")
+lines(xweight, yweight)
+
 
 
 explain.innovation1$activity.prop5
@@ -3370,3 +3395,6 @@ heatmap(data = activitycor2, columns = 2:6)
 
 length(which(explain.innovation1$success5 ==TRUE))
 nrow(explain.innovation1)
+
+
+
