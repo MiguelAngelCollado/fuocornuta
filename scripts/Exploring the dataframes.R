@@ -2045,6 +2045,8 @@ plot(succ5.rest5, lty = 1:3, xlab="Censored success time 5", ylab="% individuals
 legend(10000, .3, c("No resting", "Resting 1 time","Resting 2 times"), lty = 1:3) 
 
 survdiff (Surv(virtual.success.time5, success5) ~ times.resting5, na.action = na.exclude, data = explain.innovation1)
+
+
 #success5 ~ activity.times----
 #success5 ~ activity.time.1
 #(CORRELATION)
@@ -3397,4 +3399,5 @@ length(which(explain.innovation1$success5 ==TRUE))
 nrow(explain.innovation1)
 
 
-
+View(explain.innovation1)
+(subset(explain.innovation1, subset = (explain.innovation1$success5 == TRUE))$virtual.time.until.lid.exploring)/1000
