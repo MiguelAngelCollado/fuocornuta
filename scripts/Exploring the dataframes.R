@@ -3249,7 +3249,6 @@ summary(big.multiv2)
 cox.multiv <- coxph(Surv(virtual.success.time5, success5) ~ refuge.enter.times + refuge.time + virtual.success.time4 + time.until.lid.exploring, na.action = na.exclude, data = explain.innovation1.full) 
 cox.multiv
 
-#############
 big.multiv3<-glm(success5 ~ refuge.enter.times + refuge.time + virtual.success.time4, data=explain.innovation1, family = binomial)
 summary(big.multiv3)
 
@@ -3258,10 +3257,6 @@ plot(big.multiv3)
 
 cox.multiv2 <- coxph(Surv(virtual.success.time5, success5) ~ refuge.enter.times + refuge.time + virtual.success.time4, na.action = na.exclude, data = explain.innovation1.full) 
 cox.multiv2
-
-
-
-##############
 
 #OTHER THINGS----
 #Histograms of time spent in the cues-----
@@ -3431,12 +3426,56 @@ lines(xweight, yweight)
 
 #Figure 3
 learning.refuge<-data.frame(explain.learning1$ID,
+explain.learning1$success4,                            
 explain.learning1$refuge.enter.times,
 explain.learning1$virtual.success.time4
 )
-colnames(learning.refuge)<-c("ID","refuge.enter.times","virtual.success.time4")
+colnames(learning.refuge)<-c("ID","success4","refuge.enter.times","virtual.success.time4")
 learning.refuge<-na.omit(learning.refuge)
 learning.refuge
 refuge.re.enter<-learning.refuge$refuge.enter.times
 refuge.re.enter<-replace(refuge.re.enter, refuge.re.enter > 1, 1)
-learning.refuge$refuge.re.enter<-refuge.re.enter
+refuge.re.entern<-replace(refuge.re.enter, refuge.re.enter == 1, TRUE)
+as.logical(refuge.re.enter)
+learning.refuge$refuge.re.enter<-as.logical(refuge.re.enter)
+
+par(mfrow=c(1,2)) 
+plot(factor(success4) ~ factor(refuge.re.enter), data = learning.refuge, 
+     xlab="Refuge re-enter", ylab="Learning test success", 
+     main="Learning test related to exploration (a)")
+succ4ref$refuge.re.enter.01<-replace(succ4ref$refuge.re.enter,as.numeric(succ4ref$refuge.re.enter) > 1, 1)
+surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter.01, na.action = na.exclude, data = succ4ref) 
+plot(surv.refuge.enter, ylim=c(0,1),lty = 1:2, xlab="Censored success time 4", ylab="% of success in trial 4", 
+     main= "Survival curves for refuge re-enter times (b)") 
+legend(200000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"),
+       lty = 1:6, horiz = FALSE, ncol = 1, cex = 0.8, bty ="n") 
+par(mfrow=c(1,1)) 
+
+#Alternatively
+surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = learning.refuge) 
+plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
+legend(400000, .99999999, 
+       c("Refuge re-enter","Not refuge re-enter"), 
+       lty = 1:2, horiz = FALSE, ncol = 1, bty="n",
+       cex = 0.8) 
+
+#Figure 4
+par(mfrow=c(2,2))
+plot(factor(success5) ~ factor (sex), data = explain.innovation1, main= "Sucess in innovation grouped by sex (a)", ylab="Innovation test success", xlab="")
+
+plot(factor(success4) ~ factor(sex), explain.learning1, main= "Success in learning grouped by sex (b)", ylab= "Learning test success", xlab="")
+
+sex.surv <- survfit(Surv(virtual.success.time5, success5) ~ sex, na.action = na.exclude, data = explain.innovation1) 
+plot(sex.surv, lty = 1:2, xlab="Censored success time for innovation", ylab="% individuals that has no solved the task") 
+legend(c("Female", "Male"), lty = 1:2, x =10 ,y =0.4, cex = 0.8, bty="n") 
+title("Kaplan-Meier curves for innovation compared by sex (c)") 
+survdiff (Surv((virtual.success.time5), success5) ~ sex, na.action = na.exclude, data = explain.innovation1)
+
+sex.surv.learn <- survfit(Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1) 
+plot(sex.surv.learn, lty = 1:2, xlab="Censored success time for learning", ylab="") 
+title("Kaplan-Meier curves comparing sex for learning (d)") 
+survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
+
+par(mfrow=c(1,1))
+
+
