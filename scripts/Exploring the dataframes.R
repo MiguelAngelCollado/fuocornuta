@@ -2261,7 +2261,7 @@ plot(survdiff (Surv(virtual.success.time5, success5) ~ virtual.success.time4, na
 
 
 
-#########
+
 
 #if we remove the virtual 9000000 results for failing
 #success5 ~ success.time4
@@ -2592,6 +2592,15 @@ re.enter[n]<-1
 
 
 #We need to create some data
+ID<-explain.learning1$ID
+refuge.re.enter<-
+
+  
+  
+    
+explain.learning1$refuge.enter.times
+
+refuge.re.enter<-replace(explain.learning1$refuge.enter.times, explain.learning1$refuge.enter.times == "Psithyrus", "Bombus")
 refuge.renter<-data.frame(ID, refuge.re.enter)
 refuge.renter.learn<-data.frame(explain.learning1$ID, explain.learning1$refuge.enter.times)
 
@@ -3380,7 +3389,7 @@ par(mfrow=c(1,2))
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Comparation between innovation and success (a)")
 visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)", ylab ="", main="Descending probability of innovation success \n with time until succeess in learning test (b)")
 par(mfrow=c(1,1))
-succ5time4.2<-glm(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4/1000, family = binomial)
+succ5time4.2<-glm(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4, family = binomial)
 
 par(mfrow=c(1,2)) 
 
@@ -3401,3 +3410,33 @@ nrow(explain.innovation1)
 
 View(explain.innovation1)
 (subset(explain.innovation1, subset = (explain.innovation1$success5 == TRUE))$virtual.time.until.lid.exploring)/1000
+
+
+#Figures google drive----
+#Figure 2
+par(mfrow=c(2,2)) 
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Success in innovation and learning (a)")
+visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)", ylab ="Innovation test success probability", main="Probability of innovation related to \nbeing faster at the learning test (b)")
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Innovation test success", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
+plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Innovation test success", main= "Relationship between \ninnovation success and re-entering the refuge (d)")
+
+par(mfrow=c(1,1)) 
+
+#Alternatively
+plot(success5 ~ virtual.success.time4, data = succ5.time4formodels)
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5.as.numeric ~ virtual.success.time4, data = explain.innovation1, family = binomial)
+yweight <- predict(fit, list(virtual.success.time4 = xweight), type="response")
+lines(xweight, yweight)
+
+#Figure 3
+learning.refuge<-data.frame(explain.learning1$ID,
+explain.learning1$refuge.enter.times,
+explain.learning1$virtual.success.time4
+)
+colnames(learning.refuge)<-c("ID","refuge.enter.times","virtual.success.time4")
+learning.refuge<-na.omit(learning.refuge)
+learning.refuge
+refuge.re.enter<-learning.refuge$refuge.enter.times
+refuge.re.enter<-replace(refuge.re.enter, refuge.re.enter > 1, 1)
+learning.refuge$refuge.re.enter<-refuge.re.enter
