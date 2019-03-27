@@ -65,7 +65,6 @@ shyness<-data.frame(trial1t$test,
                trial1t$refuge.prop,
                trial1t$refuge.enter.times
                )
-library(dplyr)
 colnames(shyness)
 shyness<-rename(shyness, test = trial1t.test, refuge.time = trial1t.refuge.time, 
                 getting.out.refuge.time = trial1t.getting.out.refuge.time,
@@ -1056,15 +1055,12 @@ is.data.frame(explain.innovation1)
 ##it seems that some control bees have fallen into our data, let's remove then
 #this is due to some confusion during along the trials (10 hours of work a day, one free day a week...)
 #but is everything under control#
-<<<<<<< HEAD
 explain.innovation1<-subset(explain.innovation1, 
                             subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
-=======
 explain.innovation1<-subset(explain.innovation1, subset = (explain.innovation1$success1 == TRUE|explain.innovation1$success1 == FALSE))
 
 explain.innovation1$success4
 explain.learning1$success4
->>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 
 
 explain.innovation1[which(explain.innovation1$ID == "OC20"),
@@ -1755,11 +1751,21 @@ allEffects(succ5.virtual1)
 
 #What happens when we remove the virtual success of 900000 ms?
 #(So now we are only using successful bees for the trial 1 )
-
+#----------------
 #success5~success.time1----
 #(Correlation) but n=17 (all succeeders)
 na.omit(explain.innovation1$success.time1)
 plot(success5 ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1", xlim=c(0,900000))
+
+
+plot(success5 ~ success.time1, data=explain.innovation1, main="x", xlab="x", ylab = "x", xlim=c(0,900000))
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5 ~ success.time1, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(success.time1 = xweight), type="response")
+lines(xweight, yweight)
+
+
+
 visreg(lm(success5 ~ success.time1, data=explain.innovation1))
 plot(factor(success5) ~ success.time1, data=explain.innovation1, ylab = "Success5", xlab = "Success time 1")
 
@@ -2183,8 +2189,6 @@ summary(succ5.succ4)
 allEffects(succ5.succ4)
 
 
-=======
->>>>>>> 956e27b7b58a419f35b510f808a5a5015148471f
 surv.succ5.succ4 <- survfit(Surv(virtual.success.time5, success5) ~ success4, na.action = na.exclude, data = explain.innovation1) 
 plot(surv.succ5.succ4, lty = 1:2, xlab="Censored success time 5", ylab="% individuals that has no solved the task", main="Success in innovation \ndepending on having succeed innovation trial") 
 legend(10000, .2, c("Individuals that didn't succeed learning test", "Individuals that succeed learning test"), lty = 1:2) 
@@ -2653,7 +2657,7 @@ plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no 
 legend(200000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"), lty = 1:6, horiz = FALSE, ncol = 1) 
 
 #Success 4 ~ n.of.explored.cues----
-#por aquí----
+
 succ4cues<-merge(succ4ref, explored.cues)
 
 
@@ -3416,6 +3420,14 @@ plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Innovatio
 plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Innovation test success", main= "Relationship between \ninnovation success and re-entering the refuge (d)")
 
 par(mfrow=c(1,1)) 
+
+
+plot(success5 ~ success.time1, data=explain.innovation1, main="Probability of success related to exploration (e)", xlab="Exploration time success", ylab = "Innovation success", xlim=c(0,900000))
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5 ~ success.time1, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(success.time1 = xweight), type="response")
+lines(xweight, yweight)
+
 
 #Alternatively
 plot(success5 ~ virtual.success.time4, data = succ5.time4formodels)
