@@ -2950,6 +2950,14 @@ visreg(glm(refuge.re.enter ~ n.of.explored.cues, data = rent, family = binomial)
 explored.cues<-data.frame(rent$ID, rent$n.of.explored.cues)
 colnames(explored.cues)<-c("ID", "n.of.explored.cues")
 
+#Survival by sex
+summary(trial1$sex)
+summary(trial5$sex)
+
+summary(trial5$sex)/summary(trial1$sex)
+
+
+
 #MULTIVARIATE MODELS (Fishing)----
 #INNOVATION----
 #First, Is innovation explain by success in learning and exploration?
