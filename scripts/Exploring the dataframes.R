@@ -1288,7 +1288,6 @@ plot(v.succ.refuge, which = 1)
 ##and it doesn't
 plot(v.succ.refuge, which = 2)
 
-
 #Let's remove those who didn't passed the innovation trial (trial 5)
 v.succ.refuge.only.successful<-lm(data = (subset(explain.innovation1, subset = (explain.innovation1$virtual.success.time5<900000))), formula = virtual.success.time5 ~ refuge.time) 
 summary(v.succ.refuge.only.successful)
@@ -3424,9 +3423,8 @@ View(explain.innovation1)
 par(mfrow=c(2,2)) 
 plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Success in innovation and learning (a)")
 visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)", ylab ="Innovation test success probability", main="Probability of innovation related to \nbeing faster at the learning test (b)")
-plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Innovation test success", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
+visreg(succ.refuge, scale = "response",ylab = "Innovation test success probability", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
 plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Innovation test success", main= "Relationship between \ninnovation success and re-entering the refuge (d)")
-
 par(mfrow=c(1,1)) 
 
 
@@ -3435,6 +3433,20 @@ xweight <- seq(0, 900000, 1000)
 fit <- glm(success5 ~ success.time1, family = binomial, data = explain.innovation1)
 yweight <- predict(fit, list(success.time1 = xweight), type="response")
 lines(xweight, yweight)
+
+plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Innovation test success", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
+xweight <- seq(0, 900000, 1000)
+fit <- glm(success5 ~ refuge.time, family = binomial, data = explain.innovation1)
+yweight <- predict(fit, list(refuge.time = xweight), type="response")
+lines(xweight, yweight)
+
+
+plot(factor(success5) ~ refuge.time, data=explain.innovation1, ylab = "Innovation test success", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
+
+
+visreg(succ.refuge, scale = "response")
+
+
 
 
 #Alternatively
