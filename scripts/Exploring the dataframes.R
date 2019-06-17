@@ -5,7 +5,7 @@ library(visreg)
 library(DHARMa)
 library(survival)
 library(plotrix)
-
+library(brms)
 #DEFINING (behaviors)----
 #Import data
 #We import first our data
@@ -20,10 +20,6 @@ trial5 <- read.csv("data/dataframes/trial5.csv")
 datafull <- read.csv("data/dataframes/datafull.csv")
 
 
-nrow(trial1)
-nrow(trial5)
-
-nrow(trial1t) + nrow(trial1c)
 #We extract only the treatment trials, not control ones
 trial1t<-subset(trial1, subset = (trial1$experiment.type == "Treatment"))
 trial1c<-subset(trial1, subset = (trial1$experiment.type == "Control"))
@@ -75,6 +71,8 @@ cor(shyness[2:5])
 pcr.shyness<-prcomp(shyness[2:5], center = TRUE,
                            scale. = TRUE, na.action = na.omit)
 pcr.shyness
+write.csv(pcr.shyness$rotation, "shyness.csv")
+
 summary(pcr.shyness)
 plot(pcr.shyness, type = "l")
 biplot(pcr.shyness)
@@ -887,6 +885,8 @@ summary(cs)
 pcr.learning<-prcomp(learning[,c(2,3,5,6)], center = TRUE,
                     scale. = TRUE) #check
 pcr.learning
+#write.csv(pcr.learning$rotation, "learningpcr.csv")
+
 summary(pcr.learning)
 plot(pcr.learning, type = "l")
 biplot(pcr.learning)
@@ -1230,6 +1230,7 @@ controlvstreatment
 chisq.test(controlvstreatment)
 fisher.test(controlvstreatment)
 
+summary(glm(trial5$success~trial5$experiment.type, family = binomial))
 
 #Treatment and control are independent from succeeding or no succeeding, success
 #has nothing to do with treatment, ergo they are equals
@@ -2181,7 +2182,7 @@ plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4)
 #But this table is not
 table(explain.innovation1$success5, explain.innovation1$success4)
 
-succ5.succ4<-glm(success5~success4, data = explain.innovation1, family = binomial)
+succ5.succ4<-glm(success5~success4, data = succ4succ5formodels, family = binomial)
 chisq.test(x = c(2,7))
 #Why we don't have significance here?? The difference is clear graphicaly
 summary(succ5.succ4)
@@ -2228,6 +2229,7 @@ succ5.time4formodels<-na.omit(succ5.time4formodels)
 
 #Most succeders, did the test 4 in little time
 plot(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4, ylab= "Success 5", xlab="Virtual success time 4")
+abline(lm(succ5.time4formodels$success5 ~ succ5.time4formodels$virtual.success.time4))
 #How many passed the test
 length(which(succ5.time4formodels$success5 == TRUE))
 #Did they took long?
@@ -2262,7 +2264,9 @@ coxph(Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action =
 survdiff (Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1)
 plot(survdiff (Surv(virtual.success.time5, success5) ~ virtual.success.time4, na.action = na.exclude, data = explain.innovation1))
 
-
+#nacho
+coxph(Surv(virtual.success.time5, success5) ~ virtual.success.time4 + activity.prop5 + success4 + sex
+      , na.action = na.exclude, data = explain.innovation1)
 
 
 
@@ -2957,123 +2961,212 @@ summary(trial5$sex)/summary(trial1$sex)
 
 
 
-#MULTIVARIATE MODELS (Fishing)----
-#INNOVATION----
-#First, Is innovation explain by success in learning and exploration?
-#The answer is NO
 
-#success5 ~ success4 + success1
-#(NO CORRELATION)
-summary(succ5.succ1)
-summary(succ5.succ4)
+#MODEL SELECTION-------
 
-succ541<-glm(success5 ~ success1 + success4, data = explain.innovation1, family = binomial)
-
-summary(succ541)
-
-
+#INNOVATION success----
 
 #Innovation with shyness-----
-#Our shyness descriptors
-summary(succ5.renter)
+
+#The univariate model
+summary(glm(formula = success5 ~ refuge.time, family = "binomial", data = explain.innovation1))
 summary(succ.refuge)
-#Maybe successtime1 has something to do
-summary(succ5.succtime1)
 
-#Re.enter was created later, let's check that is not correlated
-renter.refugetime<-glm(factor(re.enter) ~ explain.innovation1$refuge.time, family = binomial)
-summary(renter.refugetime)
-
-renter.succtime<-glm(factor(re.enter) ~ explain.innovation1$refuge.time, 
-                     family = binomial) 
-summary(renter.succtime)
-
-#Success5 ~ re.enter + refuge.time
-succ5shy<-glm(explain.innovation1$success5 ~ factor(re.enter) + explain.innovation1$refuge.time,
-    family = binomial)
-
-#When you add both shyness descriptors together, the model fails, and AIC doesn't
-#improve! 
-summary(succ5shy)
-#But not individually 
-summary(succ5.renter)
-summary(succ.refuge)
+#multivariate models for shyness
+explain.innovation1
+shyness.full<-glm(formula = success5 ~ refuge.time + activity.prop5 + sex, family = "binomial", data = explain.innovation1)
+summary(shyness.full)
 
 #Innovation with exploration-----
-#These variables are correlated with innovation
-explain.innovation1$success.time1
-explain.innovation1$virtual.time.until.lid.exploring
+explain.exploration1<-explain.innovation1
+explain.exploration1$success.time1
+explain.exploration1$virtual.time.until.lid.exploring
+explain.exploration1$refuge.enter.times
+for (n in 1:nrow(explain.exploration1)){if(explain.exploration1$refuge.enter.times[n]==0){
+  
+  explain.exploration1$refuge.re.enter[n]<-FALSE
+}else{explain.exploration1$refuge.re.enter[n]<-TRUE}
+  
+}
+
+explain.exploration1$refuge.re.enter
+
+#Univariate models
+summary(glm(formula = success5 ~ refuge.re.enter, family = "binomial", 
+    data = explain.exploration1))
+summary(succ5.renter)
+
 summary(succ5.succtime1)
 summary(succ5.lid)
 
-succ5.succtime1.lid<-glm(success5 ~ success.time1 + virtual.time.until.lid.exploring, 
-    data = explain.innovation1, family = binomial)
+#Multivariate model
+exploration.full<-glm(success5 ~ virtual.success.time1 + virtual.time.until.lid.exploring + refuge.re.enter + sex + activity.prop5, data=explain.exploration1)
+summary(exploration.full)
 
-#This is ok, is better the model with two variables than
-#More time until success (but neccesarily succeeding) the exploration trial summed
-#with less time until lid exploring give us a model about success in innovation
+cor(explain.exploration1[,c("virtual.success.time1", "virtual.time.until.lid.exploring", "refuge.re.enter")])
 
-summary(succ5.succtime1.lid)
-allEffects(succ5.succtime1.lid)
-
-summary(succ5.succtime1)
-summary(succ5.lid)
-
-allEffects(succ5.succtime1)
-allEffects(succ5.lid)
-
-#Innovation with Activity-----
-explain.innovation1$activity.prop5
-explain.innovation1$times.resting5
-summary(succ5.act)
-summary(succ5.rest)
-
-#Multivariate model does not improve success 5 explanation
-succ5.act.rest<-glm(success5 ~ activity.prop5 + times.resting5, data = explain.innovation1,
-    family = binomial)
-summary(succ5.act.rest)
-summary(succ5.act)
-summary(succ5.rest)
-
+#Multivariate model
+exploration.full2<-glm(success5 ~  virtual.time.until.lid.exploring + sex + activity.prop5, data=explain.exploration1)
+summary(exploration.full2)
 
 #Innovation with Learning-----
 
 virtual.success.time4  
 summary(succ5time4)
+summary(succ5succ4)
+learning.full<-glm(success5 ~ success4 + virtual.success.time4 + sex + activity.prop5, family = "binomial", explain.innovation1)
+summary(learning.full)
+
+cor(explain.innovation1$activity.prop5, explain.innovation1$virtual.success.time4, use = "complete.obs")
+learning.full2<-glm(success5 ~ virtual.success.time4 + sex + activity.prop5, family = "binomial", explain.innovation1)
+summary(learning.full2)
+
+#INNOVATION censored time----
+
+#Innovation with shyness----
+#univariate
+summary(glm(virtual.success.time5 ~ refuge.time, data=explain.innovation1))
+cox.refugesucc5
+#multivariate
+shyness.full.t<-glm(virtual.success.time5 ~ refuge.time + sex + activity.prop5, data=explain.innovation1)
+summary(shyness.full.t)
+
+#Innovation with exploration----
+
+#univariate
+summary(glm(virtual.success.time5 ~ virtual.success.time1, data=explain.innovation1))
+summary(glm(virtual.success.time5 ~ virtual.time.until.lid.exploring, data=explain.innovation1))
+summary(glm(virtual.success.time5 ~ refuge.re.enter, data=explain.exploration1))
+#multivariate
+exploration.full.t<-glm(virtual.success.time5 ~ virtual.success.time1
+                      + refuge.re.enter + sex + activity.prop5, data=explain.exploration1)
+summary(exploration.full.t)
+
+#Innovation with Learning-----
+#univariate
+summary(glm(virtual.success.time5 ~ success4, data=explain.innovation1))
+summary(glm(virtual.success.time5 ~ virtual.success.time4, data=explain.innovation1))
+
+#multivariate
+learning.full.t<-glm(virtual.success.time5 ~ success4 + virtual.success.time4 + sex + activity.prop5, data = explain.innovation1)
+summary(learning.full.t)
 
 
-#LEARNING-----
+
+
+#MODEL SELECTION LEARNING-----
+explain.learning1
+#LEARNING success---------
+#Learning with shyness
+#univariate
+summary(glm(success4 ~ refuge.time, data=explain.learning1))
+#multivariate
+shyness.full.l<-glm(success4 ~ refuge.time + sex + activity.prop4, data=explain.learning1)
+summary(shyness.full.l)
+
+#Learning with exploration
+learning.exploration.data<-data.frame(explain.learning1$ID,
+                            explain.learning1$success4,                            
+                            explain.learning1$refuge.enter.times,
+                            explain.learning1$virtual.success.time4,
+                            explain.learning1$virtual.success.time1,
+                            explain.learning1$sex,
+                            explain.learning1$activity.prop4,
+                            explain.learning1$refuge.time
+)
+colnames(learning.exploration.data)<-c("ID","success4","refuge.enter.times","virtual.success.time4",
+                                       "virtual.success.time1","sex","activity.prop4","refuge.time")
+learning.exploration.data<-na.omit(learning.exploration.data)
+learning.exploration.data
+refuge.re.enter<-learning.exploration.data$refuge.enter.times
+refuge.re.enter<-replace(refuge.re.enter, refuge.re.enter > 1, 1)
+refuge.re.entern<-replace(refuge.re.enter, refuge.re.enter == 1, TRUE)
+as.logical(refuge.re.enter)
+learning.exploration.data$refuge.re.enter<-as.logical(refuge.re.enter)
+
+
+#Univariate models
+summary(glm(success4 ~ refuge.re.enter, data =learning.exploration.data, family="binomial"))
+#Multivariate model
+exploration.full.l<-glm(success4 ~ virtual.success.time1 + refuge.re.enter + sex + activity.prop4, data=learning.exploration.data)
+summary(exploration.full.l)
+
+#LEARNING time
+#Learning with shyness
+#univariate
+summary(glm(virtual.success.time4 ~ refuge.time, data=explain.learning1))
+#multivariate
+shyness.full.lt<-glm(virtual.success.time4 ~ refuge.time + sex + activity.prop4, data=explain.learning1)
+summary(shyness.full.lt)
+
+#Learning with exploration
+
+#Univariate models
+summary(glm(virtual.success.time4 ~ refuge.re.enter, data =learning.exploration.data))
+#Multivariate model
+exploration.full.lt<-glm(virtual.success.time4 ~ virtual.success.time1 + refuge.re.enter + sex + activity.prop4, data=learning.exploration.data)
+summary(exploration.full.lt)
+
+
+#BIG MODELS-----
+
+
+full.innovation.model<-glm(success5~refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1,
+                           na.action="na.omit") #sex removed...
+summary(full.innovation.model)
+anova(full.innovation.model)
+coxph(Surv(virtual.success.time5, success5) ~ refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1, na.action = na.exclude) 
+
+
+coxph(Surv(virtual.success.time5, success5) ~  virtual.success.time4, data=explain.innovation1, na.action = na.exclude) 
+
+
+
+
+full.learning.model<-glm(,data=learning.exploration.data)
+
+
+
+
+
+
+
+
 #We need a new data.frame
 learning.for<-data.frame(explain.learning1$ID,
                          explain.learning1$success4,
                          explain.learning1$sex,
                          explain.learning1$refuge.enter.times,
                          explain.learning1$time.until.correct.cue4)
-colnames(learning.for)
-learning.for<-rename(learning.for, ID = explain.learning1.ID, sex = explain.learning1.sex,
-       refuge.enter.times = explain.learning1.refuge.enter.times,
-       time.until.correct.cue4 = explain.learning1.time.until.correct.cue4,
-       success4 = explain.learning1.success4)
-learning.for.multi<-merge(learning.for, refuge.renter, by="ID")
 
-#Refuge enter times must be correlated with refuge.re.enter, because it's
-#extracted from the same variable
-check<-glm(refuge.re.enter ~ refuge.enter.times, data = learning.for.multi)
-summary(check)
+colnames(learning.for)<-c("ID","success4","sex","refuge.enter.times","time.until.correct.cue4")
+learning.for<-na.omit(learning.for)
+str(learning.for)
+n=3
+for (n in 1:nrow(learning.for)){if(learning.for$refuge.enter.times[n]==0){
+  
+  learning.for$refuge.re.enter[n]<-FALSE
+}else{learning.for$refuge.re.enter[n]<-TRUE}
+  
+}
+
+learning.for
+
 
 #Let's use only refuge.re.enter because is more simple
-learning.full.model<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter + sex, 
-    data = learning.for.multi, family = binomial)
-summary(learning.full.model)
+lfullmod<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter + sex, 
+    data = learning.for, family = binomial)
+summary(lfullmod)
 
-learning.models1<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter, 
-                      data = learning.for.multi, family = binomial)
-#We compare the models
-summary(learning.full.model)
-summary(learning.models1)
-summary(succ4timeuntilecue)
-summary(succ4rre)
+lmod1<-glm(success4 ~ time.until.correct.cue4 + refuge.re.enter, 
+              data = learning.for, family = binomial)
+lmod2<-glm(success4 ~ time.until.correct.cue4, 
+           data = learning.for, family = binomial)
+model.sel(lfullmod,lmod1,lmod2)
 
+
+write.csv(model.sel(lfullmod,lmod1,lmod2)
+,"model_sel_learning.csv")
 #Best model is
 summary(learning.models1)
 
@@ -3105,30 +3198,17 @@ fisher.test(learning.success.chi)
 
 
 
-################
 
 
 
 learning.models1$null.deviance + learning.models1$deviance
 #Other multivariate combinations----
 
-#success5 ~ success4.time + success1.time
-
-lm.succ5vtime5<-lm(success5 ~ virtual.success.time4 + virtual.success.time1, 
-                  data = explain.innovation1)
-
-summary(lm.succ5vtime5)
-
-succ5vtime5<-glm(success5 ~ virtual.success.time4 + virtual.success.time1, 
-                data = explain.innovation1, family = binomial)
-summary(succ5vtime5)
 
 
-
-
-colnames(explain.innovation1)
-
-lm.model.success5<-lm(success5 ~ refuge.time + 
+#INNOVATION MODEL SELECTION---------
+head(explain.innovation1)
+full.model<-glm(success5 ~ refuge.time + 
                       virtual.success.time1 + 
                       virtual.time.until.lid.exploring +
                       activity.prop5 +
@@ -3136,26 +3216,11 @@ lm.model.success5<-lm(success5 ~ refuge.time +
                       virtual.success.time4 +
                       sex, data = explain.innovation1)
 
-summary(lm.model.success5)
-hist(lm.model.success5$residuals)
-
-
-#We do a model with every variable that resulted significative for individual
-#models
-
-whole.model.success5<-glm(success5 ~ refuge.time + 
-                      virtual.success.time1 + 
-                      virtual.time.until.lid.exploring +
-                      activity.prop5 +
-                      times.resting5 +
-                      virtual.success.time4 +
-                      sex, data = explain.innovation1, family = binomial)
-
 #And it is a mess
-summary(whole.model.success5)
+summary(full.model)
 
 #Virtual.time.until.lid.exploring has the lowest significance, and very low effect
-model.success5.1<-glm(success5 ~ refuge.time + 
+mod1<-glm(success5 ~ refuge.time + 
                       virtual.success.time1 + 
                       
                       activity.prop5 +
@@ -3163,11 +3228,11 @@ model.success5.1<-glm(success5 ~ refuge.time +
                       virtual.success.time4 +
                       sex, data = explain.innovation1, family = binomial)
 
-summary(model.success5.1)
+summary(mod1)
 
 #for sex, we don't have enough males and the significance is low
 
-model.success5.2<-glm(success5 ~ refuge.time + 
+mod2<-glm(success5 ~ refuge.time + 
                         virtual.success.time1 + 
                         
                         activity.prop5 +
@@ -3176,10 +3241,10 @@ model.success5.2<-glm(success5 ~ refuge.time +
                         
                         data = explain.innovation1, family = binomial)
 
-summary(model.success5.2)
+summary(mod2)
 
 #Virtual.success.time4 has very little effect, and no significance
-model.success5.3<-glm(success5 ~ refuge.time + 
+mod3<-glm(success5 ~ refuge.time + 
                         virtual.success.time1 + 
                         
                         activity.prop5 +
@@ -3188,24 +3253,27 @@ model.success5.3<-glm(success5 ~ refuge.time +
                       
                       data = explain.innovation1, family = binomial)
 
-summary(model.success5.3)
+summary(mod3)
 
 #times.resting5 has no significance at all
 
-model.success5.4<-glm(success5 ~ refuge.time + 
+mod4<-glm(success5 ~ refuge.time + 
                         virtual.success.time1 + 
                         activity.prop5,
                         data = explain.innovation1, family = binomial)
 
 #This model is something
-summary(model.success5.4)
+summary(mod4)
 
 #virtual.success.time1 has little effect
-model.success5.5<-glm(success5 ~ refuge.time + 
+mod5<-glm(success5 ~ refuge.time + 
                         activity.prop5,
                       data = explain.innovation1, family = binomial)
 
-summary(model.success5.5)
+summary(mod5)
+
+write.csv(model.sel(full.model,mod1,mod2,mod3,mod4,mod5), "model_sel_innovation.csv")
+
 #Multivariate size + sex----
 trial4t$success
 trial4t$sex
@@ -3421,18 +3489,22 @@ View(explain.innovation1)
 #Figures google drive----
 #Figure 2
 par(mfrow=c(2,2)) 
-plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning test success", ylab = "Innovation test success", main= "Success in innovation and learning (a)")
-visreg(succ5time4, scale = "response", xlab= "Time until learning success (ms)", ylab ="Innovation test success probability", main="Probability of innovation related to \nbeing faster at the learning test (b)")
-visreg(succ.refuge, scale = "response",ylab = "Innovation test success probability", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
-plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Refuge re-enter", ylab="Innovation test success", main= "Relationship between \ninnovation success and re-entering the refuge (d)")
+plot(factor(explain.innovation1$success5) ~ factor(explain.innovation1$success4), xlab="Learning success", ylab = "Innovation success", main= "Innovation success compared to learning success (a)", las= 1)
+visreg(succ5time4, scale = "response", xlab= "Latency to learning success (ms)", ylab ="Innovation success probability", main="Probability of innovation success related to \nbeing latency to learning (b)")
+
+visreg(succ.refuge, scale = "response",ylab = "Innovation success probability", xlab = "Time spent in the refuge (ms)", main = "Probability of innovation success related to \ntime spent in the refuge (c)")
+plot(factor(re.enter.data$re.enter), factor(re.enter.data$success5), xlab="Re-entering the refuge", ylab="Innovation success", main= "Innovation success compared \n to re-entering the refuge (d)")
 par(mfrow=c(1,1)) 
 
 
-plot(success5 ~ success.time1, data=explain.innovation1, main="Probability of success related to exploration (e)", xlab="Exploration time success", ylab = "Innovation success", xlim=c(0,900000))
+plot(success5 ~ success.time1, data=explain.innovation1, main="Innovation success related to exploration success (e)", xlab="Exploration time success", ylab = "Innovation success", xlim=c(0,900000))
 xweight <- seq(0, 900000, 1000)
 fit <- glm(success5 ~ success.time1, family = binomial, data = explain.innovation1)
 yweight <- predict(fit, list(success.time1 = xweight), type="response")
 lines(xweight, yweight)
+
+
+
 
 plot(success5 ~ refuge.time, data=explain.innovation1, ylab = "Innovation test success", xlab = "Time spent in the refuge (ms)", main = "Relationship between \n innovation success and time spent in the refuge (c)")
 xweight <- seq(0, 900000, 1000)
@@ -3456,6 +3528,42 @@ fit <- glm(success5.as.numeric ~ virtual.success.time4, data = explain.innovatio
 yweight <- predict(fit, list(virtual.success.time4 = xweight), type="response")
 lines(xweight, yweight)
 
+
+#New figure 2, multivariate
+full.innovation.model
+summary(full.innovation.model)
+#Innovation success refuge time
+visreg(succ.refuge, scale = "response",ylab = "Innovation success probability", xlab = "Time spent in the refuge (ms)", main = "Probability of innovation success related to \ntime spent in the refuge (c)")
+plot(success5~refuge.time,data = explain.exploration1)
+abline(glm(success5~refuge.time,data = explain.exploration1))
+
+succtemp=NULL
+explain.innovation1.asf<-explain.innovation1
+for (n in 1:nrow(explain.innovation1.asf)){
+if(explain.innovation1.asf$success5[n]==TRUE){succtemp[n]<-1}else{succtemp[n]<-0}}
+explain.innovation1.asf$success5<-succtemp
+full.innovation.model.f<-glm(success5~refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1.asf,
+                           na.action="na.omit")
+
+plot(success5~refuge.time,data = explain.innovation1.asf,
+     xlim=c(0,900003),las=1, ylab="Innovation success", xlab="Refuge time",yaxt="n", main="TEMP",xaxt="n")
+
+fits <-ggpredict(full.innovation.model.f,terms = "refuge.time")
+polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
+        col = "grey80", border = NA)
+lines(fits$x, fits$predicted, lwd=2)
+lines(fits$x, fits$conf.low)
+lines(fits$x, fits$conf.high)
+
+points(success5~refuge.time,data = explain.innovation1.asf)
+lines(fits$Forests, fits$estimate__, lwd=2)
+axis(2,cex.axis=1, las=1)
+axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
+
+#Innovation time to learn
+#Innovation exploration time
+#Innovation with activity
+
 #Figure 3
 learning.refuge<-data.frame(explain.learning1$ID,
 explain.learning1$success4,                            
@@ -3474,12 +3582,12 @@ learning.refuge$refuge.re.enter<-as.logical(refuge.re.enter)
 par(mfrow=c(1,2)) 
 plot(factor(success4) ~ factor(refuge.re.enter), data = learning.refuge, 
      xlab="Refuge re-enter", ylab="Learning test success", 
-     main="Learning test related to exploration (a)")
+     main="Learning success related to exploration (a)")
 succ4ref$refuge.re.enter.01<-replace(succ4ref$refuge.re.enter,as.numeric(succ4ref$refuge.re.enter) > 1, 1)
 surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter.01, na.action = na.exclude, data = succ4ref) 
 plot(surv.refuge.enter, ylim=c(0,1),lty = 1:2, xlab="Censored success time 4", ylab="% of success in trial 4", 
-     main= "Survival curves for refuge re-enter times (b)") 
-legend(200000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"),
+     main= "Survival curves for exploration (b)") 
+legend(100000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"),
        lty = 1:6, horiz = FALSE, ncol = 1, cex = 0.8, bty ="n") 
 par(mfrow=c(1,1)) 
 
@@ -3509,5 +3617,31 @@ title("Kaplan-Meier curves comparing sex for learning (d)")
 survdiff (Surv(virtual.success.time4, success4) ~ sex, na.action = na.exclude, data = explain.learning1)
 
 par(mfrow=c(1,1))
+
+
+#Not decay of activity along the trials
+t1<-data.frame(rep(1,nrow(trial1)),trial1$activity.prop)
+colnames(t1)<-c("Trial","activity.prop")
+
+t2<-data.frame(rep(2,nrow(trial2)), trial2$activity.prop)
+colnames(t2)<-c("Trial","activity.prop")
+
+
+t3<-data.frame(rep(3,nrow(trial3)),trial3$activity.prop)
+colnames(t3)<-c("Trial","activity.prop")
+
+t4<-data.frame(rep(4,nrow(trial4)),trial4$activity.prop)
+colnames(t4)<-c("Trial","activity.prop")
+
+t5<-data.frame(rep(5,nrow(trial5)),trial5$activity.prop)
+colnames(t5)<-c("Trial","activity.prop")
+
+activity.trend<-rbind(t1,t2,t3,t4,t5)
+
+plot(activity.prop ~ Trial,data=activity.trend)
+abline(lm(activity.prop ~ Trial,data=activity.trend), col = "purple")
+boxplot(activity.prop ~ Trial,data=activity.trend)
+abline(lm(activity.prop ~ Trial,data=activity.trend), col = "purple")
+summary(lm(activity.prop ~ Trial,data=activity.trend))
 
 
