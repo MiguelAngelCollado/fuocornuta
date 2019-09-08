@@ -1,0 +1,6 @@
+"","correct.cue.time","time.until.correct.cue","success.time","success","success.virtual.time"
+"correct.cue.time",1,-0.263363287230617,NA,0.434508119881487,-0.453209647811405
+"time.until.correct.cue",-0.263363287230617,1,NA,-0.271416889217531,0.423022721622674
+"success.time",NA,NA,1,NA,NA
+"success",0.434508119881487,-0.271416889217531,NA,1,-0.908264612644684
+"success.virtual.time",-0.453209647811405,0.423022721622674,NA,-0.908264612644684,1
