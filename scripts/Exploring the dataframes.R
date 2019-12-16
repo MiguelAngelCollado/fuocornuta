@@ -368,9 +368,84 @@ colnames(activity3t)<-c("ID","activity.time3")
 
 activitycor2<-merge(merge(merge(merge(activity1,activity2t, by="ID"), activity3t, by = "ID"), activity4, by = "ID"), activity5, by = "ID")
 cor(activitycor2[2:6])
+is.data.frame(activitycor2)
+colnames(activitycor2)<-c("ID","Activity trial 1","Activity trial 2","Activity trial 3","Activity trial 4", "Activity trial 5")
 heatmap(data = activitycor2, columns = 2:6)
 
-
+########
+data=activitycor2
+columns = 2:6
+heatmap<-function(data, columns)
+  cormat<-cor(na.omit(data[columns]))
+mean(cormat)  
+library(reshape2)
+  melted_cormat <- melt(cormat)
+  head(melted_cormat)
+  library(ggplot2)
+  ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+    geom_tile()
+  
+  # Get lower triangle of the correlation matrix
+  get_lower_tri<-function(cormat){
+    cormat[upper.tri(cormat)] <- NA
+    return(cormat)
+  }
+  # Get upper triangle of the correlation matrix
+  get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+  }
+  upper_tri <- get_upper_tri(cormat)
+  upper_tri
+  
+  library(reshape2)
+  melted_cormat <- melt(upper_tri, na.rm = TRUE)
+  # Heatmap
+  melted_cormat[1,3]<-0
+  melted_cormat[3,3]<-0
+  melted_cormat[6,3]<-0
+  melted_cormat[10,3]<-0
+  melted_cormat[15,3]<-0
+  library(ggplot2)
+  pdf("heatmap.pdf")
+  ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
+    geom_tile(color = "white")+
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                         midpoint = 0, limit = c(-1,1), space = "Lab", 
+                         name="Pearson\nCorrelation") +
+    theme_minimal()+ 
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                     size = 12, hjust = 1))+
+    coord_fixed()+
+    xlab("")+
+    ylab("")+
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  dev.off()
+  reorder_cormat <- function(cormat){
+    # Use correlation between variables as distance
+    dd <- as.dist((1-cormat)/2)
+    hc <- hclust(dd)
+    cormat <-cormat[hc$order, hc$order]
+  }
+  
+  # Reorder the correlation matrix
+  cormat <- reorder_cormat(cormat)
+  upper_tri <- get_upper_tri(cormat)
+  # Melt the correlation matrix
+  melted_cormat <- melt(upper_tri, na.rm = TRUE)
+  # Create a ggheatmap
+  ggheatmap <- ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
+    geom_tile(color = "white")+
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                         midpoint = 0, limit = c(-1,1), space = "Lab", 
+                         name="Pearson\nCorrelation") +
+    theme_minimal()+ # minimal theme
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                     size = 12, hjust = 1))+
+    coord_fixed()
+  # Print the heatmap
+  print(ggheatmap)
+#######
 
 #Activity correlation one by one
 act1<-data.frame(trial1t$ID, trial1t$activity.time)
@@ -1887,8 +1962,10 @@ shapiro.test(lm.succ5.lid$residuals)
 
 #We have significance, but we can not forget that censored data this time
 #implies not succeeding
+innmod1<-explain.exploration1
+innmod1$virtual.time.until.lid.exploring<-((innmod1$virtual.time.until.lid.exploring)/1000)/60
 succ5.lid<-glm(success5 ~ virtual.time.until.lid.exploring, 
-               data = explain.innovation1, family = "binomial")
+               data = innmod1, family = "binomial")
 
 summary(succ5.lid)
 summary(succ5.lid)$coefficients
@@ -2301,6 +2378,7 @@ explain.learning1
 
 #How many passed and not passed the test
 summary(explain.learning1$success4)
+30/(30+18)
 
 #Artifacts----
 
@@ -2339,13 +2417,13 @@ summary(glm(success ~ experiment.type, data = trial4, family = binomial))
 observed = c(30, 18)        # observed frequencies
 expected = c(0.50, 0.50)      # expected proportions
 
-chisq.test(x = observed,
+csqt<-chisq.test(x = observed,
            p = expected)$p.value
 
 
 observed = c(19, 17)        # observed frequencies
 expected = c(0.50, 0.50)      # expected proportions
-
+19+17
 chisq.test(x = observed,
            p = expected)$p.value
 
@@ -3128,7 +3206,8 @@ full.innovation.model<-glm(success5~refuge.time + virtual.success.time4 + virtua
 
 summary(full.innovation.model)
 anova(full.innovation.model)
-coxph(Surv(virtual.success.time5, success5) ~ refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1, na.action = na.exclude) 
+coxph(Surv(virtual.success.time5, success5) ~ refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1.minutes, na.action = na.exclude) 
+coxph(Surv(virtual.success.time5, success5) ~ refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation2.minutes2, na.action = na.exclude) 
 
 
 coxph(Surv(virtual.success.time5, success5) ~  virtual.success.time4, data=explain.innovation1, na.action = na.exclude) 
@@ -3157,6 +3236,12 @@ coxph(Surv(virtual.success.time4, success4) ~ refuge.re.enter + sex, data=learni
 
 
 coxph(Surv(virtual.success.time4, success4) ~ refuge.time + virtual.success.time1 + sex, data=learning.exploration.data, na.action = na.exclude) 
+
+
+coxph(Surv(virtual.success.time4, success4) ~ refuge.time + virtual.success.time1 + activity.prop4 + sex, data=explain.learning2.minutes2, na.action = na.exclude) 
+
+
+coxph(Surv(virtual.success.time4, success4) ~ refuge.time + virtual.success.time1 + activity.prop4 + sex, data=explain.learning1.minutes, na.action = na.exclude) 
 
 
 #We need a new data.frame
@@ -3512,6 +3597,185 @@ nrow(explain.innovation1)
 View(explain.innovation1)
 (subset(explain.innovation1, subset = (explain.innovation1$success5 == TRUE))$virtual.time.until.lid.exploring)/1000
 
+#Bayesian approach-----
+#innovation
+full.innovation.model.f
+str(explain.innovation1.asf)
+
+b.innovation<-brm(formula = success5 ~ refuge.time + virtual.success.time4 + 
+                     virtual.success.time1 + activity.prop5, family = "bernoulli", cores = 4,
+                   data = explain.innovation1.asf,control = list(adapt_delta = 0.9,max_treedepth=10))
+
+
+b.innovation$fit@sim
+
+
+marginal_effects(b.innovation)
+plot(b.innovation)
+
+
+explain.innovation1.minutes<-explain.innovation1.asf
+
+explain.innovation1.minutes$virtual.success.time5<-((explain.innovation1.minutes$virtual.success.time5)/1000)/60
+explain.innovation1.minutes$virtual.success.time4<-((explain.innovation1.minutes$virtual.success.time4)/1000)/60
+explain.innovation1.minutes$refuge.time<-((explain.innovation1.minutes$refuge.time)/1000)/60
+explain.innovation1.minutes$virtual.success.time1<-((explain.innovation1.minutes$virtual.success.time1)/1000)/60
+
+
+b.innovation2<-brm(formula = success5 ~ refuge.time + virtual.success.time4 + 
+                     virtual.success.time1 + activity.prop5, family = "bernoulli", cores = 4,
+                   data = explain.innovation1.minutes,control = list(adapt_delta = 0.9,max_treedepth=10))
+
+expl.temp<-explain.innovation1.minutes$virtual.success.time1
+explain.innovation1.minutes$ID
+get.out<-((trial1$getting.out.refuge.time)/1000)/60
+trial1$ID
+get.out.r<-data.frame(trial1$ID,get.out)
+colnames(get.out.r)<-c("ID","get.out")
+length(explain.innovation1.minutes)
+explain.innovation2.minutes<-merge(explain.innovation1.minutes,get.out.r)
+expl.temp<-explain.innovation2.minutes$virtual.success.time1 - explain.innovation2.minutes$get.out
+which(explain.innovation2.minutes$virtual.success.time1==15)
+expl.temp[2]=explain.innovation2.minutes$virtual.success.time1[2]
+expl.temp[6]=explain.innovation2.minutes$virtual.success.time1[6]
+expl.temp[8]=explain.innovation2.minutes$virtual.success.time1[8]
+expl.temp[10]=explain.innovation2.minutes$virtual.success.time1[10]
+expl.temp[14]=explain.innovation2.minutes$virtual.success.time1[14]
+expl.temp[17]=explain.innovation2.minutes$virtual.success.time1[17]
+expl.temp[18]=explain.innovation2.minutes$virtual.success.time1[18]
+expl.temp[21]=explain.innovation2.minutes$virtual.success.time1[21]
+expl.temp[22]=explain.innovation2.minutes$virtual.success.time1[22]
+expl.temp[24]=explain.innovation2.minutes$virtual.success.time1[24]
+expl.temp[26]=explain.innovation2.minutes$virtual.success.time1[26]
+expl.temp[27]=explain.innovation2.minutes$virtual.success.time1[27]
+
+explain.innovation2.minutes2<-explain.innovation2.minutes
+explain.innovation2.minutes2$virtual.success.time1<-expl.temp
+
+b.innovation3<-brm(formula = success5 ~ refuge.time + virtual.success.time4 + 
+                     virtual.success.time1 + activity.prop5, family = "bernoulli", cores = 4,
+                   data = explain.innovation2.minutes2,control = list(adapt_delta = 0.9,max_treedepth=10))
+b.innovation3
+
+
+explain.learning1.minutes<-explain.learning1.asf
+explain.learning1.minutes$virtual.success.time1<-((explain.innovation1.minutes$virtual.success.time5)/1000)/60
+explain.learning1.minutes$virtual.success.time1<-((explain.learning1.minutes$virtual.success.time1)/1000)/60
+explain.learning1.minutes$refuge.time<-((explain.learning1.minutes$refuge.time)/1000)/60
+
+full.learning.model
+
+b.learning<-brm(formula = success4 ~ refuge.time  + 
+                     virtual.success.time1 + activity.prop4, family = "bernoulli", cores = 4,
+                   data = explain.learning1.minutes,control = list(adapt_delta = 0.9,max_treedepth=10))
+
+b.learning2<-brm(formula = success4 ~ refuge.time  + 
+                  virtual.success.time1 + activity.prop4 + sex, family = "bernoulli", cores = 4,
+                data = explain.learning1.minutes,control = list(adapt_delta = 0.9,max_treedepth=10))
+
+
+23
+OC35
+
+36
+oc60
+
+expl.temp2
+explain.learning1.minutes
+explain.learning2.minutes2<-explain.learning1.minutes
+explain.learning2.minutes2<-merge(explain.learning1.minutes,get.out.r)
+get.out.r
+
+expl.temp2<-explain.learning2.minutes2$virtual.success.time1 - explain.learning2.minutes2$get.out
+which(explain.learning2.minutes2$virtual.success.time1==15)
+expl.temp2[3]=explain.learning2.minutes2$virtual.success.time1[3]
+expl.temp2[9]=explain.learning2.minutes2$virtual.success.time1[9]
+expl.temp2[11]=explain.learning2.minutes2$virtual.success.time1[11]
+expl.temp2[13]=explain.learning2.minutes2$virtual.success.time1[13]
+expl.temp2[15]=explain.learning2.minutes2$virtual.success.time1[15]
+expl.temp2[16]=explain.learning2.minutes2$virtual.success.time1[16]
+expl.temp2[21]=explain.learning2.minutes2$virtual.success.time1[21]
+expl.temp2[25]=explain.learning2.minutes2$virtual.success.time1[25]
+expl.temp2[26]=explain.learning2.minutes2$virtual.success.time1[26]
+expl.temp2[28]=explain.learning2.minutes2$virtual.success.time1[28]
+expl.temp2[30]=explain.learning2.minutes2$virtual.success.time1[30]
+expl.temp2[31]=explain.learning2.minutes2$virtual.success.time1[31]
+expl.temp2[33]=explain.learning2.minutes2$virtual.success.time1[33]
+expl.temp2[34]=explain.learning2.minutes2$virtual.success.time1[34]
+expl.temp2[35]=explain.learning2.minutes2$virtual.success.time1[35]
+expl.temp2[37]=explain.learning2.minutes2$virtual.success.time1[37]
+expl.temp2[39]=explain.learning2.minutes2$virtual.success.time1[39]
+expl.temp2[42]=explain.learning2.minutes2$virtual.success.time1[42]
+expl.temp2[43]=explain.learning2.minutes2$virtual.success.time1[43]
+
+b.learning3<-brm(formula = success4 ~ refuge.time  + 
+                   virtual.success.time1 + activity.prop4 + sex, family = "bernoulli", cores = 4,
+                 data = explain.learning2.minutes2,control = list(adapt_delta = 0.9,max_treedepth=10))
+
+explain.innovation1.minutes2<-explain.innovation1.minutes
+explain.innovation1.minutes2$virtual.success.time1<-expl.temp
+
+
+nrow(explain.learning1.minutes)
+#Cox
+
+####
+update.packages("brms")
+brmsfamily("cox")
+library(simsurv)
+library(survival)
+library(simsurv)
+library(brms)
+set.seed(1234)
+brmsfamily("cox")
+if (!requireNamespace("remotes")) {
+  install.packages("remotes")
+}
+remotes::install_github("paul-buerkner/brms")
+# simulated data from the rstanarm::stan_surv example
+covs <- data.frame(id  = 1:200, trt = stats::rbinom(200, 1L, 0.5))
+d1 <- simsurv(lambdas = 0.1,
+              gammas  = 1.5,
+              betas   = c(trt = -0.5),
+              x       = covs,
+              maxt    = 5)
+d1 <- merge(d1, covs)
+
+fit_coxph <- coxph(Surv(eventtime, status) ~ trt, data = d1)
+summary(fit_coxph)
+
+fit_brm <- brm(eventtime | cens(1 - status) ~ 1 + trt, 
+               data = d1, family = brmsfamily("cox"))
+summary(fit_brm)
+
+write.csv(explain.innovation1.full,"data_miguel.csv")
+#Let's try another thing####
+install.packages("rstanarm")
+library("rstanarm")
+??stan_jm
+
+coxph(Surv(virtual.success.time5, success5) ~ refuge.time, na.action = na.exclude, data = explain.innovation1.full)
+
+fit1 <- stan_jm(
+  formulaLong = list(
+  logBili ~ year + (year | id),
+  albumin ~ year + (year | id)),
+  formulaEvent = Surv(futimeYears, death) ~ sex,
+  dataLong = pbcLong, dataEvent = pbcSurv,
+  time_var = "year", assoc = "etavalue", basehaz = "bs")
+summary(fit1)
+
+
+fit2 <- stan_jm(
+  formulaLong = list(
+    logBili ~ year + (year | id),
+    albumin ~ year + (year | id)),
+  formulaEvent = Surv(futimeYears, death) ~ sex,
+  dataLong = pbcLong, dataEvent = pbcSurv,
+  time_var = "year", assoc = "etavalue", basehaz = "bs")
+summary(fit2)
+
+??stansurv
 
 #Figures google drive----
 
@@ -3527,127 +3791,160 @@ explain.innovation1.asf$success5<-succtemp
 full.innovation.model.f<-glm(success5~refuge.time + virtual.success.time4 + virtual.success.time1 + activity.prop5, data=explain.innovation1.asf,
                            family="binomial",na.action="na.omit")
 summary(full.innovation.model.f)
-
-pdf("Figure2.pdf", width = 7, height = 7)
+View(explain.innovation1.minutes)
+pdf("Figure2.pdf", width = 12, height = 10)
 par(mfrow=c(2,2))
-plot(success5~refuge.time,data = explain.innovation1.asf,
-     xlim=c(0,900003),las=1, ylab="Innovation success", xlab="Time spent in the refuge (min)",yaxt="n", main="Innovation related to shyness (a)",xaxt="n"
-     , cex.lab=1.4, cex.main= 1.35)
+plot(success5~refuge.time,data = explain.innovation2.minutes2,
+     xlim=c(0,15),las=1, ylab="Innovation success", xlab="Time spent in the refuge (min)",yaxt="n", main="Innovation related to shyness (a)",xaxt="n"
+     , cex.lab=1.4, cex.main= 1.35, type = "n")
 
-fits <-ggpredict(full.innovation.model.f,terms = "refuge.time")
+fits <-ggpredict(b.innovation3,terms = "refuge.time")
+
 polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
         col = "grey80", border = NA)
 lines(fits$x, fits$predicted, lwd=2, col="blue")
 lines(fits$x, fits$conf.low)
 lines(fits$x, fits$conf.high)
-points(success5~refuge.time,data = explain.innovation1.asf)
 lines(fits$Forests, fits$estimate__, lwd=2)
-axis(2,cex.axis=1, las=3, seq(0,1, by =1), labels = c("No success","Success"))
+axis(2,cex.axis=1.2, las=3, seq(0,1, by =1), labels = c("No success","Success"))
 #axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
-axis(1,cex.axis=1.15, at = seq(0, 900000, by = 60000),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
+axis(1,cex.axis=1.15, at = seq(0, 15, by = 1),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
 #Innovation time to learn
-plot(success5~virtual.success.time4,data = explain.innovation1.asf,
-     xlim=c(0,900003),las=1, ylab="Innovation success", xlab="Learning time success (min)",yaxt="n", main="Innovation related to learning (b)",xaxt="n"
-     , cex.lab=1.4 , cex.main= 1.35)
+plot(success5~virtual.success.time4,data = explain.innovation2.minutes2,
+     xlim=c(0,15),las=1, ylab="Innovation success", xlab="Learning time success (min)",yaxt="n", main="Innovation related to learning (b)",xaxt="n"
+     , cex.lab=1.4 , cex.main= 1.35, type="n")
 
-fits <-ggpredict(full.innovation.model.f,terms = "virtual.success.time4")
+fits <-ggpredict(b.innovation3,terms = "virtual.success.time4")
+
 polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
         col = "grey80", border = NA)
 lines(fits$x, fits$predicted, lwd=2, col="red")
 lines(fits$x, fits$conf.low)
 lines(fits$x, fits$conf.high)
 
-points(success5~virtual.success.time4,data = explain.innovation1.asf)
 lines(fits$Forests, fits$estimate__, lwd=2)
-axis(2,cex.axis=1, las=3, at = seq(0,1, by =1), labels = c("No success","Success"))
+axis(2,cex.axis=1.2, las=3, at = seq(0,1, by =1), labels = c("No success","Success"))
 #axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
-axis(1,cex.axis=1, at = seq(0, 900000, by = 60000),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
+axis(1,cex.axis=1.15, at = seq(0, 15, by = 1),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
+
 #Innovation exploration time
-data.frame(explain.innovation1.asf$virtual.success.time4,
-explain.innovation1.asf$success5)
 
-plot(success5~virtual.success.time1,data = explain.innovation1.asf,
+plot(success5~virtual.success.time1,data = explain.innovation2.minutes2,
      las=1, ylab="Innovation success", xlab="Exploration time success (min)",yaxt="n", main="Innovation related to exploration (c)",xaxt="n"
-     , cex.lab=1.4 , cex.main= 1.35)
+     , cex.lab=1.4 , cex.main= 1.35, type="n")
 
-fits <-ggpredict(full.innovation.model.f,terms = "virtual.success.time1")
+fits <-ggpredict(b.innovation3,terms = "virtual.success.time1")
 polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
         col = "grey80", border = NA)
 lines(fits$x, fits$predicted, lwd=2, col="purple")
 lines(fits$x, fits$conf.low)
 lines(fits$x, fits$conf.high)
 
-points(success5~virtual.success.time1,data = explain.innovation1.asf)
 lines(fits$Forests, fits$estimate__, lwd=2)
-axis(2,cex.axis=1, las=3, at = seq(0,1,by=1), labels = c("No success","Success"))
+axis(2,cex.axis=1.2, las=3, at = seq(0,1,by=1), labels = c("No success","Success"))
 #axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
-axis(1,cex.axis=1, at = seq(0, 900000, by = 60000),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
+axis(1,cex.axis=1.15, at = seq(0, 15, by = 1),las=1, labels = c("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"))
 
 #Innovation with activity
-plot(success5~activity.prop5,data = explain.innovation1.asf,
+plot(success5~activity.prop5,data = explain.innovation2.minutes2,
      las=1, ylab="Innovation success", xlab="Proportion of time active",yaxt="n", main="Innovation related to activity (d)",xaxt="n"
-     , cex.lab=1.4 , cex.main= 1.35)
-
-fits <-ggpredict(full.innovation.model.f,terms = "activity.prop5")
+     , cex.lab=1.4 , cex.main= 1.35, type="n")
+fits <-ggpredict(b.innovation3,terms = "activity.prop5")
 polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
         col = "grey80", border = NA)
 lines(fits$x, fits$predicted, lwd=2, col=3)
 lines(fits$x, fits$conf.low)
 lines(fits$x, fits$conf.high)
 
-points(success5~activity.prop5,data = explain.innovation1.asf)
 lines(fits$Forests, fits$estimate__, lwd=2)
-axis(2,cex.axis=1, las=3, at = seq(0,1,by=1), labels = c("No success","Success"))
+axis(2,cex.axis=1.2, las=3, at = seq(0,1,by=1), labels = c("No success","Success"))
 axis(1,cex.axis=1, at = seq(0, 1, by = 0.1),las=1)
-
 dev.off()
-#Figure 3 old
-learning.refuge<-data.frame(explain.learning1$ID,
-explain.learning1$success4,                            
-explain.learning1$refuge.enter.times,
-explain.learning1$virtual.success.time4
-)
-colnames(learning.refuge)<-c("ID","success4","refuge.enter.times","virtual.success.time4")
-learning.refuge<-na.omit(learning.refuge)
-learning.refuge
-refuge.re.enter<-learning.refuge$refuge.enter.times
-refuge.re.enter<-replace(refuge.re.enter, refuge.re.enter > 1, 1)
-refuge.re.entern<-replace(refuge.re.enter, refuge.re.enter == 1, TRUE)
-as.logical(refuge.re.enter)
-learning.refuge$refuge.re.enter<-as.logical(refuge.re.enter)
 
-par(mfrow=c(1,2)) 
-plot(factor(success4) ~ factor(refuge.re.enter), data = learning.refuge, 
-     xlab="Refuge re-enter", ylab="Learning test success", 
-     main="Learning success related to exploration (a)")
-succ4ref$refuge.re.enter.01<-replace(succ4ref$refuge.re.enter,as.numeric(succ4ref$refuge.re.enter) > 1, 1)
-surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter.01, na.action = na.exclude, data = succ4ref) 
-plot(surv.refuge.enter, ylim=c(0,1),lty = 1:2, xlab="Censored success time 4", ylab="% of success in trial 4", 
-     main= "Survival curves for exploration (b)") 
-legend(100000, .19, c("Bees that didn't re-entered the refuge","Bees that re-entered the refuge"),
-       lty = 1:6, horiz = FALSE, ncol = 1, cex = 0.8, bty ="n") 
-par(mfrow=c(1,1)) 
-
-#Alternatively
-surv.refuge.enter <- survfit(Surv(virtual.success.time4, success4) ~ refuge.re.enter, na.action = na.exclude, data = learning.refuge) 
-plot(surv.refuge.enter, lty = 1:2, xlab="Virtual success time 4", ylab="% of no success in trial 4", main= "Survival curves for refuge re-enter times") 
-legend(400000, .99999999, 
-       c("Refuge re-enter","Not refuge re-enter"), 
-       lty = 1:2, horiz = FALSE, ncol = 1, bty="n",
-       cex = 0.8) 
-
-#multivariate
 #Learning with shyness
 succtemp=NULL
 explain.learning1.asf<-learning.exploration.data
 for (n in 1:nrow(explain.learning1.asf)){
   if(explain.learning1.asf$success4[n]==TRUE){succtemp[n]<-1}else{succtemp[n]<-0}}
 explain.learning1.asf$success4<-succtemp
-full.learning.model.f<-glm(success4~refuge.time + virtual.success.time1 + activity.prop4 ,data=explain.learning1.asf, na.action = "na.omit",family="binomial")
+full.learning.model.f<-glm(success4~refuge.time + virtual.success.time1 + activity.prop4 + sex ,data=explain.learning1.asf, na.action = "na.omit",family="binomial")
 summary(full.learning.model.f)
 
-pdf("Figure 3.pdf", width = 12, height = 7)
-par(mfrow=c(2,3))
+
+pdf("Figure 3.pdf", width = 12, height = 10)
+par(mfrow=c(2,2))
+plot(success4~refuge.time,data = explain.learning2.minutes2,
+     xlim=c(0,15),las=1, ylab="Learning success", xlab="Time spent in the refuge (min)",yaxt="n", main="Learning related \nto shyness (a)",xaxt="n"
+     ,cex.lab= 1.5, cex.main = 1.35, type="n")
+
+fits <-ggpredict(b.learning3,terms = "refuge.time")
+polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
+        col = "grey80", border = NA)
+lines(fits$x, fits$predicted, lwd=2, col="blue")
+lines(fits$x, fits$conf.low)
+lines(fits$x, fits$conf.high)
+
+axis(2,cex.axis=1.2, las=3, seq(0,1, by =1), labels = c("No success","Success"))
+#axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
+axis(1,cex.axis=1, at = seq(0, 15, by = 1),las=1, labels = c("0","","2","","4","","6","","8","","10","","12","","14",""))
+
+#Learning exploration time
+plot(success4~virtual.success.time1,data = explain.learning2.minutes2,
+     las=1, ylab="", xlab="Exploration time success (min)",yaxt="n", main="Learning related \nto exploration (b)",xaxt="n"
+     ,cex.lab= 1.5, cex.main = 1.35, type ="n")
+
+fits <-ggpredict(b.learning3,terms = "virtual.success.time1")
+polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
+        col = "grey80", border = NA)
+lines(fits$x, fits$predicted, lwd=2, col="purple")
+lines(fits$x, fits$conf.low)
+lines(fits$x, fits$conf.high)
+
+axis(2,cex.axis=1.2, las=3, seq(0,1, by =1), labels = c("No success","Success"))
+#axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
+axis(1,cex.axis=1, at = seq(0, 15, by = 1),las=1, labels = c("0","","2","","4","","6","","8","","10","","12","","14",""))
+
+#Learning with activity
+plot(success4~activity.prop4,data = explain.learning2.minutes2,xlim=c(0,1),
+     las=1, ylab="Learning success", xlab="Proportion of the test time active",yaxt="n", 
+     main="",xaxt="n",
+     cex.lab= 1.5, cex.main = 1.35, type="n")
+
+fits <-ggpredict(b.learning3,terms = "activity.prop4")
+polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
+        col = "grey80", border = NA)
+lines(fits$x, fits$predicted, lwd=2, col=3)
+lines(fits$x, fits$conf.low)
+lines(fits$x, fits$conf.high)
+
+lines(fits$Forests, fits$estimate__, lwd=2)
+
+axis(2,cex.axis=1.2, las=3, seq(0,1, by =1), labels = c("No success","Success"))
+#axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
+axis(1,cex.axis=1, at = seq(0, 1, by = 0.5),las=1, labels = c("0","0.5","1"))
+title(main = "Learning related\n to activity (c)",
+      cex.main=1.35)
+
+#Learning with sex
+plot(factor(success4)~factor(sex),data = explain.learning1.asf,xlim=c(0,1),
+     las=1, ylab="", main=""
+     ,cex.main = 10.35, yaxt='n', xlab="",axes=FALSE, cex.lab=1000,
+     cex.axis=10, cex.main=10, cex.sub=10, cex=10)
+axis(1,cex.axis=1.3, at = seq(0, 1, by = 1),las=1, labels = c("          Female","Male"))
+axis(4,cex.axis=1.3, at = seq(0, 1, by = 0.5),las=1, labels = c("","",""))
+axis(2,cex.axis=1.3, at = seq(0, 1, by = 1),las=1, labels = c("",""))
+axis(2,cex.axis=1.3, at = seq(0, 1, by = 1),las=3, labels = c("No success","Success"))
+
+title(xlab="Sex",
+      cex.lab=1.5)
+title(main = "Learning related\n to sex (d)",
+      cex.main=1.35)
+
+dev.off()
+
+
+
+######
 plot(success4~refuge.time,data = explain.learning1.asf,
      xlim=c(0,900003),las=1, ylab="Learning success", xlab="Time spent in the refuge (min)",yaxt="n", main="Learning related \nto shyness (a)",xaxt="n"
      , cex.lab= 1.5, cex.main = 1.35)
@@ -3659,52 +3956,11 @@ lines(fits$x, fits$predicted, lwd=2, col="blue")
 lines(fits$x, fits$conf.low)
 lines(fits$x, fits$conf.high)
 
-axis(2,cex.axis=1, las=3, seq(0,1, by =1), labels = c("NO SUCCESS","SUCCESS"))
+axis(2,cex.axis=1.2, las=3, seq(0,1, by =1), labels = c("No success","Success"))
 #axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
 axis(1,cex.axis=1, at = seq(0, 900000, by = 60000),las=1, labels = c("0","","2","","4","","6","","8","","10","","12","","14",""))
 
-#Learning exploration time
-plot(success4~virtual.success.time1,data = explain.learning1.asf,
-     las=1, ylab="", xlab="Exploration time success (min)",yaxt="n", main="Learning related \nto exploration (b)",xaxt="n"
-     ,cex.lab= 1.5, cex.main = 1.35)
-
-fits <-ggpredict(full.learning.model.f,terms = "virtual.success.time1")
-polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
-        col = "grey80", border = NA)
-lines(fits$x, fits$predicted, lwd=2, col="purple")
-lines(fits$x, fits$conf.low)
-lines(fits$x, fits$conf.high)
-
-#axis(1,cex.axis=1, at = seq(0, 900000, by = 100000),las=1)
-axis(1,cex.axis=1, at = seq(0, 900000, by = 60000),las=1, labels = c("0","","2","","4","","6","","8","","10","","12","","14",""))
-
-#Learning with sex
-plot(factor(success4)~factor(sex),data = explain.learning1.asf,xlim=c(0,1),
-     las=1, ylab="NOT SUCCESS                     SUCCESS", main=""
-     ,cex.main = 1.35, yaxt='n', xlab="",axes=FALSE, cex.lab=10)
-axis(1,cex.axis=1.3, at = seq(0, 1, by = 1),las=1, labels = c("Female","Male"))
-axis(2,cex.axis=1.3, at = seq(0, 1, by = 0.5),las=1, labels = c("0","0.5","1"))
-axis(4,cex.axis=1.3, at = seq(0, 1, by = 1),las=1, labels = c("",""))
-title(xlab="Sex",
-      cex.lab=1.5)
-title(main = "Learning related\n to sex (c)",
-      cex.main=1.35)
-dev.off()
-#Learning with activity
-plot(success4~activity.prop4,data = explain.learning1.asf,xlim=c(0,1),
-     las=1, ylab="", xlab="Proportion of time active in the learning test",yaxt="n", main="Learning related to activity (c)",xaxt="n")
-
-fits <-ggpredict(full.learning.model.f,terms = "activity.prop4")
-polygon(c(fits$x, rev(fits$x)), c(fits$conf.high, rev(fits$conf.low)),
-        col = "grey80", border = NA)
-lines(fits$x, fits$predicted, lwd=2, col=3)
-lines(fits$x, fits$conf.low)
-lines(fits$x, fits$conf.high)
-
-lines(fits$Forests, fits$estimate__, lwd=2)
-axis(1,cex.axis=1, at = seq(0, 1, by = 0.1),las=1)
-
-
+######
 
 ####sex and re-enter
 par(mfrow=c(1,2))
@@ -3801,3 +4057,39 @@ abline(lm(activity.prop ~ Trial,data=activity.trend), col = "purple")
 summary(lm(activity.prop ~ Trial,data=activity.trend))
 
 
+summary(full.learning.model.f)
+
+#Shyness to exploration
+plot(refuge.time~virtual.success.time1,data=explain.innovation2.minutes2)
+abline(glm(refuge.time~virtual.success.time1,data=explain.innovation2.minutes2))
+summary(glm(refuge.time~virtual.success.time1,data=explain.innovation1.minutes))
+#Shyness to activity
+plot(refuge.time~activity.prop5,data=explain.innovation1.minutes)
+abline(glm(refuge.time~activity.prop5,data=explain.innovation1.minutes))
+summary(glm(refuge.time~activity.prop5,data=explain.innovation1.minutes))
+#Exploration to activity
+plot(virtual.success.time1~activity.prop5,data=explain.innovation1.minutes)
+abline(glm(virtual.success.time1~activity.prop5,data=explain.innovation1.minutes))
+summary(glm(virtual.success.time1~activity.prop5,data=explain.innovation1.minutes))
+
+
+
+summary(explain.learning2.minutes2)
+summary(explain.innovation2.minutes2)
+
+
+
+
+##############
+
+
+explain.innovation2.minutes2$time.until.lid.exploring.minutes<-(explain.innovation2.minutes2$time.until.lid.exploring)/1000/60
+explain.innovation2.minutes2$virtual.time.until.lid.exploring.minutes<-(explain.innovation2.minutes2$virtual.time.until.lid.exploring)/1000/60
+
+summary(glm(virtual.success.time5~virtual.time.until.lid.exploring.minutes, 
+  data=explain.innovation2.minutes2))
+
+
+summary(lm(virtual.success.time5~virtual.time.until.lid.exploring.minutes, 
+            data=explain.innovation2.minutes2))
+  pearson
